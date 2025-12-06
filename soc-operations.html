@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOC Operations | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to SOC Operations - security operations center structure, analyst tiers, metrics, and 24/7 monitoring.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="siem.html" class="sidebar-nav-link">SIEM</a></li>
+          <li class="sidebar-nav-item"><a href="soc-operations.html" class="sidebar-nav-link active">SOC Operations</a></li>
+          <li class="sidebar-nav-item"><a href="incident-response.html" class="sidebar-nav-link">Incident Response</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>SOC Operations</span>
+          </div>
+          <h1>SOC Operations</h1>
+          <p class="page-description">The Security Operations Center (SOC) is the nerve center of enterprise security—monitoring, detecting, and responding to threats 24/7. Effective SOC operations combine skilled analysts, robust processes, and integrated technology to defend against attacks.</p>
+        </div>
+
+        <section>
+          <h2 id="structure">SOC Analyst Tiers</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 280" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="280" fill="#0f1117"/>
+              
+              <!-- Tier 1 -->
+              <rect x="30" y="40" width="240" height="200" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="150" y="70" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">TIER 1: TRIAGE</text>
+              <text x="150" y="95" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Alert Monitoring & Initial Response</text>
+              
+              <text x="50" y="125" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Monitor SIEM alerts 24/7</text>
+              <text x="50" y="145" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Initial triage (true/false positive)</text>
+              <text x="50" y="165" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Execute runbook procedures</text>
+              <text x="50" y="185" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Escalate to Tier 2</text>
+              <text x="50" y="205" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Ticket documentation</text>
+              
+              <text x="50" y="225" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Skills: SIEM basics, networking, runbooks</text>
+              
+              <!-- Tier 2 -->
+              <rect x="305" y="40" width="240" height="200" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="425" y="70" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">TIER 2: INVESTIGATION</text>
+              <text x="425" y="95" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Deep Analysis & Containment</text>
+              
+              <text x="325" y="125" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Deep-dive investigation</text>
+              <text x="325" y="145" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Correlation across data sources</text>
+              <text x="325" y="165" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Containment actions</text>
+              <text x="325" y="185" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Malware analysis (basic)</text>
+              <text x="325" y="205" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Escalate to Tier 3/IR</text>
+              
+              <text x="325" y="225" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Skills: Forensics, scripting, advanced queries</text>
+              
+              <!-- Tier 3 -->
+              <rect x="580" y="40" width="240" height="200" rx="8" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="700" y="70" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">TIER 3: EXPERT</text>
+              <text x="700" y="95" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Advanced Threats & Engineering</text>
+              
+              <text x="600" y="125" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• APT/advanced threat response</text>
+              <text x="600" y="145" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Threat hunting</text>
+              <text x="600" y="165" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Detection engineering</text>
+              <text x="600" y="185" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Tool tuning & optimization</text>
+              <text x="600" y="205" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Mentor Tier 1/2</text>
+              
+              <text x="600" y="225" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Skills: Reverse eng., threat intel, automation</text>
+              
+              <!-- Arrows -->
+              <path d="M270 140 L305 140" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <text x="287" y="130" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Escalate</text>
+              
+              <path d="M545 140 L580 140" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <text x="562" y="130" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Escalate</text>
+              
+              <defs>
+                <marker id="arrowGray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="workflow">Alert Handling Workflow</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Standard Alert Triage Process</span></div>
+            <pre><code># Alert arrives in SIEM queue
+
+1. INITIAL TRIAGE (Tier 1) - Target: 15 minutes
+   ┌─────────────────────────────────────────────┐
+   │ □ Review alert details                       │
+   │ □ Check for known false positive patterns    │
+   │ □ Verify affected asset (criticality?)       │
+   │ □ Check if related alerts exist              │
+   │ □ Consult runbook for alert type             │
+   └─────────────────────────────────────────────┘
+   
+   Decision:
+   → False Positive → Document, tune detection, close
+   → True Positive (Low) → Execute runbook, close
+   → True Positive (Med+) → Escalate to Tier 2
+
+2. INVESTIGATION (Tier 2) - Target: 1 hour
+   ┌─────────────────────────────────────────────┐
+   │ □ Timeline reconstruction                    │
+   │ □ Query additional data sources              │
+   │ □ Identify scope (other affected systems?)   │
+   │ □ Determine attack vector                    │
+   │ □ Assess business impact                     │
+   └─────────────────────────────────────────────┘
+   
+   Decision:
+   → Contained incident → Execute containment, document
+   → Active/complex threat → Escalate to Tier 3/IR
+
+3. RESPONSE (Tier 3/IR) - Variable
+   ┌─────────────────────────────────────────────┐
+   │ □ Lead incident response                     │
+   │ □ Coordinate containment                     │
+   │ □ Forensic evidence preservation             │
+   │ □ Eradication and recovery                   │
+   │ □ Post-incident review                       │
+   └─────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="metrics">SOC Metrics & KPIs</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Description</th>
+                  <th>Target</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>MTTD</strong></td>
+                  <td>Mean Time to Detect - time from attack start to detection</td>
+                  <td>&lt; 24 hours</td>
+                </tr>
+                <tr>
+                  <td><strong>MTTR</strong></td>
+                  <td>Mean Time to Respond - time from detection to containment</td>
+                  <td>&lt; 4 hours</td>
+                </tr>
+                <tr>
+                  <td><strong>MTTA</strong></td>
+                  <td>Mean Time to Acknowledge - time from alert to first action</td>
+                  <td>&lt; 15 minutes</td>
+                </tr>
+                <tr>
+                  <td><strong>Alert Volume</strong></td>
+                  <td>Number of alerts per day/week</td>
+                  <td>Track trend</td>
+                </tr>
+                <tr>
+                  <td><strong>False Positive Rate</strong></td>
+                  <td>Percentage of alerts that are not real threats</td>
+                  <td>&lt; 30%</td>
+                </tr>
+                <tr>
+                  <td><strong>Escalation Rate</strong></td>
+                  <td>Percentage of alerts escalated to higher tier</td>
+                  <td>10-20%</td>
+                </tr>
+                <tr>
+                  <td><strong>Coverage</strong></td>
+                  <td>Percentage of assets with monitoring</td>
+                  <td>&gt; 95%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="models">SOC Models</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">In-House SOC</h4>
+              <p class="card-description">Fully internal team and infrastructure. Maximum control and customization. High cost—24/7 requires 8-12+ analysts minimum.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">Managed SOC (MSSP)</h4>
+              <p class="card-description">Outsourced to security provider. 24/7 coverage without staffing burden. Less customization, shared resources.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Hybrid SOC</h4>
+              <p class="card-description">MSSP for Tier 1 + nights/weekends. Internal Tier 2/3 for deep expertise. Balance of cost and control.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">MDR (Managed Detection & Response)</h4>
+              <p class="card-description">Vendor provides detection + response. Often includes EDR/XDR platform. Turnkey solution, less visibility.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">SOC Tools & Services</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Splunk</div>
+            <div class="vendor-item">Microsoft Sentinel</div>
+            <div class="vendor-item">CrowdStrike Falcon</div>
+            <div class="vendor-item">Palo Alto Cortex</div>
+            <div class="vendor-item">Arctic Wolf (MDR)</div>
+            <div class="vendor-item">Secureworks</div>
+            <div class="vendor-item">Red Canary (MDR)</div>
+            <div class="vendor-item">Expel (MDR)</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">SOC Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              SOC Operations Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Reduce Alert Fatigue:</strong> Tune detections ruthlessly. 1,000 quality alerts beat 100,000 noise. Target &lt;30% false positive rate.</p>
+              <p><strong>2. Document Everything:</strong> Runbooks for common scenarios. Playbooks for incident types. Knowledge base for tribal knowledge.</p>
+              <p><strong>3. Measure and Improve:</strong> Track MTTD, MTTR. Identify bottlenecks. Continuous improvement cycle.</p>
+              <p><strong>4. Automate Tier 0:</strong> Use SOAR to auto-close known false positives. Auto-enrich alerts. Reserve humans for decisions.</p>
+              <p><strong>5. Invest in People:</strong> Training, certifications, career paths. Burnout is real—rotate shifts, manage workload.</p>
+              <p><strong>6. Regular Exercises:</strong> Tabletop exercises, purple team. Test processes before real incidents.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="siem.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← SIEM</div>
+          </a>
+          <a href="incident-response.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Incident Response →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

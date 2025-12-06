@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zero Trust Architecture | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Zero Trust Architecture - never trust always verify, zero trust principles, and implementation strategies.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">1. Foundations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="principles.html" class="sidebar-nav-link">Security Principles</a></li>
+          <li class="sidebar-nav-item"><a href="zero-trust.html" class="sidebar-nav-link active">Zero Trust Architecture</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Foundations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Zero Trust Architecture</span>
+          </div>
+          <h1>Zero Trust Architecture</h1>
+          <p class="page-description">Zero Trust is a security model based on the principle "never trust, always verify." It eliminates implicit trust based on network location and instead requires continuous verification of every user, device, and connection.</p>
+        </div>
+
+        <section>
+          <h2 id="principles">Zero Trust Principles</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Core Zero Trust Tenets</span></div>
+            <pre><code># Zero Trust Core Principles (NIST SP 800-207)
+
+1. NEVER TRUST, ALWAYS VERIFY
+   ┌────────────────────────────────────────────────────┐
+   │ • No implicit trust based on network location     │
+   │ • Authenticate and authorize every request        │
+   │ • "Inside the network" provides no privilege      │
+   └────────────────────────────────────────────────────┘
+
+2. ASSUME BREACH
+   ┌────────────────────────────────────────────────────┐
+   │ • Design systems expecting compromise             │
+   │ • Minimize blast radius via segmentation          │
+   │ • Continuous monitoring for anomalies             │
+   └────────────────────────────────────────────────────┘
+
+3. VERIFY EXPLICITLY
+   ┌────────────────────────────────────────────────────┐
+   │ • Authenticate based on all available data:       │
+   │   - User identity                                 │
+   │   - Device health and compliance                  │
+   │   - Location, time, behavior                      │
+   │   - Application and data sensitivity              │
+   └────────────────────────────────────────────────────┘
+
+4. LEAST PRIVILEGE ACCESS
+   ┌────────────────────────────────────────────────────┐
+   │ • Just-in-time (JIT) access                       │
+   │ • Just-enough-access (JEA)                        │
+   │ • Risk-based adaptive policies                    │
+   └────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="comparison">Traditional vs Zero Trust</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Castle-and-Moat (Traditional)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Trust based on network location</li>
+                  <li>Strong perimeter, soft interior</li>
+                  <li>VPN = trusted access</li>
+                  <li>Flat internal network</li>
+                  <li>Once inside, move laterally</li>
+                </ul>
+                <div class="info-box warning" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Problem:</strong> Breach perimeter = game over</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Zero Trust
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>No implicit trust anywhere</li>
+                  <li>Micro-segmented network</li>
+                  <li>Identity is the perimeter</li>
+                  <li>Continuous verification</li>
+                  <li>Least privilege, JIT access</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Benefit:</strong> Breach contained, limited damage</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="pillars">Zero Trust Pillars</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Identity</h4>
+              <p class="card-description">Strong authentication (MFA), conditional access, identity governance. User and service identity is foundational.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">Devices</h4>
+              <p class="card-description">Device health verification, compliance checks, managed vs unmanaged policies. Healthy devices only.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Network</h4>
+              <p class="card-description">Micro-segmentation, software-defined perimeter, encrypted communications. No flat networks.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">Applications</h4>
+              <p class="card-description">In-app permissions, secure access brokers, API security. Application-level controls.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-cyan);">Data</h4>
+              <p class="card-description">Data classification, encryption, DLP. Protect data wherever it lives.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-orange);">Visibility</h4>
+              <p class="card-description">Continuous monitoring, analytics, threat detection. See everything, trust nothing.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="implementation">Implementation Roadmap</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Phase</th>
+                  <th>Focus Area</th>
+                  <th>Key Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Phase 1</strong></td>
+                  <td>Identity Foundation</td>
+                  <td>Deploy MFA, implement conditional access, SSO</td>
+                </tr>
+                <tr>
+                  <td><strong>Phase 2</strong></td>
+                  <td>Device Trust</td>
+                  <td>MDM/EDR, device compliance policies, health attestation</td>
+                </tr>
+                <tr>
+                  <td><strong>Phase 3</strong></td>
+                  <td>Network Segmentation</td>
+                  <td>Micro-segmentation, ZTNA for remote access</td>
+                </tr>
+                <tr>
+                  <td><strong>Phase 4</strong></td>
+                  <td>Application Access</td>
+                  <td>App-level access controls, API security, CASB</td>
+                </tr>
+                <tr>
+                  <td><strong>Phase 5</strong></td>
+                  <td>Data Protection</td>
+                  <td>Classification, DLP, encryption everywhere</td>
+                </tr>
+                <tr>
+                  <td><strong>Phase 6</strong></td>
+                  <td>Continuous Verification</td>
+                  <td>Analytics, UEBA, adaptive policies</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Zero Trust Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Zero Trust Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with Identity:</strong> Strong authentication is the foundation. No Zero Trust without solid identity.</p>
+              <p><strong>2. Inventory Everything:</strong> Know your users, devices, applications, data. Can't protect what you don't know.</p>
+              <p><strong>3. Incremental Approach:</strong> Zero Trust is a journey, not a project. Start with high-value assets.</p>
+              <p><strong>4. User Experience Matters:</strong> Excessive friction drives workarounds. Balance security with usability.</p>
+              <p><strong>5. Automate Policies:</strong> Manual enforcement doesn't scale. Use conditional access, SOAR.</p>
+              <p><strong>6. Measure Progress:</strong> Define Zero Trust metrics. Track coverage, incidents, compliance.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="principles.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Security Principles</div>
+          </a>
+          <a href="ztna.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">ZTNA →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

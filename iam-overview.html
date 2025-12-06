@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IAM Overview | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Identity and Access Management - IAM fundamentals, identity lifecycle, and access governance.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">3. Identity & Access</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="iam-overview.html" class="sidebar-nav-link active">IAM Overview</a></li>
+          <li class="sidebar-nav-item"><a href="mfa.html" class="sidebar-nav-link">Multi-Factor Authentication</a></li>
+          <li class="sidebar-nav-item"><a href="sso.html" class="sidebar-nav-link">Single Sign-On</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Identity & Access</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>IAM Overview</span>
+          </div>
+          <h1>Identity and Access Management (IAM)</h1>
+          <p class="page-description">IAM ensures the right people have the right access to the right resources at the right time. In a zero trust world, identity is the new perimeter. Strong IAM is foundational to security.</p>
+        </div>
+
+        <section>
+          <h2 id="concepts">IAM Core Concepts</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">IAM Fundamentals</span></div>
+            <pre><code># IAM Building Blocks
+
+IDENTITY: Who is requesting access?
+┌────────────────────────────────────────────────────┐
+│ • Human users (employees, contractors)            │
+│ • Non-human identities (service accounts, APIs)   │
+│ • Devices (managed endpoints)                     │
+│ • Workloads (containers, serverless)              │
+└────────────────────────────────────────────────────┘
+
+AUTHENTICATION: Prove you are who you claim to be
+┌────────────────────────────────────────────────────┐
+│ • Something you know (password)                   │
+│ • Something you have (phone, security key)        │
+│ • Something you are (biometrics)                  │
+│ • Somewhere you are (location, network)           │
+└────────────────────────────────────────────────────┘
+
+AUTHORIZATION: What are you allowed to do?
+┌────────────────────────────────────────────────────┐
+│ • Role-Based Access Control (RBAC)                │
+│ • Attribute-Based Access Control (ABAC)           │
+│ • Policy-Based Access Control (PBAC)              │
+│ • Least privilege principle                        │
+└────────────────────────────────────────────────────┘
+
+GOVERNANCE: Is access appropriate and compliant?
+┌────────────────────────────────────────────────────┐
+│ • Access reviews and certifications               │
+│ • Segregation of duties                           │
+│ • Audit and compliance reporting                  │
+│ • Lifecycle management                            │
+└────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="lifecycle">Identity Lifecycle</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Phase</th>
+                  <th>Activities</th>
+                  <th>Security Controls</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Joiner</strong></td>
+                  <td>Create identity, provision access</td>
+                  <td>Birthright access only, manager approval</td>
+                </tr>
+                <tr>
+                  <td><strong>Mover</strong></td>
+                  <td>Role change, department transfer</td>
+                  <td>Remove old access, provision new, review</td>
+                </tr>
+                <tr>
+                  <td><strong>Leaver</strong></td>
+                  <td>Offboarding, termination</td>
+                  <td>Immediate access revocation, account disable</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="components">IAM Components</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Identity Provider (IdP)</h4>
+              <p class="card-description">Source of truth for identities. Entra ID, Okta, Ping. Authenticates users, issues tokens.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">Directory Services</h4>
+              <p class="card-description">Stores identity data. Active Directory, LDAP. User attributes, group memberships.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Privileged Access Management</h4>
+              <p class="card-description">Secures admin accounts. Vaulting, session recording, JIT access.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">Identity Governance (IGA)</h4>
+              <p class="card-description">Access reviews, provisioning, compliance. SailPoint, Saviynt.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">IAM Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              IAM Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. MFA Everywhere:</strong> Password-only is not acceptable. MFA for all users, all systems.</p>
+              <p><strong>2. Least Privilege:</strong> Grant minimum access needed. Use just-in-time elevation.</p>
+              <p><strong>3. Automate Provisioning:</strong> HR-driven provisioning. Remove human delay and error.</p>
+              <p><strong>4. Regular Access Reviews:</strong> Quarterly reviews minimum. Managers certify their team's access.</p>
+              <p><strong>5. Consolidate Identity:</strong> Single source of truth. Federate, don't duplicate identities.</p>
+              <p><strong>6. Don't Forget Non-Human:</strong> Service accounts, API keys need lifecycle management too.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="principles.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Security Principles</div>
+          </a>
+          <a href="mfa.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Multi-Factor Authentication →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

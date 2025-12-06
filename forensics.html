@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Forensics | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Digital Forensics - evidence collection, chain of custody, memory forensics, and investigation procedures.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="incident-response.html" class="sidebar-nav-link">Incident Response</a></li>
+          <li class="sidebar-nav-item"><a href="forensics.html" class="sidebar-nav-link active">Digital Forensics</a></li>
+          <li class="sidebar-nav-item"><a href="threat-hunting.html" class="sidebar-nav-link">Threat Hunting</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Digital Forensics</span>
+          </div>
+          <h1>Digital Forensics</h1>
+          <p class="page-description">Digital forensics is the scientific process of collecting, preserving, analyzing, and presenting digital evidence. Proper forensic procedures ensure evidence integrity for incident response, legal proceedings, and root cause analysis.</p>
+        </div>
+
+        <section>
+          <h2 id="process">Forensic Process</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 180" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="180" fill="#0f1117"/>
+              
+              <!-- Identify -->
+              <rect x="30" y="50" width="130" height="80" rx="6" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="95" y="80" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">IDENTIFY</text>
+              <text x="95" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Scope the incident</text>
+              <text x="95" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Identify evidence sources</text>
+              
+              <!-- Preserve -->
+              <rect x="190" y="50" width="130" height="80" rx="6" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="255" y="80" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">PRESERVE</text>
+              <text x="255" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Memory capture first</text>
+              <text x="255" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Disk imaging, hash</text>
+              
+              <!-- Collect -->
+              <rect x="350" y="50" width="130" height="80" rx="6" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="415" y="80" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">COLLECT</text>
+              <text x="415" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Logs, artifacts</text>
+              <text x="415" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Chain of custody</text>
+              
+              <!-- Analyze -->
+              <rect x="510" y="50" width="130" height="80" rx="6" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="575" y="80" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">ANALYZE</text>
+              <text x="575" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Timeline analysis</text>
+              <text x="575" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Artifact examination</text>
+              
+              <!-- Report -->
+              <rect x="670" y="50" width="130" height="80" rx="6" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="735" y="80" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">REPORT</text>
+              <text x="735" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Document findings</text>
+              <text x="735" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Court-ready if needed</text>
+              
+              <!-- Arrows -->
+              <path d="M160 90 L190 90" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M320 90 L350 90" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M480 90 L510 90" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M640 90 L670 90" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray)"/>
+              
+              <defs>
+                <marker id="arrowGray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#64748b"/></marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="volatility">Order of Volatility</h2>
+          
+          <div class="info-box warning">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Collect Most Volatile First!
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. CPU Registers & Cache</strong> - Gone in nanoseconds</p>
+              <p><strong>2. Memory (RAM)</strong> - Lost on power off or reboot</p>
+              <p><strong>3. Network State</strong> - Connections, routing tables</p>
+              <p><strong>4. Running Processes</strong> - Process list, handles</p>
+              <p><strong>5. Disk</strong> - Persistent but can be overwritten</p>
+              <p><strong>6. Remote Logs</strong> - SIEM, cloud logs (most stable)</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="collection">Evidence Collection</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Linux Forensic Collection</span></div>
+            <pre><code># Memory Acquisition (do this FIRST)
+# Using LiME (Linux Memory Extractor)
+insmod lime.ko "path=/evidence/memory.lime format=lime"
+
+# Or using AVML (Microsoft)
+./avml /evidence/memory.raw
+
+# Disk Imaging (after memory)
+# Create forensic image with hash
+dc3dd if=/dev/sda of=/evidence/disk.dd hash=sha256 \
+  hashlog=/evidence/disk.dd.sha256
+
+# Or using FTK Imager CLI
+ftkimager /dev/sda /evidence/disk.E01 --e01
+
+# Verify hash
+sha256sum /evidence/disk.dd
+
+# Collect volatile data before shutdown
+date > /evidence/volatile/timestamp.txt
+ps auxf > /evidence/volatile/processes.txt
+netstat -an > /evidence/volatile/netstat.txt
+lsof -n > /evidence/volatile/openfiles.txt
+cat /proc/*/maps > /evidence/volatile/memory_maps.txt
+last > /evidence/volatile/logins.txt
+history > /evidence/volatile/history.txt
+
+# Windows: Use KAPE, Velociraptor, or commercial tools</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="chain">Chain of Custody</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Evidence Documentation</span></div>
+            <pre><code># Chain of Custody Log
+
+Evidence ID: INC-2024-1234-001
+Description: Dell Latitude 5520 Laptop, S/N: ABCD1234
+Case: Insider Data Theft Investigation
+
+Collection:
+  Date/Time: 2024-12-06 14:32 UTC
+  Location: Building A, Desk 42
+  Collected By: John Smith (Security Analyst)
+  Witness: Jane Doe (HR Representative)
+  Condition: Powered on, screen locked
+  
+Actions Taken:
+  1. Photographed device and surroundings
+  2. Memory acquisition with LiME
+  3. Powered off (held power button)
+  4. Removed HDD, placed in anti-static bag
+  5. Sealed evidence bag with tamper seal #TS-98765
+  
+Hash Values:
+  Memory Image: SHA256: 3a7bd3e2f...
+  Disk Image:   SHA256: 9c8f7a6b5...
+
+Transfer Log:
+  2024-12-06 15:00: John Smith → Evidence Locker (Rm 101)
+  2024-12-07 09:00: Evidence Locker → Sarah Chen (Forensic Analyst)
+  2024-12-10 16:00: Sarah Chen → Legal Hold Storage
+
+All transfers witnessed and signed.
+Evidence integrity verified via hash comparison at each transfer.</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="artifacts">Key Forensic Artifacts</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Artifact</th>
+                  <th>Location (Windows)</th>
+                  <th>Evidence Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Event Logs</strong></td>
+                  <td>C:\Windows\System32\winevt\Logs\</td>
+                  <td>Logins, process execution, security events</td>
+                </tr>
+                <tr>
+                  <td><strong>Prefetch</strong></td>
+                  <td>C:\Windows\Prefetch\</td>
+                  <td>Program execution history, timestamps</td>
+                </tr>
+                <tr>
+                  <td><strong>Registry</strong></td>
+                  <td>C:\Windows\System32\config\</td>
+                  <td>User activity, installed software, USB history</td>
+                </tr>
+                <tr>
+                  <td><strong>Browser History</strong></td>
+                  <td>%APPDATA%\Local\Google\Chrome\</td>
+                  <td>Web activity, downloads, searches</td>
+                </tr>
+                <tr>
+                  <td><strong>$MFT</strong></td>
+                  <td>NTFS Master File Table</td>
+                  <td>All files including deleted, timestamps</td>
+                </tr>
+                <tr>
+                  <td><strong>Amcache</strong></td>
+                  <td>C:\Windows\appcompat\Programs\</td>
+                  <td>Application execution, SHA1 hashes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Forensic Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Autopsy</div>
+            <div class="vendor-item">EnCase</div>
+            <div class="vendor-item">FTK (AccessData)</div>
+            <div class="vendor-item">Volatility</div>
+            <div class="vendor-item">X-Ways Forensics</div>
+            <div class="vendor-item">Velociraptor</div>
+            <div class="vendor-item">KAPE</div>
+            <div class="vendor-item">Plaso/log2timeline</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Forensics Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Digital Forensics Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Memory First:</strong> Always capture RAM before disk. Memory contains running processes, network connections, encryption keys.</p>
+              <p><strong>2. Work on Copies:</strong> Never analyze original evidence. Create forensic images, verify with hashes.</p>
+              <p><strong>3. Document Everything:</strong> Every action, every finding. Chain of custody must be unbroken.</p>
+              <p><strong>4. Use Write Blockers:</strong> Prevent accidental modification when imaging drives.</p>
+              <p><strong>5. Timeline Everything:</strong> Super timelines correlate events across all artifact sources.</p>
+              <p><strong>6. Prepare in Advance:</strong> Have forensic toolkit ready. When incidents happen, time is critical.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="incident-response.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Incident Response</div>
+          </a>
+          <a href="threat-hunting.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Threat Hunting →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

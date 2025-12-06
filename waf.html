@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Application Firewall | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Web Application Firewalls - OWASP protection, rule sets, deployment architectures, and tuning.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">2. Network Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="firewalls.html" class="sidebar-nav-link">Next-Gen Firewalls</a></li>
+          <li class="sidebar-nav-item"><a href="waf.html" class="sidebar-nav-link active">Web Application Firewall</a></li>
+          <li class="sidebar-nav-item"><a href="ids-ips.html" class="sidebar-nav-link">IDS/IPS</a></li>
+          <li class="sidebar-nav-item"><a href="dmz.html" class="sidebar-nav-link">DMZ Architecture</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Network Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Web Application Firewall</span>
+          </div>
+          <h1>Web Application Firewall (WAF)</h1>
+          <p class="page-description">A Web Application Firewall protects web applications by inspecting HTTP/HTTPS traffic and blocking malicious requests. WAFs defend against OWASP Top 10 attacks including SQL injection, XSS, and CSRF that traditional firewalls cannot detect.</p>
+        </div>
+
+        <section>
+          <h2 id="comparison">Network Firewall vs. WAF</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Network Firewall (Layer 3-4)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Operates at network/transport layer</li>
+                  <li>Filters by IP, port, protocol</li>
+                  <li>Cannot inspect application payload</li>
+                  <li>Sees "allow port 443" → allows all HTTPS</li>
+                  <li>Blind to SQL injection, XSS, etc.</li>
+                </ul>
+                <div class="info-box warning" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Gap:</strong> Firewall allows HTTPS on 443. Attacker sends SQL injection payload over HTTPS. Firewall sees valid TCP, allows it.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Web Application Firewall (Layer 7)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Operates at application layer</li>
+                  <li>Inspects HTTP headers, body, cookies</li>
+                  <li>Understands application context</li>
+                  <li>Detects malicious patterns in requests</li>
+                  <li>Blocks OWASP Top 10 attacks</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Benefit:</strong> WAF inspects HTTPS payload, detects <code>' OR '1'='1</code> pattern, blocks request before it reaches app.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="owasp">OWASP Top 10 Protection</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>OWASP Category</th>
+                  <th>Attack Example</th>
+                  <th>WAF Detection</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>A01: Broken Access Control</strong></td>
+                  <td>IDOR: <code>/api/users/1234</code> → <code>/api/users/1235</code></td>
+                  <td>Rate limiting, parameter tampering rules</td>
+                </tr>
+                <tr>
+                  <td><strong>A02: Cryptographic Failures</strong></td>
+                  <td>Sensitive data in URL parameters</td>
+                  <td>Detect SSN/CC patterns in requests</td>
+                </tr>
+                <tr>
+                  <td><strong>A03: Injection</strong></td>
+                  <td><code>' OR '1'='1' --</code></td>
+                  <td>SQL/NoSQL/LDAP injection signatures</td>
+                </tr>
+                <tr>
+                  <td><strong>A04: Insecure Design</strong></td>
+                  <td>Business logic flaws</td>
+                  <td>Custom rules for app-specific logic</td>
+                </tr>
+                <tr>
+                  <td><strong>A05: Security Misconfiguration</strong></td>
+                  <td>Admin panel exposed</td>
+                  <td>Block access to sensitive paths</td>
+                </tr>
+                <tr>
+                  <td><strong>A06: Vulnerable Components</strong></td>
+                  <td>Log4j exploitation attempts</td>
+                  <td>Virtual patching for known CVEs</td>
+                </tr>
+                <tr>
+                  <td><strong>A07: Auth Failures</strong></td>
+                  <td>Credential stuffing</td>
+                  <td>Rate limiting, bot detection</td>
+                </tr>
+                <tr>
+                  <td><strong>A08: Integrity Failures</strong></td>
+                  <td>Malicious serialized objects</td>
+                  <td>Detect deserialization attacks</td>
+                </tr>
+                <tr>
+                  <td><strong>A09: Logging Failures</strong></td>
+                  <td>Log injection</td>
+                  <td>Sanitize log-destined data</td>
+                </tr>
+                <tr>
+                  <td><strong>A10: SSRF</strong></td>
+                  <td><code>url=http://169.254.169.254</code></td>
+                  <td>Block internal IP patterns</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="detection-flow">WAF Detection Example: SQL Injection</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">WAF Blocks SQL Injection Attack</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Attacker Sends Malicious Request</div>
+                  <div class="flow-step-description">SQL injection attempt in login form</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Malicious HTTP Request</span></div>
+                    <pre><code>POST /api/v1/login HTTP/1.1
+Host: app.contoso.com
+Content-Type: application/json
+
+{
+  "username": "admin'--",
+  "password": "' OR '1'='1"
+}</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">WAF Inspects Request</div>
+                  <div class="flow-step-description">Multiple detection rules evaluate the payload</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">WAF Rule Evaluation</span></div>
+                    <pre><code>WAF Processing Pipeline:
+  
+1. Decode Request Body (JSON parsing)
+2. Normalize special characters
+3. Run Core Rule Set (CRS)
+
+Rule Matches:
+  ✗ 942100: SQL Injection Attack Detected
+    Pattern: /' OR '/
+    Match: password field
+    Score: +5 (critical)
+    
+  ✗ 942260: SQL Comment Sequence Detected
+    Pattern: /'--/
+    Match: username field  
+    Score: +5 (critical)
+
+Anomaly Score: 10 (Threshold: 5)
+Action: BLOCK</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Request Blocked</div>
+                  <div class="flow-step-description">WAF returns 403 Forbidden, app never sees attack</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">WAF Response</span></div>
+                    <pre><code>HTTP/1.1 403 Forbidden
+Content-Type: application/json
+X-WAF-Block-ID: 7a8b9c0d-1234-5678-abcd-ef0123456789
+
+{
+  "error": "Request blocked by security policy",
+  "reference": "7a8b9c0d-1234-5678-abcd-ef0123456789"
+}
+
+WAF Log Entry:
+{
+  "timestamp": "2024-01-15T14:32:47Z",
+  "client_ip": "185.234.72.19",
+  "request_uri": "/api/v1/login",
+  "rule_id": "942100",
+  "rule_msg": "SQL Injection Attack Detected",
+  "action": "BLOCK",
+  "anomaly_score": 10
+}
+
+Result:
+  ✓ Attack blocked at edge
+  ✓ Application protected
+  ✓ Database never queried with malicious SQL
+  ✓ Alert sent to SIEM</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="deployment">Deployment Architectures</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 280" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="280" fill="#0f1117"/>
+              
+              <!-- Cloud WAF -->
+              <rect x="30" y="30" width="250" height="220" rx="8" fill="rgba(59, 130, 246, 0.05)" stroke="#3b82f6" stroke-dasharray="4"/>
+              <text x="155" y="55" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">CLOUD WAF (CDN-Based)</text>
+              
+              <rect x="60" y="80" width="60" height="35" rx="4" fill="#1e2430" stroke="#64748b"/>
+              <text x="90" y="102" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">Users</text>
+              
+              <rect x="150" y="80" width="100" height="35" rx="4" fill="rgba(59, 130, 246, 0.2)" stroke="#3b82f6"/>
+              <text x="200" y="102" text-anchor="middle" fill="#3b82f6" font-family="IBM Plex Sans, sans-serif" font-size="8">CDN + WAF</text>
+              
+              <rect x="150" y="140" width="100" height="35" rx="4" fill="#1e2430" stroke="#64748b"/>
+              <text x="200" y="162" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">Origin Server</text>
+              
+              <path d="M120 97 L150 97" stroke="#3b82f6" stroke-width="2" fill="none"/>
+              <path d="M200 115 L200 140" stroke="#3b82f6" stroke-width="2" fill="none"/>
+              
+              <text x="155" y="200" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Cloudflare, AWS WAF,</text>
+              <text x="155" y="215" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Azure Front Door</text>
+              <text x="155" y="235" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="7">✓ Global, scalable, DDoS included</text>
+              
+              <!-- Appliance WAF -->
+              <rect x="300" y="30" width="250" height="220" rx="8" fill="rgba(16, 185, 129, 0.05)" stroke="#10b981" stroke-dasharray="4"/>
+              <text x="425" y="55" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">APPLIANCE WAF (On-Prem)</text>
+              
+              <rect x="330" y="80" width="60" height="35" rx="4" fill="#1e2430" stroke="#64748b"/>
+              <text x="360" y="102" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">Internet</text>
+              
+              <rect x="420" y="80" width="100" height="35" rx="4" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981"/>
+              <text x="470" y="102" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="8">WAF Appliance</text>
+              
+              <rect x="420" y="140" width="100" height="35" rx="4" fill="#1e2430" stroke="#64748b"/>
+              <text x="470" y="162" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">Web Servers</text>
+              
+              <path d="M390 97 L420 97" stroke="#10b981" stroke-width="2" fill="none"/>
+              <path d="M470 115 L470 140" stroke="#10b981" stroke-width="2" fill="none"/>
+              
+              <text x="425" y="200" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">F5 BIG-IP, Imperva,</text>
+              <text x="425" y="215" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Fortinet FortiWeb</text>
+              <text x="425" y="235" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="7">✓ Full control, deep integration</text>
+              
+              <!-- Host-Based WAF -->
+              <rect x="570" y="30" width="250" height="220" rx="8" fill="rgba(139, 92, 246, 0.05)" stroke="#8b5cf6" stroke-dasharray="4"/>
+              <text x="695" y="55" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">HOST-BASED (Agent)</text>
+              
+              <rect x="600" y="80" width="60" height="35" rx="4" fill="#1e2430" stroke="#64748b"/>
+              <text x="630" y="102" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">Users</text>
+              
+              <rect x="690" y="70" width="100" height="55" rx="4" fill="#1e2430" stroke="#64748b"/>
+              <text x="740" y="90" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">Web Server</text>
+              <rect x="700" y="100" width="80" height="20" rx="2" fill="rgba(139, 92, 246, 0.2)" stroke="#8b5cf6"/>
+              <text x="740" y="114" text-anchor="middle" fill="#8b5cf6" font-family="IBM Plex Sans, sans-serif" font-size="7">WAF Module</text>
+              
+              <path d="M660 97 L690 97" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+              
+              <text x="695" y="160" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">ModSecurity, NGINX WAF,</text>
+              <text x="695" y="175" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">AWS WAF on ALB</text>
+              <text x="695" y="195" text-anchor="middle" fill="#8b5cf6" font-family="IBM Plex Sans, sans-serif" font-size="7">✓ Low latency, app-aware</text>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">WAF Solutions</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Cloudflare WAF</div>
+            <div class="vendor-item">AWS WAF</div>
+            <div class="vendor-item">Azure WAF</div>
+            <div class="vendor-item">Akamai Kona</div>
+            <div class="vendor-item">Imperva WAF</div>
+            <div class="vendor-item">F5 Advanced WAF</div>
+            <div class="vendor-item">Fortinet FortiWeb</div>
+            <div class="vendor-item">ModSecurity (OSS)</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">WAF Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              WAF Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start in Detection Mode:</strong> Deploy in log-only mode first. Understand traffic patterns and tune rules before blocking.</p>
+              <p><strong>2. Use Core Rule Set (CRS):</strong> OWASP CRS provides solid baseline protection. Don't reinvent the wheel.</p>
+              <p><strong>3. Tune False Positives:</strong> False positives kill WAF projects. Create targeted exceptions rather than disabling rules entirely.</p>
+              <p><strong>4. Virtual Patching:</strong> Use WAF rules to block exploitation of known CVEs while patching is in progress.</p>
+              <p><strong>5. Rate Limiting:</strong> Implement rate limiting for authentication endpoints, API calls, and form submissions.</p>
+              <p><strong>6. Monitor and Alert:</strong> WAF logs are gold. Send to SIEM, create dashboards, alert on attack patterns.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="firewalls.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Next-Gen Firewalls</div>
+          </a>
+          <a href="ids-ips.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">IDS/IPS →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

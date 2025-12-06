@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log Management | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Security Log Management - centralized logging, log sources, retention, and security monitoring.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="siem.html" class="sidebar-nav-link">SIEM</a></li>
+          <li class="sidebar-nav-item"><a href="log-management.html" class="sidebar-nav-link active">Log Management</a></li>
+          <li class="sidebar-nav-item"><a href="threat-hunting.html" class="sidebar-nav-link">Threat Hunting</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Log Management</span>
+          </div>
+          <h1>Log Management</h1>
+          <p class="page-description">Effective log management is the foundation of security operations. Centralized collection, proper retention, and fast search capabilities enable threat detection, incident response, and compliance. Without comprehensive logging, you're flying blind.</p>
+        </div>
+
+        <section>
+          <h2 id="architecture">Log Management Architecture</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 380" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="380" fill="#0f1117"/>
+              
+              <!-- Log Sources -->
+              <text x="80" y="30" text-anchor="middle" fill="#64748b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">LOG SOURCES</text>
+              
+              <rect x="30" y="50" width="100" height="50" rx="4" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="80" y="80" text-anchor="middle" fill="#3b82f6" font-family="IBM Plex Sans, sans-serif" font-size="8">Endpoints (EDR)</text>
+              
+              <rect x="30" y="110" width="100" height="50" rx="4" fill="#1e2430" stroke="#10b981"/>
+              <text x="80" y="140" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="8">Firewalls / IDS</text>
+              
+              <rect x="30" y="170" width="100" height="50" rx="4" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="80" y="200" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="8">Identity (AD/Entra)</text>
+              
+              <rect x="30" y="230" width="100" height="50" rx="4" fill="#1e2430" stroke="#8b5cf6"/>
+              <text x="80" y="260" text-anchor="middle" fill="#8b5cf6" font-family="IBM Plex Sans, sans-serif" font-size="8">Cloud (AWS/Azure)</text>
+              
+              <rect x="30" y="290" width="100" height="50" rx="4" fill="#1e2430" stroke="#ef4444"/>
+              <text x="80" y="320" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">Applications</text>
+              
+              <!-- Collection Layer -->
+              <rect x="180" y="100" width="150" height="180" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="255" y="130" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">COLLECTION</text>
+              
+              <text x="200" y="160" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Agents (Beats, Fluentd)</text>
+              <text x="200" y="178" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Syslog receivers</text>
+              <text x="200" y="196" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• API collectors</text>
+              <text x="200" y="214" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Cloud connectors</text>
+              <text x="200" y="232" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Message queues</text>
+              <text x="200" y="250" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">  (Kafka, Event Hub)</text>
+              
+              <!-- Processing Layer -->
+              <rect x="380" y="100" width="150" height="180" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="455" y="130" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">PROCESSING</text>
+              
+              <text x="400" y="160" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Parsing</text>
+              <text x="400" y="178" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Normalization</text>
+              <text x="400" y="196" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Enrichment</text>
+              <text x="400" y="214" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Filtering</text>
+              <text x="400" y="232" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Deduplication</text>
+              <text x="400" y="250" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Correlation</text>
+              
+              <!-- Storage Layer -->
+              <rect x="580" y="100" width="150" height="180" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="655" y="130" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">STORAGE</text>
+              
+              <text x="600" y="160" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Hot tier (7-30 days)</text>
+              <text x="600" y="178" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">  SSD, fast search</text>
+              <text x="600" y="200" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Warm tier (90 days)</text>
+              <text x="600" y="218" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">  HDD, slower search</text>
+              <text x="600" y="240" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Cold tier (1+ years)</text>
+              <text x="600" y="258" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">  Object storage, archive</text>
+              
+              <!-- Analysis Layer -->
+              <rect x="760" y="100" width="70" height="180" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="795" y="130" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="9" font-weight="600">ANALYZE</text>
+              
+              <text x="767" y="160" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• SIEM</text>
+              <text x="767" y="178" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Dashboards</text>
+              <text x="767" y="196" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Alerts</text>
+              <text x="767" y="214" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Hunting</text>
+              <text x="767" y="232" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Forensics</text>
+              
+              <!-- Flow arrows -->
+              <path d="M130 190 L180 190" stroke="#64748b" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M330 190 L380 190" stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#arrowBlue)"/>
+              <path d="M530 190 L580 190" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrowGreen)"/>
+              <path d="M730 190 L760 190" stroke="#8b5cf6" stroke-width="2" fill="none" marker-end="url(#arrowPurple)"/>
+              
+              <!-- Volume indicators -->
+              <text x="255" y="355" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">10 TB/day raw</text>
+              <text x="455" y="355" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">5 TB/day normalized</text>
+              <text x="655" y="355" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">1 PB+ retention</text>
+              
+              <defs>
+                <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6"/>
+                </marker>
+                <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+                </marker>
+                <marker id="arrowPurple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#8b5cf6"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="sources">Critical Log Sources</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Source</th>
+                  <th>Key Events</th>
+                  <th>Security Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Windows Security</strong></td>
+                  <td>4624/4625 (logon), 4688 (process), 4672 (privilege)</td>
+                  <td>Authentication, privilege escalation, lateral movement</td>
+                </tr>
+                <tr>
+                  <td><strong>Active Directory</strong></td>
+                  <td>4768/4769 (Kerberos), 4728/4732 (group changes)</td>
+                  <td>Kerberoasting, Golden Ticket, persistence</td>
+                </tr>
+                <tr>
+                  <td><strong>Entra ID</strong></td>
+                  <td>Sign-ins, audit logs, risky users</td>
+                  <td>Cloud auth attacks, impossible travel, MFA bypass</td>
+                </tr>
+                <tr>
+                  <td><strong>Firewall</strong></td>
+                  <td>Allow/deny, threat logs, URL filtering</td>
+                  <td>C2 detection, data exfiltration, policy violations</td>
+                </tr>
+                <tr>
+                  <td><strong>DNS</strong></td>
+                  <td>Query logs, response codes</td>
+                  <td>DGA, tunneling, C2 callbacks</td>
+                </tr>
+                <tr>
+                  <td><strong>EDR</strong></td>
+                  <td>Process creation, network, file, registry</td>
+                  <td>Malware execution, persistence, defense evasion</td>
+                </tr>
+                <tr>
+                  <td><strong>Cloud Trail/Activity</strong></td>
+                  <td>API calls, console access, IAM changes</td>
+                  <td>Privilege escalation, data access, resource abuse</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="windows">Windows Event Log Collection</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Critical Windows Events to Collect</span></div>
+            <pre><code># AUTHENTICATION (Security Log)
+4624  - Successful logon
+4625  - Failed logon
+4648  - Explicit credentials (runas)
+4672  - Special privileges assigned
+4776  - NTLM authentication
+
+# PROCESS TRACKING (requires audit policy)
+4688  - Process creation (CRITICAL)
+4689  - Process termination
+
+# ACCOUNT MANAGEMENT
+4720  - User account created
+4722  - User account enabled
+4724  - Password reset attempt
+4728  - Member added to security group
+4732  - Member added to local group
+4756  - Member added to universal group
+
+# KERBEROS (detect attacks)
+4768  - TGT requested (AS-REQ)
+4769  - Service ticket requested (TGS-REQ) - Kerberoasting
+4771  - Kerberos pre-auth failed
+
+# POWERSHELL (requires script block logging)
+4103  - Module logging
+4104  - Script block logging (CRITICAL)
+
+# Enable command line in process events
+# GPO: Computer Config → Admin Templates → System → Audit Process Creation
+# Enable "Include command line in process creation events"
+
+# PowerShell Script Block Logging
+# GPO: Computer Config → Admin Templates → Windows Components → 
+#      Windows PowerShell → Turn on PowerShell Script Block Logging</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="retention">Log Retention Requirements</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">PCI-DSS</h4>
+              <p class="card-description">1 year retention, 3 months immediately accessible. Daily log reviews required. All access to cardholder data environments.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">HIPAA</h4>
+              <p class="card-description">6 years retention. Access to PHI, system activity, security incidents. Audit controls required.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">SOX</h4>
+              <p class="card-description">7 years retention for financial systems. Change management, access logs for systems affecting financial reporting.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">GDPR</h4>
+              <p class="card-description">No specific retention, but must justify. Balance security needs vs. data minimization. Document retention rationale.</p>
+            </div>
+          </div>
+          
+          <div class="info-box info" style="margin-top: var(--space-lg);">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Practical Retention Strategy
+            </div>
+            <div class="info-box-content">
+              <p><strong>Hot (0-30 days):</strong> Full detail, fast search. Active investigations, real-time detection.</p>
+              <p><strong>Warm (30-90 days):</strong> Full detail, slower search. Incident response, trend analysis.</p>
+              <p><strong>Cold (90 days - 1 year):</strong> Compressed, archived. Compliance, forensics if needed.</p>
+              <p><strong>Glacier (1+ years):</strong> Legal hold, compliance. Retrieve in hours/days, not minutes.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="normalization">Log Normalization</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Common Event Format (CEF) Example</span></div>
+            <pre><code># Raw Windows Event (messy, vendor-specific)
+&lt;Event xmlns="http://schemas.microsoft.com/win/2004/08/events/event"&gt;
+  &lt;System&gt;
+    &lt;EventID&gt;4625&lt;/EventID&gt;
+    &lt;TimeCreated SystemTime="2024-01-15T14:32:47.123Z"/&gt;
+  &lt;/System&gt;
+  &lt;EventData&gt;
+    &lt;Data Name="TargetUserName"&gt;admin&lt;/Data&gt;
+    &lt;Data Name="IpAddress"&gt;10.100.1.50&lt;/Data&gt;
+    &lt;Data Name="LogonType"&gt;3&lt;/Data&gt;
+    &lt;Data Name="FailureReason"&gt;%%2313&lt;/Data&gt;
+  &lt;/EventData&gt;
+&lt;/Event&gt;
+
+# Normalized Event (consistent, searchable)
+{
+  "timestamp": "2024-01-15T14:32:47.123Z",
+  "event_type": "authentication",
+  "event_action": "failure",
+  "event_category": "security",
+  
+  "source": {
+    "ip": "10.100.1.50",
+    "hostname": "WORKSTATION-42"
+  },
+  "destination": {
+    "hostname": "DC-01"
+  },
+  "user": {
+    "name": "admin",
+    "domain": "CONTOSO"
+  },
+  
+  "authentication": {
+    "type": "network",
+    "failure_reason": "bad_password"
+  },
+  
+  "vendor": {
+    "name": "Microsoft",
+    "product": "Windows",
+    "event_id": "4625"
+  }
+}
+
+# Benefits of normalization:
+# - Single query syntax across all sources
+# - Consistent field names for correlation
+# - Easier threat detection rule writing
+# - Vendor-agnostic dashboards</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Log Management Solutions</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Splunk</div>
+            <div class="vendor-item">Elastic Stack (ELK)</div>
+            <div class="vendor-item">Microsoft Sentinel</div>
+            <div class="vendor-item">Datadog</div>
+            <div class="vendor-item">Sumo Logic</div>
+            <div class="vendor-item">CrowdStrike LogScale</div>
+            <div class="vendor-item">Graylog</div>
+            <div class="vendor-item">Loki (Grafana)</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Log Management Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Log Management Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Collect Security-Relevant Logs First:</strong> Authentication, process execution, network connections. These detect most attacks. Add more over time.</p>
+              <p><strong>2. Enable Command Line Logging:</strong> Process creation without command lines is nearly useless. Enable audit policy for full visibility.</p>
+              <p><strong>3. Normalize Early:</strong> Parse and normalize at ingestion. Makes searching and correlation vastly easier downstream.</p>
+              <p><strong>4. Time Sync Everything:</strong> NTP on all systems. Logs without accurate timestamps are useless for correlation.</p>
+              <p><strong>5. Protect Log Integrity:</strong> Centralize immediately. Attackers delete local logs. Consider write-once storage for compliance.</p>
+              <p><strong>6. Monitor Log Pipeline:</strong> Alert on collection failures. If logs stop flowing, you're blind—and that might be intentional.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="siem.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← SIEM</div>
+          </a>
+          <a href="threat-hunting.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Threat Hunting →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

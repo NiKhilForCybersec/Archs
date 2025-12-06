@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privileged Identity Management | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Privileged Identity Management (PIM) - just-in-time access, privileged role management, and Entra ID PIM implementation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">3. Identity & Access</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="pam.html" class="sidebar-nav-link">Privileged Access Management</a></li>
+          <li class="sidebar-nav-item"><a href="pim.html" class="sidebar-nav-link active">Privileged Identity Management</a></li>
+          <li class="sidebar-nav-item"><a href="identity-governance.html" class="sidebar-nav-link">Identity Governance</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Identity & Access</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Privileged Identity Management</span>
+          </div>
+          <h1>Privileged Identity Management (PIM)</h1>
+          <p class="page-description">Privileged Identity Management provides just-in-time (JIT) privileged access, reducing standing privileges. Users activate roles when needed, with time-bound access, approval workflows, and comprehensive audit trails.</p>
+        </div>
+
+        <section>
+          <h2 id="concept">Standing vs Just-in-Time Privileges</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Standing Privileges (Avoid)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Permanent admin rights</li>
+                  <li>Always active</li>
+                  <li>High risk if compromised</li>
+                  <li>Difficult to audit</li>
+                </ul>
+                <div class="info-box warning" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Risk:</strong> Compromised account = instant admin</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Just-in-Time (JIT) Access
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Request-based activation</li>
+                  <li>Time-limited (1-8 hours)</li>
+                  <li>Requires justification</li>
+                  <li>Optional approval workflow</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Benefit:</strong> Reduced attack window</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="entra-pim">Entra ID PIM Configuration</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">PIM Role Settings</span></div>
+            <pre><code># Entra ID PIM - Role Configuration Example
+# Role: Global Administrator
+
+ACTIVATION SETTINGS:
+┌────────────────────────────────────────────────────────┐
+│ Maximum activation duration: 4 hours                  │
+│ Require MFA on activation: Yes                        │
+│ Require justification: Yes                            │
+│ Require ticket information: Yes                       │
+│ Require approval: Yes                                 │
+│   Approvers: Security Team, IT Director               │
+└────────────────────────────────────────────────────────┘
+
+ASSIGNMENT SETTINGS:
+┌────────────────────────────────────────────────────────┐
+│ Allow permanent eligible assignment: No               │
+│ Expire eligible assignments after: 90 days            │
+│ Allow permanent active assignment: No                 │
+│ Expire active assignments after: 8 hours              │
+│ Require MFA for active assignment: Yes                │
+└────────────────────────────────────────────────────────┘
+
+NOTIFICATION SETTINGS:
+┌────────────────────────────────────────────────────────┐
+│ Send notifications when members are assigned: Yes     │
+│ Send notifications when members activate: Yes         │
+│ Notify all eligible users when activated: Yes         │
+│ Additional recipients: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="23504c4063404c4e53424d5a0d404c4e">[email&#160;protected]</a>                │
+└────────────────────────────────────────────────────────┘
+
+# User Activation Flow:
+1. User requests "Global Administrator" activation
+2. Enters justification and ticket number
+3. Completes MFA challenge
+4. Approval request sent to approvers
+5. Once approved, role active for 4 hours
+6. Auto-deactivation after time limit</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="roles">High-Risk Roles for PIM</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Role</th>
+                  <th>Risk Level</th>
+                  <th>Recommended Settings</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Global Administrator</strong></td>
+                  <td style="color: var(--accent-red);">Critical</td>
+                  <td>Approval required, 2-hour max, MFA, ticket</td>
+                </tr>
+                <tr>
+                  <td><strong>Privileged Role Administrator</strong></td>
+                  <td style="color: var(--accent-red);">Critical</td>
+                  <td>Approval required, 2-hour max, MFA</td>
+                </tr>
+                <tr>
+                  <td><strong>Exchange Administrator</strong></td>
+                  <td style="color: var(--accent-orange);">High</td>
+                  <td>Approval optional, 4-hour max, MFA</td>
+                </tr>
+                <tr>
+                  <td><strong>Security Administrator</strong></td>
+                  <td style="color: var(--accent-orange);">High</td>
+                  <td>Approval optional, 4-hour max, MFA</td>
+                </tr>
+                <tr>
+                  <td><strong>User Administrator</strong></td>
+                  <td style="color: var(--accent-yellow);">Medium</td>
+                  <td>No approval, 8-hour max, MFA</td>
+                </tr>
+                <tr>
+                  <td><strong>Helpdesk Administrator</strong></td>
+                  <td style="color: var(--accent-green);">Low</td>
+                  <td>No approval, 8-hour max, justification</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">PIM Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              PIM Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Eliminate Standing Admins:</strong> Convert all permanent admin assignments to eligible. No standing Global Admins.</p>
+              <p><strong>2. Require Approval for Critical:</strong> Global Admin, Privileged Role Admin need approval workflow.</p>
+              <p><strong>3. Short Activation Windows:</strong> 2-4 hours for critical roles. Users can re-activate if needed.</p>
+              <p><strong>4. Require Business Justification:</strong> Every activation should document why access is needed.</p>
+              <p><strong>5. Alert on Activations:</strong> SOC should receive notification of all privileged role activations.</p>
+              <p><strong>6. Regular Access Reviews:</strong> Quarterly review of who is eligible for privileged roles.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="pam.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Privileged Access Management</div>
+          </a>
+          <a href="identity-governance.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Identity Governance →</d

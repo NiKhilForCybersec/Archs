@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Architecture Principles | SecArch Reference</title>
+  <meta name="description" content="Core security architecture principles including defense in depth, zero trust, least privilege, and separation of duties.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item">
+            <a href="index.html" class="sidebar-nav-link">Overview</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">1. Foundational Concepts</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item">
+            <a href="principles.html" class="sidebar-nav-link active">Security Principles</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="compliance-frameworks.html" class="sidebar-nav-link">Security Frameworks</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="zero-trust.html" class="sidebar-nav-link">Deployment Models</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="compliance-frameworks.html" class="sidebar-nav-link">Compliance & Regulatory</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="threat-intel.html" class="sidebar-nav-link">Threat Landscape</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Related Sections</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item">
+            <a href="ztna.html" class="sidebar-nav-link">Zero Trust Network Access</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="conditional-access.html" class="sidebar-nav-link">Conditional Access</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="pam.html" class="sidebar-nav-link">Privileged Access Management</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Foundational Concepts</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Principles</span>
+          </div>
+          <h1>Security Architecture Principles</h1>
+          <p class="page-description">
+            Core principles that guide the design and implementation of enterprise security architectures. These concepts form the foundation upon which all other security controls are built.
+          </p>
+        </div>
+
+        <!-- Defense in Depth -->
+        <section>
+          <h2 id="defense-in-depth">Defense in Depth</h2>
+          
+          <p>
+            Defense in Depth is a security strategy that employs multiple layers of security controls throughout an IT system. If one layer fails, another layer is there to prevent or mitigate the attack. This approach acknowledges that no single security control is perfect.
+          </p>
+
+          <div class="diagram-container">
+            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+              <rect width="700" height="400" fill="#0f1117"/>
+              
+              <!-- Title -->
+              <text x="350" y="30" text-anchor="middle" fill="#f1f5f9" font-family="Space Grotesk, sans-serif" font-size="16" font-weight="600">Defense in Depth Layers</text>
+              
+              <!-- Outer Layer - Perimeter -->
+              <rect x="50" y="50" width="600" height="320" rx="12" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444" stroke-width="2"/>
+              <text x="350" y="75" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600">PERIMETER SECURITY</text>
+              <text x="350" y="92" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="10">Firewalls, WAF, DDoS Protection, Email Gateway</text>
+              
+              <!-- Network Layer -->
+              <rect x="90" y="105" width="520" height="240" rx="10" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b" stroke-width="2"/>
+              <text x="350" y="128" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600">NETWORK SECURITY</text>
+              <text x="350" y="143" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="10">Segmentation, IDS/IPS, NDR, DNS Security</text>
+              
+              <!-- Endpoint Layer -->
+              <rect x="130" y="155" width="440" height="165" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6" stroke-width="2"/>
+              <text x="350" y="178" text-anchor="middle" fill="#3b82f6" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600">ENDPOINT SECURITY</text>
+              <text x="350" y="193" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="10">EDR, AV, Application Control, Device Compliance</text>
+              
+              <!-- Application Layer -->
+              <rect x="170" y="205" width="360" height="90" rx="6" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6" stroke-width="2"/>
+              <text x="350" y="228" text-anchor="middle" fill="#8b5cf6" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600">APPLICATION SECURITY</text>
+              <text x="350" y="243" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="10">Authentication, Authorization, Input Validation</text>
+              
+              <!-- Data Layer (Core) -->
+              <rect x="220" y="255" width="260" height="30" rx="4" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="2"/>
+              <text x="350" y="275" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600">DATA SECURITY</text>
+              
+              <!-- Crown Jewels -->
+              <rect x="290" y="290" width="120" height="20" rx="4" fill="#10b981"/>
+              <text x="350" y="304" text-anchor="middle" fill="white" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600">CRITICAL DATA</text>
+              
+              <!-- Attack Arrow -->
+              <path d="M30 200 L50 200" stroke="#ef4444" stroke-width="3" marker-end="url(#attackArrow)"/>
+              <text x="25" y="220" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="9">Attack</text>
+              
+              <defs>
+                <marker id="attackArrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Key Insight
+            </div>
+            <div class="info-box-content">
+              <p>Defense in Depth is not about adding redundant controls at each layer. Each layer should protect against different attack vectors or provide different types of protection. The goal is <strong>complementary coverage</strong>, not duplication.</p>
+            </div>
+          </div>
+
+          <h3>Layer Responsibilities</h3>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Layer</th>
+                  <th>Primary Controls</th>
+                  <th>Protects Against</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Perimeter</strong></td>
+                  <td>NGFW, WAF, DDoS protection, Email security</td>
+                  <td>External attacks, volumetric attacks, known threats</td>
+                </tr>
+                <tr>
+                  <td><strong>Network</strong></td>
+                  <td>Segmentation, IDS/IPS, NDR, DNS filtering</td>
+                  <td>Lateral movement, internal reconnaissance, C2</td>
+                </tr>
+                <tr>
+                  <td><strong>Endpoint</strong></td>
+                  <td>EDR, AV, application control, host firewall</td>
+                  <td>Malware execution, exploitation, privilege escalation</td>
+                </tr>
+                <tr>
+                  <td><strong>Application</strong></td>
+                  <td>Authentication, authorization, input validation</td>
+                  <td>Unauthorized access, injection attacks, logic flaws</td>
+                </tr>
+                <tr>
+                  <td><strong>Data</strong></td>
+                  <td>Encryption, DLP, classification, access controls</td>
+                  <td>Data theft, unauthorized disclosure, tampering</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Zero Trust -->
+        <section>
+          <h2 id="zero-trust">Zero Trust Architecture</h2>
+          
+          <p>
+            Zero Trust is a security model based on the principle of "never trust, always verify." Unlike traditional perimeter-based security that assumes everything inside the network is trusted, Zero Trust assumes breach and verifies every request as though it originates from an untrusted network.
+          </p>
+
+          <div class="comparison-split">
+            <!-- Traditional -->
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Traditional Perimeter Model
+              </div>
+              <div class="comparison-box-content">
+                <h4>Castle-and-Moat Approach</h4>
+                <ul>
+                  <li>Trust based on network location</li>
+                  <li>Inside network = trusted</li>
+                  <li>Outside network = untrusted</li>
+                  <li>VPN grants full network access</li>
+                  <li>Flat internal network</li>
+                  <li>Implicit trust after authentication</li>
+                </ul>
+                
+                <div class="info-box danger" style="margin-top: var(--space-md);">
+                  <div class="info-box-title">The Problem</div>
+                  <div class="info-box-content">
+                    <p>Once an attacker breaches the perimeter (phishing, compromised VPN, insider threat), they have access to everything inside the network.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Zero Trust -->
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Zero Trust Model
+              </div>
+              <div class="comparison-box-content">
+                <h4>Never Trust, Always Verify</h4>
+                <ul>
+                  <li>No implicit trust based on location</li>
+                  <li>Verify identity for every request</li>
+                  <li>Verify device health/compliance</li>
+                  <li>Least privilege access</li>
+                  <li>Micro-segmentation</li>
+                  <li>Continuous validation</li>
+                </ul>
+                
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-title">The Solution</div>
+                  <div class="info-box-content">
+                    <p>Even if an attacker compromises one user or system, they cannot move laterally. Every access request is individually verified.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3>Zero Trust Pillars</h3>
+          
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              </div>
+              <h3 class="card-title">Identity</h3>
+              <p class="card-description">Strong authentication (MFA), risk-based access decisions, identity governance, and privileged access management.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-green);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              </div>
+              <h3 class="card-title">Devices</h3>
+              <p class="card-description">Device compliance, health attestation, endpoint protection, mobile device management.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              </div>
+              <h3 class="card-title">Network</h3>
+              <p class="card-description">Micro-segmentation, encrypted communications, network access control, software-defined perimeter.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-yellow);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+              </div>
+              <h3 class="card-title">Applications</h3>
+              <p class="card-description">Application-level access control, secure APIs, runtime protection, shadow IT discovery.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+              </div>
+              <h3 class="card-title">Data</h3>
+              <p class="card-description">Data classification, encryption, DLP, information rights management, access based on sensitivity.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(239, 68, 68, 0.15); color: var(--accent-red);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+              </div>
+              <h3 class="card-title">Visibility & Analytics</h3>
+              <p class="card-description">Centralized logging, SIEM, UEBA, continuous monitoring, threat detection.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Least Privilege -->
+        <section>
+          <h2 id="least-privilege">Principle of Least Privilege</h2>
+          
+          <p>
+            The Principle of Least Privilege (PoLP) states that users, programs, and processes should only have the minimum permissions necessary to perform their intended function — nothing more. This limits the potential damage from accidents, errors, or attacks.
+          </p>
+
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Excessive Privileges (The Problem)
+              </div>
+              <div class="comparison-box-content">
+                <div class="code-block">
+                  <div class="code-block-header">
+                    <span class="code-block-title">Typical Bad Practices</span>
+                  </div>
+                  <pre><code># User is domain admin "just in case"
+net group "Domain Admins" jsmith /add
+
+# Service account with full admin rights  
+Grant-ADPermission -Full -Identity "svc_backup"
+
+# Application uses sa account
+connectionString="Server=sql;User=sa;Password=..."
+
+# Everyone has read access to file shares
+icacls "\\server\finance" /grant Everyone:R</code></pre>
+                </div>
+                
+                <p style="margin-top: var(--space-md); color: var(--accent-red);">
+                  <strong>Risk:</strong> Compromising any of these accounts grants attacker full access to critical systems.
+                </p>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Least Privilege (The Solution)
+              </div>
+              <div class="comparison-box-content">
+                <div class="code-block">
+                  <div class="code-block-header">
+                    <span class="code-block-title">Best Practices</span>
+                  </div>
+                  <pre><code># User has standard account, requests elevation
+# via PAM for specific tasks with time limit
+
+# Service account with minimum required permissions
+New-ADServiceAccount -Name "svc_backup" 
+Grant-Permission -Read -Path "\\backup\target"
+
+# Application uses managed identity (no password)
+connectionString="Server=sql;Authentication=ActiveDirectory"
+
+# Role-based access to file shares
+icacls "\\server\finance" /grant "Finance_Users":R</code></pre>
+                </div>
+                
+                <p style="margin-top: var(--space-md); color: var(--accent-green);">
+                  <strong>Result:</strong> Compromised account has limited blast radius. Attacker must escalate through multiple barriers.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <h3>Implementing Least Privilege</h3>
+          
+          <div class="flow-vertical">
+            <div class="flow-vertical-step">
+              <div class="flow-step-number">1</div>
+              <div class="flow-step-content">
+                <div class="flow-step-title">Inventory Access</div>
+                <div class="flow-step-description">Document all users, service accounts, and their current permissions. Identify who has access to what.</div>
+              </div>
+            </div>
+            <div class="flow-vertical-step">
+              <div class="flow-step-number">2</div>
+              <div class="flow-step-content">
+                <div class="flow-step-title">Define Roles</div>
+                <div class="flow-step-description">Create role definitions based on job functions. Map minimum required permissions to each role.</div>
+              </div>
+            </div>
+            <div class="flow-vertical-step">
+              <div class="flow-step-number">3</div>
+              <div class="flow-step-content">
+                <div class="flow-step-title">Remove Standing Privileges</div>
+                <div class="flow-step-description">Eliminate permanent admin access. Implement just-in-time (JIT) access via PAM solutions.</div>
+              </div>
+            </div>
+            <div class="flow-vertical-step">
+              <div class="flow-step-number">4</div>
+              <div class="flow-step-content">
+                <div class="flow-step-title">Regular Access Reviews</div>
+                <div class="flow-step-description">Conduct quarterly access certifications. Remove unused permissions automatically.</div>
+              </div>
+            </div>
+            <div class="flow-vertical-step success">
+              <div class="flow-step-number">5</div>
+              <div class="flow-step-content">
+                <div class="flow-step-title">Monitor & Alert</div>
+                <div class="flow-step-description">Log all privilege usage. Alert on anomalous access patterns or privilege escalation attempts.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Separation of Duties -->
+        <section>
+          <h2 id="separation-of-duties">Separation of Duties</h2>
+          
+          <p>
+            Separation of Duties (SoD) is a control that prevents any single individual from having the ability to complete a critical task alone. It requires collusion between multiple parties to commit fraud or cause significant harm.
+          </p>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Scenario</th>
+                  <th>Without SoD (Risk)</th>
+                  <th>With SoD (Control)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Financial Transactions</strong></td>
+                  <td>Same person creates and approves payments</td>
+                  <td>One person creates, different person approves</td>
+                </tr>
+                <tr>
+                  <td><strong>User Provisioning</strong></td>
+                  <td>Admin creates account and assigns all permissions</td>
+                  <td>HR requests, IT creates, manager approves access</td>
+                </tr>
+                <tr>
+                  <td><strong>Code Deployment</strong></td>
+                  <td>Developer writes and deploys own code to production</td>
+                  <td>Dev writes, peer reviews, separate team deploys</td>
+                </tr>
+                <tr>
+                  <td><strong>Security Changes</strong></td>
+                  <td>Single admin can disable security controls</td>
+                  <td>Changes require approval from security team + change board</td>
+                </tr>
+                <tr>
+                  <td><strong>Database Access</strong></td>
+                  <td>DBA has full access to all data</td>
+                  <td>DBA manages schema, data access requires separate approval</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="info-box warning">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Implementation Challenge
+            </div>
+            <div class="info-box-content">
+              <p>In smaller organizations, strict SoD may not be practical due to limited staff. In these cases, implement <strong>compensating controls</strong> like enhanced logging, regular audits, and management oversight of sensitive actions.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Assume Breach -->
+        <section>
+          <h2 id="assume-breach">Assume Breach Mindset</h2>
+          
+          <p>
+            The "assume breach" principle acknowledges that despite best efforts, determined attackers will eventually penetrate your defenses. Rather than focusing solely on prevention, organizations should invest equally in detection, response, and recovery capabilities.
+          </p>
+
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-icon" style="background: rgba(239, 68, 68, 0.15); color: var(--accent-red);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              </div>
+              <h3 class="card-title">Prevent</h3>
+              <p class="card-description">Block known threats and reduce attack surface. But accept that prevention will never be 100%.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-yellow);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              </div>
+              <h3 class="card-title">Detect</h3>
+              <p class="card-description">Invest in visibility and monitoring. Assume attackers are already inside and hunt for them.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(59, 130, 246, 0.15); color: var(--accent-blue);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              </div>
+              <h3 class="card-title">Respond</h3>
+              <p class="card-description">Have playbooks ready. Contain threats quickly to minimize damage. Practice incident response.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-green);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+              </div>
+              <h3 class="card-title">Recover</h3>
+              <p class="card-description">Plan for resilience. Maintain backups. Test disaster recovery. Return to operations quickly.</p>
+            </div>
+          </div>
+
+          <div class="info-box tip">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Practical Application
+            </div>
+            <div class="info-box-content">
+              <p>Ask yourself: "If an attacker got domain admin credentials right now, what would happen?" Then work backwards to add detection and containment controls at each step of that attack chain.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Security by Design -->
+        <section>
+          <h2 id="security-by-design">Security by Design</h2>
+          
+          <p>
+            Security by Design means building security into systems from the beginning rather than adding it as an afterthought. It's significantly cheaper and more effective to address security during design than to retrofit it later.
+          </p>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Principle</th>
+                  <th>Description</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Secure Defaults</strong></td>
+                  <td>Systems should be secure out of the box</td>
+                  <td>Deny all network access by default; require explicit allow rules</td>
+                </tr>
+                <tr>
+                  <td><strong>Fail Secure</strong></td>
+                  <td>When errors occur, fail to a secure state</td>
+                  <td>If authentication service is unavailable, deny access (don't bypass)</td>
+                </tr>
+                <tr>
+                  <td><strong>Complete Mediation</strong></td>
+                  <td>Every access to every object must be checked</td>
+                  <td>Authorization checked on every API call, not just first request</td>
+                </tr>
+                <tr>
+                  <td><strong>Open Design</strong></td>
+                  <td>Security shouldn't depend on secrecy of design</td>
+                  <td>Use proven encryption algorithms, not homegrown security</td>
+                </tr>
+                <tr>
+                  <td><strong>Economy of Mechanism</strong></td>
+                  <td>Keep security mechanisms simple</td>
+                  <td>Simple code is easier to audit and has fewer bugs</td>
+                </tr>
+                <tr>
+                  <td><strong>Minimize Attack Surface</strong></td>
+                  <td>Reduce exposed functionality and entry points</td>
+                  <td>Disable unused services, close unnecessary ports</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Page Navigation -->
+        <nav class="page-nav">
+          <a href="index.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Overview</div>
+          </a>
+          <a href="compliance-frameworks.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Security Frameworks →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

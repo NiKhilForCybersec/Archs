@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Metrics | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Security Metrics and Reporting - KPIs, dashboards, executive reporting, and measuring security program effectiveness.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="soc-operations.html" class="sidebar-nav-link">SOC Operations</a></li>
+          <li class="sidebar-nav-item"><a href="security-metrics.html" class="sidebar-nav-link active">Security Metrics</a></li>
+          <li class="sidebar-nav-item"><a href="incident-response.html" class="sidebar-nav-link">Incident Response</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Metrics</span>
+          </div>
+          <h1>Security Metrics & Reporting</h1>
+          <p class="page-description">What gets measured gets managed. Security metrics translate security activities into business language, demonstrate program value, identify gaps, and enable data-driven decisions. The right metrics drive the right behaviors.</p>
+        </div>
+
+        <section>
+          <h2 id="categories">Metric Categories</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Detection Metrics</h4>
+              <p class="card-description">MTTD, detection coverage, alert volume, false positive rate. Measures how well we find threats.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-orange);">Response Metrics</h4>
+              <p class="card-description">MTTR, incident count, containment time. Measures how fast we respond to threats.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Vulnerability Metrics</h4>
+              <p class="card-description">Patch compliance, mean time to patch, open critical vulns. Measures attack surface reduction.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">Compliance Metrics</h4>
+              <p class="card-description">Control coverage, audit findings, policy exceptions. Measures regulatory adherence.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">Risk Metrics</h4>
+              <p class="card-description">Risk score trends, risk acceptance count, third-party risk. Measures overall risk posture.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-cyan);">Awareness Metrics</h4>
+              <p class="card-description">Phishing click rate, training completion, report rate. Measures human layer effectiveness.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="kpis">Key Performance Indicators</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>KPI</th>
+                  <th>Description</th>
+                  <th>Target</th>
+                  <th>Frequency</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>MTTD</strong></td>
+                  <td>Mean Time to Detect threats</td>
+                  <td>&lt; 24 hours</td>
+                  <td>Monthly</td>
+                </tr>
+                <tr>
+                  <td><strong>MTTR</strong></td>
+                  <td>Mean Time to Respond/Contain</td>
+                  <td>&lt; 4 hours</td>
+                  <td>Monthly</td>
+                </tr>
+                <tr>
+                  <td><strong>Critical Vuln Age</strong></td>
+                  <td>Average days critical vulns remain open</td>
+                  <td>&lt; 7 days</td>
+                  <td>Weekly</td>
+                </tr>
+                <tr>
+                  <td><strong>Patch Compliance</strong></td>
+                  <td>% systems patched within SLA</td>
+                  <td>&gt; 95%</td>
+                  <td>Weekly</td>
+                </tr>
+                <tr>
+                  <td><strong>Phishing Click Rate</strong></td>
+                  <td>% employees clicking simulated phish</td>
+                  <td>&lt; 5%</td>
+                  <td>Monthly</td>
+                </tr>
+                <tr>
+                  <td><strong>MFA Coverage</strong></td>
+                  <td>% applications with MFA enforced</td>
+                  <td>&gt; 99%</td>
+                  <td>Monthly</td>
+                </tr>
+                <tr>
+                  <td><strong>Security Incidents</strong></td>
+                  <td>Count by severity (P1/P2/P3/P4)</td>
+                  <td>Trend down</td>
+                  <td>Monthly</td>
+                </tr>
+                <tr>
+                  <td><strong>Control Coverage</strong></td>
+                  <td>% required controls implemented</td>
+                  <td>&gt; 90%</td>
+                  <td>Quarterly</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="dashboard">Executive Dashboard Example</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Monthly Security Report - December 2024</span></div>
+            <pre><code>┌──────────────────────────────────────────────────────────────────────┐
+│                    SECURITY POSTURE SUMMARY                          │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  Overall Risk Score: 72/100  [████████████░░░░] ↑ from 68 last month │
+│                                                                      │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐      │
+│  │ MTTD            │  │ MTTR            │  │ Incidents       │      │
+│  │ 18 hours  ✓     │  │ 3.2 hours  ✓    │  │ P1: 0  P2: 2    │      │
+│  │ Target: <24h    │  │ Target: <4h     │  │ P3: 8  P4: 24   │      │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘      │
+│                                                                      │
+├──────────────────────────────────────────────────────────────────────┤
+│                    VULNERABILITY MANAGEMENT                          │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  Critical Open: 3 (↓ from 7)     Patch Compliance: 97% ✓            │
+│  High Open: 47 (↓ from 62)       Mean Time to Patch: 4.2 days       │
+│                                                                      │
+│  Top Unpatched: CVE-2024-1234 (Adobe Reader) - 127 systems          │
+│                 Remediation ETA: Dec 15                              │
+│                                                                      │
+├──────────────────────────────────────────────────────────────────────┤
+│                    SECURITY AWARENESS                                │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  Phishing Click Rate: 4.2% ✓ (Target: <5%)                          │
+│  Training Completion: 94% (Target: 95%)                              │
+│  Phishing Reports: 312 (↑ 15% - employees reporting more)           │
+│                                                                      │
+│  Repeat Offenders (3+): 12 employees → HR escalation                │
+│                                                                      │
+├──────────────────────────────────────────────────────────────────────┤
+│                    KEY INITIATIVES STATUS                            │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  [████████████████████] 100% - MFA Rollout Complete                 │
+│  [████████████░░░░░░░░]  60% - Zero Trust Network Access            │
+│  [████████░░░░░░░░░░░░]  40% - EDR to XDR Migration                 │
+│  [████░░░░░░░░░░░░░░░░]  20% - SIEM Cloud Migration                 │
+│                                                                      │
+└──────────────────────────────────────────────────────────────────────┘
+
+KEY RISKS REQUIRING ATTENTION:
+1. Legacy VPN appliance EOL in Q1 - replacement project underway
+2. Third-party risk: Vendor X failed security assessment - remediation plan
+3. Cloud misconfiguration findings increased 30% - CSPM tuning needed</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="trends">Trend Analysis</h2>
+          
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Why Trends Matter More Than Snapshots
+            </div>
+            <div class="info-box-content">
+              <p>A single metric tells you where you are. Trends tell you where you're going.</p>
+              <p><strong>Ask:</strong> Are we getting better over time? Is our investment paying off? Where should we focus next?</p>
+              <p>Track metrics over 6-12 months minimum. Month-over-month variance is noise; quarter-over-quarter is signal.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Metrics Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Security Metrics Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Measure What Matters:</strong> 5-10 key metrics beat 100 vanity metrics. Focus on outcomes, not activities.</p>
+              <p><strong>2. Automate Collection:</strong> Manual metrics are inaccurate and unsustainable. Pull from tools via API.</p>
+              <p><strong>3. Provide Context:</strong> Numbers without context are meaningless. Include targets, trends, benchmarks.</p>
+              <p><strong>4. Different Audiences:</strong> Board wants risk and business impact. SOC wants operational details. Tailor accordingly.</p>
+              <p><strong>5. Drive Action:</strong> Every metric should have an owner and response plan when thresholds are breached.</p>
+              <p><strong>6. Review Regularly:</strong> Metrics go stale. Annual review of what you measure and why.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="soc-operations.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← SOC Operations</div>
+          </a>
+          <a href="incident-response.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Incident Response →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Next-Generation Firewalls | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to NGFW architecture - application awareness, threat prevention, and traffic flow analysis with Palo Alto and Fortinet examples.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">2. Network Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="firewalls.html" class="sidebar-nav-link active">Next-Gen Firewalls</a></li>
+          <li class="sidebar-nav-item"><a href="dmz.html" class="sidebar-nav-link">DMZ Architecture</a></li>
+          <li class="sidebar-nav-item"><a href="segmentation.html" class="sidebar-nav-link">Network Segmentation</a></li>
+          <li class="sidebar-nav-item"><a href="micro-segmentation.html" class="sidebar-nav-link">Micro-Segmentation</a></li>
+          <li class="sidebar-nav-item"><a href="ztna.html" class="sidebar-nav-link">ZTNA</a></li>
+          <li class="sidebar-nav-item"><a href="dns-security.html" class="sidebar-nav-link">DNS Security</a></li>
+          <li class="sidebar-nav-item"><a href="ndr.html" class="sidebar-nav-link">NDR</a></li>
+          <li class="sidebar-nav-item"><a href="ddos-protection.html" class="sidebar-nav-link">DDoS Protection</a></li>
+          <li class="sidebar-nav-item"><a href="ids-ips.html" class="sidebar-nav-link">IDS/IPS</a></li>
+          <li class="sidebar-nav-item"><a href="waf.html" class="sidebar-nav-link">WAF</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Network Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Next-Gen Firewalls</span>
+          </div>
+          <h1>Next-Generation Firewalls</h1>
+          <p class="page-description">
+            Next-Generation Firewalls (NGFW) combine traditional stateful inspection with deep packet inspection, application awareness, integrated intrusion prevention, and threat intelligence. They are the foundation of network security, controlling traffic between security zones.
+          </p>
+        </div>
+
+        <section>
+          <h2 id="overview">NGFW vs Traditional Firewall</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Traditional Firewall (Stateful)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>IP address and port-based rules</li>
+                  <li>TCP/UDP stateful inspection</li>
+                  <li>No application awareness</li>
+                  <li>Cannot inspect encrypted traffic</li>
+                  <li>Separate IPS appliance required</li>
+                  <li>No user identity integration</li>
+                  <li>Static signature updates</li>
+                </ul>
+                <div class="code-block" style="margin-top: var(--space-md);">
+                  <div class="code-block-header"><span class="code-block-title">Example Rule</span></div>
+                  <pre><code>permit tcp any any eq 443
+permit tcp any any eq 80
+deny ip any any</code></pre>
+                </div>
+                <p style="margin-top: var(--space-sm); font-size: 0.875rem; color: var(--text-muted);">Problem: Allows ALL HTTPS traffic regardless of application</p>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Next-Gen Firewall (NGFW)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Application identification (Layer 7)</li>
+                  <li>User-ID integration (AD/LDAP)</li>
+                  <li>SSL/TLS decryption and inspection</li>
+                  <li>Integrated IPS/threat prevention</li>
+                  <li>URL filtering by category</li>
+                  <li>Sandboxing for unknown files</li>
+                  <li>Cloud-delivered threat intelligence</li>
+                </ul>
+                <div class="code-block" style="margin-top: var(--space-md);">
+                  <div class="code-block-header"><span class="code-block-title">Example Rule</span></div>
+                  <pre><code>allow application slack
+  from zone trust
+  to zone untrust  
+  user-group "Engineering"
+  profile threat-prevention strict</code></pre>
+                </div>
+                <p style="margin-top: var(--space-sm); font-size: 0.875rem; color: var(--text-muted);">Allows only Slack app, for specific users, with threat inspection</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="architecture">NGFW Architecture</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 480" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="480" fill="#0f1117"/>
+              
+              <!-- Internet Zone -->
+              <rect x="30" y="180" width="140" height="120" rx="8" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="100" y="210" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">UNTRUST</text>
+              <text x="100" y="230" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Internet</text>
+              <text x="100" y="250" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Threats</text>
+              <text x="100" y="270" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Attackers</text>
+              
+              <!-- NGFW -->
+              <rect x="220" y="50" width="410" height="380" rx="8" fill="rgba(59, 130, 246, 0.05)" stroke="#3b82f6" stroke-width="2"/>
+              <text x="425" y="80" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600">NEXT-GENERATION FIREWALL</text>
+              
+              <!-- Processing Pipeline -->
+              <rect x="250" y="110" width="350" height="50" rx="6" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="425" y="138" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="500">SSL/TLS Decryption</text>
+              <text x="425" y="152" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Forward Proxy • Inbound Inspection</text>
+              
+              <rect x="250" y="170" width="350" height="50" rx="6" fill="#1e2430" stroke="#8b5cf6"/>
+              <text x="425" y="198" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="500">App-ID (Application Identification)</text>
+              <text x="425" y="212" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Signature • Heuristics • Decoding</text>
+              
+              <rect x="250" y="230" width="350" height="50" rx="6" fill="#1e2430" stroke="#10b981"/>
+              <text x="425" y="258" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="500">User-ID (Identity Mapping)</text>
+              <text x="425" y="272" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">AD Integration • Captive Portal • Agent</text>
+              
+              <rect x="250" y="290" width="170" height="50" rx="6" fill="#1e2430" stroke="#ef4444"/>
+              <text x="335" y="318" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Threat Prevention</text>
+              <text x="335" y="332" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">IPS • AV • Anti-Spyware</text>
+              
+              <rect x="430" y="290" width="170" height="50" rx="6" fill="#1e2430" stroke="#06b6d4"/>
+              <text x="515" y="318" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">URL Filtering</text>
+              <text x="515" y="332" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Categories • Custom Lists</text>
+              
+              <rect x="250" y="350" width="170" height="50" rx="6" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="335" y="378" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">File Blocking</text>
+              <text x="335" y="392" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Type • Direction</text>
+              
+              <rect x="430" y="350" width="170" height="50" rx="6" fill="#1e2430" stroke="#ec4899"/>
+              <text x="515" y="378" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">WildFire Sandbox</text>
+              <text x="515" y="392" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Unknown File Analysis</text>
+              
+              <!-- Trust Zone -->
+              <rect x="680" y="100" width="140" height="100" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="750" y="130" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">TRUST</text>
+              <text x="750" y="150" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">User Workstations</text>
+              <text x="750" y="170" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Corporate Network</text>
+              
+              <!-- DMZ Zone -->
+              <rect x="680" y="220" width="140" height="100" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="750" y="250" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">DMZ</text>
+              <text x="750" y="270" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Web Servers</text>
+              <text x="750" y="290" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Reverse Proxies</text>
+              
+              <!-- Datacenter Zone -->
+              <rect x="680" y="340" width="140" height="100" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="750" y="370" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">DATACENTER</text>
+              <text x="750" y="390" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Servers</text>
+              <text x="750" y="410" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Databases</text>
+              
+              <!-- Flow arrows -->
+              <path d="M170 240 L220 240" stroke="#ef4444" stroke-width="2" fill="none"/>
+              <path d="M630 150 L680 150" stroke="#10b981" stroke-width="2" fill="none"/>
+              <path d="M630 270 L680 270" stroke="#f59e0b" stroke-width="2" fill="none"/>
+              <path d="M630 390 L680 390" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="traffic-flow">Detailed Traffic Flow: HTTPS Request</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">User → Firewall → SaaS Application (Salesforce)</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Initiates Connection</div>
+                  <div class="flow-step-description">User opens browser to access Salesforce</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Initial Packet</span></div>
+                    <pre><code>Source IP: 10.1.1.50 (User Workstation)
+Dest IP: 13.110.32.1 (Salesforce)
+Protocol: TCP
+Dest Port: 443
+User: jsmith (via User-ID agent)
+Zone: trust → untrust</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">SSL/TLS Decryption</div>
+                  <div class="flow-step-description">Firewall performs SSL forward proxy to inspect encrypted traffic</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Decryption Flow</span></div>
+                    <pre><code>1. Client Hello → Firewall
+2. Firewall presents internal CA cert to client
+3. Firewall establishes separate TLS session to Salesforce
+4. Traffic decrypted at firewall for inspection
+
+Decryption Profile: "Decrypt-Outbound-SaaS"
+Certificate: "Internal-CA" (trusted by all endpoints)
+TLS Version: 1.3
+Cipher: TLS_AES_256_GCM_SHA384</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Application Identification (App-ID)</div>
+                  <div class="flow-step-description">Firewall identifies application from decrypted content</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">App-ID Result</span></div>
+                    <pre><code>Initial Detection: ssl (based on port 443)
+After Decryption: web-browsing (HTTP detected)
+After Content Analysis: salesforce-base
+
+Application: salesforce-base
+  Category: business-systems
+  Subcategory: crm
+  Technology: browser-based
+  Risk: 2 (low)
+  Evasive: no
+  Has Known Vulnerabilities: no</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Identification (User-ID)</div>
+                  <div class="flow-step-description">Firewall maps IP address to Active Directory user</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">User-ID Mapping</span></div>
+                    <pre><code>Source IP: 10.1.1.50
+User-ID Source: AD Security Log (Event 4624)
+Mapped User: CORP\jsmith
+Groups:
+  - Domain Users
+  - Sales Team
+  - Salesforce-Users
+  - MFA-Enrolled</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Security Policy Evaluation</div>
+                  <div class="flow-step-description">Firewall matches traffic against security policy rulebase</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Policy Match</span></div>
+                    <pre><code>Rule Evaluated:
+  Name: "Allow SaaS Apps - Sales Team"
+  Source Zone: trust
+  Source User: "Salesforce-Users" group ✓
+  Destination Zone: untrust
+  Application: salesforce-base, salesforce-upload, 
+               salesforce-download ✓
+  Action: ALLOW
+  
+Security Profiles Applied:
+  - Antivirus: "Strict-AV"
+  - Anti-Spyware: "Strict-AS"
+  - Vulnerability: "Strict-VP"
+  - URL Filtering: "Corporate-URL"
+  - File Blocking: "Block-Executables"
+  - WildFire: "Forward-Unknown"</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">6</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Threat Prevention Scanning</div>
+                  <div class="flow-step-description">Content scanned for threats, malware, and policy violations</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Scan Results</span></div>
+                    <pre><code>Antivirus Scan: CLEAN
+  Signatures Checked: 45,231,892
+  
+Anti-Spyware: CLEAN
+  C2 Detection: No callback detected
+  DNS Tunneling: Not detected
+  
+Vulnerability Protection: CLEAN
+  Signatures Matched: 0
+  
+URL Category: business-and-economy
+  Action: Allow
+  
+File Analysis: N/A (no file transfer)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">7</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Traffic Forwarded</div>
+                  <div class="flow-step-description">Clean traffic re-encrypted and forwarded to destination</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Session Established</span></div>
+                    <pre><code>Session ID: 2847593
+Action: ALLOW
+Rule: "Allow SaaS Apps - Sales Team"
+
+Bytes Sent: 4,521
+Bytes Received: 127,845
+Packets: 89
+
+Session End Reason: tcp-fin
+Duration: 45 seconds
+
+Log Forwarded To: Panorama, SIEM</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="key-features">Key NGFW Features</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Description</th>
+                  <th>Security Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>App-ID</strong></td>
+                  <td>Identifies 3,000+ applications regardless of port, encryption, or evasion</td>
+                  <td>Block risky apps, allow specific apps</td>
+                </tr>
+                <tr>
+                  <td><strong>User-ID</strong></td>
+                  <td>Maps IP addresses to Active Directory users and groups</td>
+                  <td>User-based policies, not just IPs</td>
+                </tr>
+                <tr>
+                  <td><strong>SSL Decryption</strong></td>
+                  <td>Decrypt and inspect HTTPS traffic inline</td>
+                  <td>Visibility into 90%+ of traffic</td>
+                </tr>
+                <tr>
+                  <td><strong>Threat Prevention</strong></td>
+                  <td>IPS, antivirus, anti-spyware, command & control protection</td>
+                  <td>Block known threats in real-time</td>
+                </tr>
+                <tr>
+                  <td><strong>URL Filtering</strong></td>
+                  <td>Block/allow websites by category (80+ categories)</td>
+                  <td>Prevent access to malicious sites</td>
+                </tr>
+                <tr>
+                  <td><strong>WildFire</strong></td>
+                  <td>Cloud sandbox for unknown file analysis</td>
+                  <td>Zero-day malware detection</td>
+                </tr>
+                <tr>
+                  <td><strong>DNS Security</strong></td>
+                  <td>Block DNS queries to malicious domains</td>
+                  <td>Stop C2 communication</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">NGFW Vendor Comparison</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Palo Alto Networks</div>
+            <div class="vendor-item">Fortinet FortiGate</div>
+            <div class="vendor-item">Cisco Firepower</div>
+            <div class="vendor-item">Check Point</div>
+            <div class="vendor-item">Juniper SRX</div>
+            <div class="vendor-item">Sophos XGS</div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>Palo Alto</th>
+                  <th>Fortinet</th>
+                  <th>Cisco</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>App Identification</td>
+                  <td class="check-yes">✓ App-ID (3,500+)</td>
+                  <td class="check-yes">✓ (4,000+)</td>
+                  <td class="check-yes">✓ (4,000+)</td>
+                </tr>
+                <tr>
+                  <td>SSL Inspection</td>
+                  <td class="check-yes">✓ Hardware accelerated</td>
+                  <td class="check-yes">✓ ASIC</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td>Cloud Sandbox</td>
+                  <td class="check-yes">✓ WildFire</td>
+                  <td class="check-yes">✓ FortiSandbox</td>
+                  <td class="check-yes">✓ Threat Grid</td>
+                </tr>
+                <tr>
+                  <td>Central Management</td>
+                  <td>Panorama</td>
+                  <td>FortiManager</td>
+                  <td>FMC</td>
+                </tr>
+                <tr>
+                  <td>Cloud Firewall</td>
+                  <td class="check-yes">✓ Prisma Access</td>
+                  <td class="check-yes">✓ FortiSASE</td>
+                  <td class="check-yes">✓ Umbrella</td>
+                </tr>
+                <tr>
+                  <td>SD-WAN Integration</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓ Native</td>
+                  <td class="check-yes">✓ Viptela</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">NGFW Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Implementation Best Practices
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Enable SSL Decryption:</strong> Without decryption, you're blind to 90%+ of traffic. Use internal CA and deploy to all endpoints.</p>
+              <p><strong>2. Use Application-Based Rules:</strong> Migrate from port-based rules to App-ID rules. "Allow port 443" should become "Allow salesforce, office365, slack".</p>
+              <p><strong>3. Enable All Threat Prevention:</strong> Turn on AV, IPS, anti-spyware, URL filtering, and WildFire. Use "strict" profiles for unknown traffic.</p>
+              <p><strong>4. Implement User-ID:</strong> Integrate with AD for user-based policies. Critical for compliance and incident response.</p>
+              <p><strong>5. Log Everything:</strong> Forward logs to SIEM. You can't investigate what you don't log.</p>
+              <p><strong>6. Regular Policy Review:</strong> Remove unused rules. Audit overly permissive rules (any/any). Use rule usage statistics.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="threat-intel.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Threat Landscape</div>
+          </a>
+          <a href="dmz.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">DMZ Architecture →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

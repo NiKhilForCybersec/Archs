@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IoT Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to IoT Security - securing Internet of Things devices, OT security, and industrial control systems.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">4. Endpoint Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="mobile-security.html" class="sidebar-nav-link">Mobile Security</a></li>
+          <li class="sidebar-nav-item"><a href="iot-security.html" class="sidebar-nav-link active">IoT Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Endpoint Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>IoT Security</span>
+          </div>
+          <h1>IoT Security</h1>
+          <p class="page-description">Internet of Things (IoT) and Operational Technology (OT) devices expand the attack surface with devices that often lack basic security controls. Securing IoT requires network segmentation, visibility, and specialized monitoring.</p>
+        </div>
+
+        <section>
+          <h2 id="challenges">IoT Security Challenges</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">No Agent Support</h4>
+              <p class="card-description">IoT devices can't run EDR agents. Limited CPU/memory. Traditional endpoint security doesn't apply.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-orange);">Default Credentials</h4>
+              <p class="card-description">Many devices ship with default passwords. Mirai botnet exploited this at massive scale.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">No Patching</h4>
+              <p class="card-description">Firmware updates rare or nonexistent. Vulnerabilities remain forever. End-of-life devices common.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Insecure Protocols</h4>
+              <p class="card-description">Telnet, HTTP, unencrypted protocols still common. Designed for availability, not security.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="architecture">IoT Security Architecture</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Segmented IoT Architecture</span></div>
+            <pre><code># IoT Network Segmentation
+
+┌─────────────────────────────────────────────────────────────────┐
+│                     CORPORATE NETWORK                          │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐            │
+│  │  Workstations│  │   Servers   │  │    Users    │            │
+│  └─────────────┘  └─────────────┘  └─────────────┘            │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │ FIREWALL (strict rules)
+┌──────────────────────────┴──────────────────────────────────────┐
+│                      IoT NETWORK (Segmented)                   │
+│  ┌─────────────────────────────────────────────────────────┐  │
+│  │                    IoT Gateway/Controller               │  │
+│  │                (Authentication, Protocol Translation)   │  │
+│  └──────────────────────────┬──────────────────────────────┘  │
+│                              │                                  │
+│  ┌──────────────┐  ┌────────┴────────┐  ┌──────────────┐      │
+│  │  VLAN: HVAC  │  │  VLAN: Cameras  │  │ VLAN: Badges │      │
+│  │  Thermostats │  │  IP Cameras     │  │ Door Readers │      │
+│  │  BMS Systems │  │  NVR/DVR        │  │ Access Ctrl  │      │
+│  └──────────────┘  └─────────────────┘  └──────────────┘      │
+└─────────────────────────────────────────────────────────────────┘
+
+KEY PRINCIPLES:
+• Segment IoT from corporate network
+• Further segment by device type/function
+• Limit east-west traffic between IoT segments
+• Monitor all IoT traffic (can't use agents)
+• Restrict internet access to required only</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="controls">IoT Security Controls</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Control</th>
+                  <th>Implementation</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Network Segmentation</strong></td>
+                  <td>VLANs, firewalls, SDN</td>
+                  <td>Isolate IoT from critical systems</td>
+                </tr>
+                <tr>
+                  <td><strong>Device Discovery</strong></td>
+                  <td>Passive network monitoring</td>
+                  <td>Know what's on your network</td>
+                </tr>
+                <tr>
+                  <td><strong>Behavioral Monitoring</strong></td>
+                  <td>Network traffic analysis</td>
+                  <td>Detect anomalous device behavior</td>
+                </tr>
+                <tr>
+                  <td><strong>Credential Management</strong></td>
+                  <td>Change defaults, rotate if possible</td>
+                  <td>Prevent default credential attacks</td>
+                </tr>
+                <tr>
+                  <td><strong>Firmware Updates</strong></td>
+                  <td>Patch when available, replace EOL</td>
+                  <td>Reduce known vulnerabilities</td>
+                </tr>
+                <tr>
+                  <td><strong>Encryption</strong></td>
+                  <td>TLS where supported, VPN tunnels</td>
+                  <td>Protect data in transit</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">IoT Security Solutions</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Armis</div>
+            <div class="vendor-item">Claroty</div>
+            <div class="vendor-item">Nozomi Networks</div>
+            <div class="vendor-item">Forescout</div>
+            <div class="vendor-item">Dragos</div>
+            <div class="vendor-item">Microsoft Defender for IoT</div>
+            <div class="vendor-item">Palo Alto IoT Security</div>
+            <div class="vendor-item">Cisco Cyber Vision</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">IoT Security Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              IoT Security Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Inventory Everything:</strong> Discover all IoT devices. Shadow IoT is a major risk.</p>
+              <p><strong>2. Segment Aggressively:</strong> IoT devices should never be on the same network as critical systems.</p>
+              <p><strong>3. Monitor Network Traffic:</strong> Since you can't install agents, network monitoring is essential.</p>
+              <p><strong>4. Change Default Credentials:</strong> First thing after deployment. Document in PAM if possible.</p>
+              <p><strong>5. Restrict Internet Access:</strong> Most IoT doesn't need full internet access. Whitelist required destinations.</p>
+              <p><strong>6. Plan for EOL:</strong> Budget for replacing devices that can't be patched.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="mobile-security.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Mobile Security</div>
+          </a>
+          <a href="patch-management.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Patch Management →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

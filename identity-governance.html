@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Identity Governance | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Identity Governance and Administration - access reviews, lifecycle management, and entitlement management.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">4. Identity & Access</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="sso.html" class="sidebar-nav-link">Single Sign-On</a></li>
+          <li class="sidebar-nav-item"><a href="mfa.html" class="sidebar-nav-link">Multi-Factor Authentication</a></li>
+          <li class="sidebar-nav-item"><a href="conditional-access.html" class="sidebar-nav-link">Conditional Access</a></li>
+          <li class="sidebar-nav-item"><a href="pam.html" class="sidebar-nav-link">Privileged Access Management</a></li>
+          <li class="sidebar-nav-item"><a href="identity-governance.html" class="sidebar-nav-link active">Identity Governance</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Identity & Access</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Identity Governance</span>
+          </div>
+          <h1>Identity Governance & Administration</h1>
+          <p class="page-description">Identity Governance and Administration (IGA) ensures the right people have the right access to the right resources for the right reasons. It encompasses identity lifecycle management, access certification, entitlement management, and separation of duties enforcement.</p>
+        </div>
+
+        <section>
+          <h2 id="problem">The Access Accumulation Problem</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Without Identity Governance
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Access granted on request, rarely removed</li>
+                  <li>Role changes = keep old access + add new</li>
+                  <li>No visibility into who has access to what</li>
+                  <li>Terminated employees retain access for weeks</li>
+                  <li>Rubber-stamp approvals without review</li>
+                  <li>Audit findings: excessive privileges everywhere</li>
+                </ul>
+                <div class="info-box danger" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Risk:</strong> Employee moves from Finance to Marketing, keeps SAP Finance access for 3 years. Never reviewed, never revoked.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                With Identity Governance
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Access tied to roles (RBAC/ABAC)</li>
+                  <li>Role changes trigger access recertification</li>
+                  <li>Complete visibility: who, what, when, why</li>
+                  <li>Automated deprovisioning on termination</li>
+                  <li>Periodic access reviews with accountability</li>
+                  <li>Continuous compliance and audit-ready</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Benefit:</strong> Employee moves to Marketing → HR update triggers automatic removal of Finance access, addition of Marketing access. Quarterly review catches any outliers.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="components">IGA Core Components</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 320" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="320" fill="#0f1117"/>
+              
+              <!-- Identity Lifecycle -->
+              <rect x="30" y="30" width="250" height="130" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="155" y="55" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">IDENTITY LIFECYCLE</text>
+              <text x="50" y="80" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Joiner: Onboarding, birthright access</text>
+              <text x="50" y="98" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Mover: Role change, access adjustment</text>
+              <text x="50" y="116" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Leaver: Offboarding, deprovisioning</text>
+              <text x="50" y="134" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Rehire: Reinstatement workflows</text>
+              
+              <!-- Access Requests -->
+              <rect x="300" y="30" width="250" height="130" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="425" y="55" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">ACCESS REQUESTS</text>
+              <text x="320" y="80" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Self-service access requests</text>
+              <text x="320" y="98" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Multi-level approval workflows</text>
+              <text x="320" y="116" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• SoD violation detection</text>
+              <text x="320" y="134" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Time-bound access grants</text>
+              
+              <!-- Access Certification -->
+              <rect x="570" y="30" width="250" height="130" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="695" y="55" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">ACCESS CERTIFICATION</text>
+              <text x="590" y="80" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Periodic access reviews</text>
+              <text x="590" y="98" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Manager / app owner campaigns</text>
+              <text x="590" y="116" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Automated revocation on denial</text>
+              <text x="590" y="134" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Audit trail and evidence</text>
+              
+              <!-- Role Management -->
+              <rect x="30" y="180" width="250" height="120" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="155" y="205" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">ROLE MANAGEMENT</text>
+              <text x="50" y="230" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Role mining and modeling</text>
+              <text x="50" y="248" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Entitlement bundling</text>
+              <text x="50" y="266" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Role assignment automation</text>
+              <text x="50" y="284" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Birthright role templates</text>
+              
+              <!-- Separation of Duties -->
+              <rect x="300" y="180" width="250" height="120" rx="8" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="425" y="205" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">SEPARATION OF DUTIES</text>
+              <text x="320" y="230" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• SoD policy definition</text>
+              <text x="320" y="248" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Preventive controls (block)</text>
+              <text x="320" y="266" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Detective controls (alert)</text>
+              <text x="320" y="284" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Violation remediation</text>
+              
+              <!-- Reporting & Analytics -->
+              <rect x="570" y="180" width="250" height="120" rx="8" fill="rgba(6, 182, 212, 0.1)" stroke="#06b6d4"/>
+              <text x="695" y="205" text-anchor="middle" fill="#06b6d4" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">REPORTING & ANALYTICS</text>
+              <text x="590" y="230" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Access entitlement reports</text>
+              <text x="590" y="248" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Orphan account detection</text>
+              <text x="590" y="266" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Compliance dashboards</text>
+              <text x="590" y="284" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Risk scoring</text>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="lifecycle">Identity Lifecycle: Joiner-Mover-Leaver</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Employee Lifecycle Example</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">J</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">JOINER: New Employee Onboarding</div>
+                  <div class="flow-step-description">HR creates employee record, triggers identity provisioning</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Joiner Workflow</span></div>
+                    <pre><code>Trigger: HR creates John Smith in Workday
+  Department: Finance
+  Job Title: Financial Analyst
+  Manager: Jane Doe
+  Start Date: 2024-02-01
+
+IGA Actions (Automated):
+  1. Create AD account: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2d475e404459456d4e424359425e42034e4240">[email&#160;protected]</a>
+  2. Create Entra ID account (synced)
+  3. Assign birthright access:
+     - Microsoft 365 E5 license
+     - SharePoint: Finance Team site
+     - Teams: Finance channel
+  4. Assign role-based access:
+     - Role: "Financial Analyst"
+     - Entitlements: SAP Finance (read), Concur, Workday ESS
+  5. Send welcome email with credentials
+  6. Create ServiceNow ticket for laptop
+
+Time to Access: < 1 hour from HR entry</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">M</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">MOVER: Role Change / Transfer</div>
+                  <div class="flow-step-description">Employee transfers departments, access must adjust</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Mover Workflow</span></div>
+                    <pre><code>Trigger: HR updates John Smith in Workday
+  Old Department: Finance
+  New Department: Marketing
+  New Title: Marketing Operations Manager
+  New Manager: Bob Wilson
+  Effective: 2024-06-01
+
+IGA Actions (Automated):
+  1. Detect role change event
+  2. Calculate access delta:
+     REMOVE (old role):
+       - SAP Finance access
+       - Finance SharePoint site
+       - Finance Teams channel
+     ADD (new role):
+       - Marketo Marketing Automation
+       - Marketing SharePoint site
+       - Marketing Teams channel
+  3. Manager notification:
+     "John Smith transferring. Review access."
+  4. Grace period: 14 days to complete transition
+  5. Automatic removal after grace period
+
+Result: No access accumulation, clean transition</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">L</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">LEAVER: Termination / Offboarding</div>
+                  <div class="flow-step-description">Employee leaves company, all access must be revoked</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Leaver Workflow</span></div>
+                    <pre><code>Trigger: HR terminates John Smith in Workday
+  Termination Type: Voluntary resignation
+  Last Day: 2024-12-15
+  
+IGA Actions (Automated - Immediate):
+  1. Disable AD account (prevents login)
+  2. Revoke all Entra ID sessions
+  3. Disable MFA tokens
+  4. Block email access
+  5. Remove from all groups
+  6. Revoke VPN certificates
+
+IGA Actions (Scheduled - 30 days):
+  7. Convert mailbox to shared (for manager)
+  8. Transfer OneDrive ownership
+  9. Archive Teams chats
+  10. Delete AD account
+  11. Delete Entra ID account
+
+Audit Log:
+  All actions timestamped, linked to HR termination
+  Evidence retained for 7 years (compliance)
+
+Result: Zero access within 15 minutes of HR action</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="access-review">Access Certification Campaign</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Quarterly Access Review Process</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Campaign Launched</div>
+                  <div class="flow-step-description">IGA system initiates quarterly manager review</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Campaign Setup</span></div>
+                    <pre><code>Campaign: Q1-2024 Manager Access Review
+Scope: All employees, all applications
+Reviewers: Direct managers
+Duration: 14 days
+Escalation: Auto-revoke if not reviewed
+
+Email to Managers:
+"You have 47 access entitlements to review for 
+your 8 direct reports. Please certify or revoke 
+each entitlement by January 31, 2024."</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Manager Reviews Access</div>
+                  <div class="flow-step-description">Manager evaluates each entitlement</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Review Interface</span></div>
+                    <pre><code>Employee: John Smith (Marketing Operations Manager)
+
+Entitlement 1: Marketo - Admin Access
+  Last Used: 2024-01-10
+  Risk: Medium
+  Decision: [CERTIFY] - Required for job
+
+Entitlement 2: SAP Finance - Read Access  
+  Last Used: 2023-06-15 (7 months ago!)
+  Risk: High
+  Decision: [REVOKE] - No longer in Finance
+
+Entitlement 3: Salesforce - Standard User
+  Last Used: 2024-01-12
+  Risk: Low
+  Decision: [CERTIFY] - Needs CRM for campaigns</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Actions Executed</div>
+                  <div class="flow-step-description">Revocations processed automatically</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Post-Review Actions</span></div>
+                    <pre><code>Campaign Results:
+  Total Entitlements Reviewed: 1,247
+  Certified: 1,089 (87%)
+  Revoked: 158 (13%)
+  
+Auto-Revocation Processing:
+  SAP Finance access for John Smith: REMOVED
+  Ticket created: INC0012345
+  User notified: "Your SAP access was revoked 
+    per manager review. Contact IT if needed."
+  
+Compliance Report Generated:
+  - 100% review completion
+  - 158 excessive privileges removed
+  - $47,000 in license savings identified
+  - Audit evidence archived</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">IGA Platform Comparison</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">SailPoint IdentityNow</div>
+            <div class="vendor-item">Saviynt</div>
+            <div class="vendor-item">Microsoft Entra ID Governance</div>
+            <div class="vendor-item">Okta Identity Governance</div>
+            <div class="vendor-item">One Identity</div>
+            <div class="vendor-item">IBM Security Verify</div>
+            <div class="vendor-item">Oracle Identity Governance</div>
+            <div class="vendor-item">Omada</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">IGA Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Identity Governance Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with HR as Source of Truth:</strong> All identity lifecycle events must flow from HR. If HR doesn't know about it, IGA can't govern it.</p>
+              <p><strong>2. Implement Role-Based Access:</strong> Define roles with appropriate entitlements. Reduces individual access requests by 70%+.</p>
+              <p><strong>3. Make Reviews Meaningful:</strong> Provide reviewers with context: last used date, risk score, peer comparison. Prevents rubber-stamping.</p>
+              <p><strong>4. Automate Deprovisioning:</strong> Leaver process must be automated and immediate. Manual processes leave gaps.</p>
+              <p><strong>5. Enforce Separation of Duties:</strong> Define SoD policies upfront. Block or alert on toxic combinations (e.g., create vendor + approve payment).</p>
+              <p><strong>6. Use Risk-Based Reviews:</strong> High-risk access reviewed more frequently. Not everything needs quarterly review.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="pam.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Privileged Access Management</div>
+          </a>
+          <a href="sso.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Single Sign-On →

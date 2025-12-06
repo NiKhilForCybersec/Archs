@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Application Security - SAST, DAST, SCA, secure coding, and AppSec program implementation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">8. Application Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="application-security.html" class="sidebar-nav-link active">Application Security</a></li>
+          <li class="sidebar-nav-item"><a href="api-security.html" class="sidebar-nav-link">API Security</a></li>
+          <li class="sidebar-nav-item"><a href="devsecops.html" class="sidebar-nav-link">DevSecOps</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Application Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Application Security</span>
+          </div>
+          <h1>Application Security</h1>
+          <p class="page-description">Application Security (AppSec) ensures software is designed, developed, and deployed securely. Through SAST, DAST, SCA, and secure coding practices, AppSec prevents vulnerabilities from reaching production.</p>
+        </div>
+
+        <section>
+          <h2 id="testing">Application Security Testing</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>When</th>
+                  <th>What It Finds</th>
+                  <th>Pros/Cons</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>SAST</strong><br>(Static Analysis)</td>
+                  <td>Development, CI/CD</td>
+                  <td>SQL injection, XSS, hardcoded secrets, buffer overflow</td>
+                  <td>✓ Early detection<br>✗ False positives</td>
+                </tr>
+                <tr>
+                  <td><strong>DAST</strong><br>(Dynamic Analysis)</td>
+                  <td>QA, Staging</td>
+                  <td>Runtime vulns, auth issues, misconfigurations</td>
+                  <td>✓ Real exploits<br>✗ Late in SDLC</td>
+                </tr>
+                <tr>
+                  <td><strong>SCA</strong><br>(Composition Analysis)</td>
+                  <td>Development, CI/CD</td>
+                  <td>Vulnerable dependencies (Log4j, etc.)</td>
+                  <td>✓ Open source risk<br>✗ Noise from transitive</td>
+                </tr>
+                <tr>
+                  <td><strong>IAST</strong><br>(Interactive Analysis)</td>
+                  <td>QA, Testing</td>
+                  <td>Runtime issues with code context</td>
+                  <td>✓ Low false positives<br>✗ Requires agent</td>
+                </tr>
+                <tr>
+                  <td><strong>Pen Testing</strong></td>
+                  <td>Pre-release, Annual</td>
+                  <td>Business logic, chained exploits</td>
+                  <td>✓ Real-world attacks<br>✗ Point-in-time</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="owasp">OWASP Top 10 (2021)</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">OWASP Top 10 Web Application Risks</span></div>
+            <pre><code># OWASP Top 10 - 2021
+
+A01: BROKEN ACCESS CONTROL
+     Users acting outside their intended permissions
+     → Enforce least privilege, deny by default
+
+A02: CRYPTOGRAPHIC FAILURES
+     Weak encryption, plaintext data, missing TLS
+     → Encrypt sensitive data, strong algorithms
+
+A03: INJECTION
+     SQL, NoSQL, OS command, LDAP injection
+     → Parameterized queries, input validation
+
+A04: INSECURE DESIGN
+     Missing security controls, threat modeling gaps
+     → Secure design patterns, threat modeling
+
+A05: SECURITY MISCONFIGURATION
+     Default configs, unnecessary features enabled
+     → Hardening, remove defaults, automate config
+
+A06: VULNERABLE COMPONENTS
+     Using components with known vulnerabilities
+     → SCA scanning, patch management, SBOM
+
+A07: IDENTIFICATION AND AUTHENTICATION FAILURES
+     Weak passwords, missing MFA, session issues
+     → Strong auth, MFA, secure session management
+
+A08: SOFTWARE AND DATA INTEGRITY FAILURES
+     CI/CD pipeline compromises, insecure deserialization
+     → Code signing, integrity verification
+
+A09: SECURITY LOGGING AND MONITORING FAILURES
+     Insufficient logging, no alerting
+     → Comprehensive logging, SIEM integration
+
+A10: SERVER-SIDE REQUEST FORGERY (SSRF)
+     Application fetches remote resources without validation
+     → Allowlist URLs, sanitize input</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="pipeline">Security in CI/CD</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Security Gates in Pipeline</span></div>
+            <pre><code># GitLab CI Security Pipeline Example
+
+stages:
+  - build
+  - security
+  - test
+  - deploy
+
+# Static Analysis (SAST)
+sast:
+  stage: security
+  script:
+    - semgrep --config=auto --json > sast-results.json
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  allow_failure: false  # Block on high severity
+
+# Dependency Scanning (SCA)
+dependency_scan:
+  stage: security
+  script:
+    - snyk test --severity-threshold=high
+  allow_failure: false  # Block on high/critical CVEs
+
+# Secret Scanning
+secret_scan:
+  stage: security
+  script:
+    - gitleaks detect --source . --verbose
+  allow_failure: false  # Always block on secrets
+
+# Container Scanning
+container_scan:
+  stage: security
+  script:
+    - trivy image --severity HIGH,CRITICAL myapp:$CI_COMMIT_SHA
+  allow_failure: false
+
+# DAST (against staging)
+dast:
+  stage: test
+  script:
+    - zap-baseline.py -t https://staging.company.com
+  allow_failure: true  # Alert but don't block (review findings)</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">AppSec Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Snyk</div>
+            <div class="vendor-item">Checkmarx</div>
+            <div class="vendor-item">Veracode</div>
+            <div class="vendor-item">SonarQube</div>
+            <div class="vendor-item">Semgrep</div>
+            <div class="vendor-item">OWASP ZAP</div>
+            <div class="vendor-item">Burp Suite</div>
+            <div class="vendor-item">GitHub Advanced Security</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">AppSec Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Application Security Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Shift Left:</strong> Security testing in IDE and CI, not just before release. Earlier = cheaper to fix.</p>
+              <p><strong>2. Automate Everything:</strong> Manual security reviews don't scale. Automate SAST, SCA, secret scanning.</p>
+              <p><strong>3. Developer-Friendly:</strong> Integrate with developer tools (IDE, PR comments). Reduce friction.</p>
+              <p><strong>4. Prioritize Ruthlessly:</strong> Not all findings are equal. Focus on exploitable, high-risk issues.</p>
+              <p><strong>5. Secure Defaults:</strong> Frameworks should be secure by default. Make insecure hard.</p>
+              <p><strong>6. Security Champions:</strong> Embed security-minded developers in each team.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="waf.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← WAF</div>
+          </a>
+          <a href="api-security.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">API Security →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

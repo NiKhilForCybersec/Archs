@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Architecture Review | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Security Architecture Reviews - design review processes, security requirements, and architecture patterns.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">1. Foundations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="principles.html" class="sidebar-nav-link">Security Principles</a></li>
+          <li class="sidebar-nav-item"><a href="security-architecture-review.html" class="sidebar-nav-link active">Architecture Review</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Foundations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Architecture Review</span>
+          </div>
+          <h1>Security Architecture Review</h1>
+          <p class="page-description">Security Architecture Reviews evaluate system designs before implementation to identify security gaps early. Fixing security issues in design is 10-100x cheaper than fixing them in production.</p>
+        </div>
+
+        <section>
+          <h2 id="process">Review Process</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Security Architecture Review Workflow</span></div>
+            <pre><code># Security Architecture Review Process
+
+1. INTAKE
+   ┌────────────────────────────────────────────────────┐
+   │ • Project submits Architecture Review Request      │
+   │ • Questionnaire: data types, users, integrations  │
+   │ • Preliminary risk classification                 │
+   │ • Assign security architect based on domain       │
+   └────────────────────────────────────────────────────┘
+                            │
+2. DOCUMENTATION REVIEW
+   ┌────────────────────────────────────────────────────┐
+   │ Required Artifacts:                               │
+   │ • Architecture diagram (data flow)                │
+   │ • Network diagram                                 │
+   │ • Authentication/authorization design             │
+   │ • Data classification and handling                │
+   │ • Third-party integrations                        │
+   └────────────────────────────────────────────────────┘
+                            │
+3. THREAT MODELING
+   ┌────────────────────────────────────────────────────┐
+   │ • STRIDE analysis on each component               │
+   │ • Attack surface identification                   │
+   │ • Trust boundary analysis                         │
+   │ • Identify high-risk data flows                   │
+   └────────────────────────────────────────────────────┘
+                            │
+4. REQUIREMENTS MAPPING
+   ┌────────────────────────────────────────────────────┐
+   │ • Map to security standards checklist             │
+   │ • Identify gaps vs requirements                   │
+   │ • Compliance requirements (PCI, HIPAA, etc.)      │
+   │ • Risk acceptance decisions needed                │
+   └────────────────────────────────────────────────────┘
+                            │
+5. FINDINGS & RECOMMENDATIONS
+   ┌────────────────────────────────────────────────────┐
+   │ • Document findings with severity                 │
+   │ • Provide remediation recommendations             │
+   │ • Architecture approval: Approved / Conditional / │
+   │   Not Approved                                    │
+   │ • Track remediation to closure                    │
+   └────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="checklist">Review Checklist Categories</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Key Questions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Authentication</strong></td>
+                  <td>How are users authenticated? MFA required? Service-to-service auth?</td>
+                </tr>
+                <tr>
+                  <td><strong>Authorization</strong></td>
+                  <td>How is access controlled? RBAC/ABAC? Least privilege?</td>
+                </tr>
+                <tr>
+                  <td><strong>Data Protection</strong></td>
+                  <td>Encryption at rest and transit? Key management? Data classification?</td>
+                </tr>
+                <tr>
+                  <td><strong>Network Security</strong></td>
+                  <td>Segmentation? Firewall rules? Internet exposure minimized?</td>
+                </tr>
+                <tr>
+                  <td><strong>Logging & Monitoring</strong></td>
+                  <td>What's logged? SIEM integration? Alerting on security events?</td>
+                </tr>
+                <tr>
+                  <td><strong>Secrets Management</strong></td>
+                  <td>How are secrets stored? Rotation? No hardcoded credentials?</td>
+                </tr>
+                <tr>
+                  <td><strong>Third-Party Risk</strong></td>
+                  <td>Vendor security assessed? Data sharing agreements?</td>
+                </tr>
+                <tr>
+                  <td><strong>Resilience</strong></td>
+                  <td>DR/BCP? Backup strategy? Incident response plan?</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="when">When to Require Review</h2>
+          
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Review Triggers
+            </div>
+            <div class="info-box-content">
+              <p><strong>New Applications:</strong> All new systems handling company or customer data.</p>
+              <p><strong>Major Changes:</strong> New integrations, authentication changes, data flow changes.</p>
+              <p><strong>Cloud Migration:</strong> Moving workloads to cloud or between clouds.</p>
+              <p><strong>Third-Party Integration:</strong> New vendors with data access.</p>
+              <p><strong>Compliance Scope:</strong> Systems entering PCI, HIPAA, or other regulated scope.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Architecture Review Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Architecture Review Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Engage Early:</strong> Review at design phase, not after development. Changes are cheap early.</p>
+              <p><strong>2. Risk-Based Approach:</strong> Tier reviews by risk. Low-risk projects get lighter review.</p>
+              <p><strong>3. Enable, Don't Block:</strong> Provide solutions, not just findings. Be a partner, not a gatekeeper.</p>
+              <p><strong>4. Document Patterns:</strong> Create approved patterns for common architectures. Accelerate reviews.</p>
+              <p><strong>5. Track to Closure:</strong> Findings without remediation are useless. Follow up on action items.</p>
+              <p><strong>6. Continuous Improvement:</strong> Post-mortems on security incidents should feed back into review criteria.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="principles.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Security Principles</div>
+          </a>
+          <a href="zero-trust.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Zero Trust →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

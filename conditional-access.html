@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conditional Access | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Conditional Access policies - identity-based access control with device compliance, location, and risk-based decisions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">4. Identity & Access</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="directory-services.html" class="sidebar-nav-link">Directory Services</a></li>
+          <li class="sidebar-nav-item"><a href="authentication-protocols.html" class="sidebar-nav-link">Authentication Protocols</a></li>
+          <li class="sidebar-nav-item"><a href="sso.html" class="sidebar-nav-link">Single Sign-On</a></li>
+          <li class="sidebar-nav-item"><a href="mfa.html" class="sidebar-nav-link">Multi-Factor Authentication</a></li>
+          <li class="sidebar-nav-item"><a href="conditional-access.html" class="sidebar-nav-link active">Conditional Access</a></li>
+          <li class="sidebar-nav-item"><a href="pam.html" class="sidebar-nav-link">Privileged Access Management</a></li>
+          <li class="sidebar-nav-item"><a href="service-accounts.html" class="sidebar-nav-link">Service Principals</a></li>
+          <li class="sidebar-nav-item"><a href="identity-governance.html" class="sidebar-nav-link">Identity Governance</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <a href="directory-services.html">Identity & Access</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Conditional Access</span>
+          </div>
+          <h1>Conditional Access</h1>
+          <p class="page-description">
+            Conditional Access is the Zero Trust control plane that makes access decisions based on identity, device, location, application, and risk signals. It's the "if-then" engine that determines whether to allow, block, or require additional verification for each access attempt.
+          </p>
+        </div>
+
+        <section>
+          <h2 id="overview">The Access Decision Engine</h2>
+          <p>
+            Conditional Access evaluates multiple signals in real-time to make dynamic access decisions. Unlike traditional binary allow/deny, it can require step-up authentication, limit session capabilities, or enforce additional controls based on context.
+          </p>
+
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Zero Trust in Action
+            </div>
+            <div class="info-box-content">
+              <p>Conditional Access is the practical implementation of Zero Trust's "never trust, always verify" principle. Every access request is evaluated against policy — whether the user is in the office, at home, or traveling abroad.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="comparison">Traditional vs. Conditional Access</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Traditional: Network-Based Access
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>On corporate network = trusted</li>
+                  <li>VPN grants full access to everything</li>
+                  <li>Same access from any device</li>
+                  <li>Static allow/deny rules</li>
+                  <li>MFA only for VPN connection</li>
+                  <li>No risk-based adaptation</li>
+                </ul>
+                
+                <div class="flow-vertical" style="margin-top: var(--space-lg);">
+                  <div class="flow-vertical-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">User on VPN</div>
+                      <div class="flow-step-description">Connected from personal laptop with malware</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step danger">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Full Access Granted</div>
+                      <div class="flow-step-description">VPN = trusted, access all internal resources</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step danger">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Lateral Movement</div>
+                      <div class="flow-step-description">Malware spreads across network via trusted connection</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Modern: Conditional Access
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Every request evaluated independently</li>
+                  <li>Access scoped to specific applications</li>
+                  <li>Device health required for sensitive apps</li>
+                  <li>Dynamic policies based on risk</li>
+                  <li>Step-up MFA when risk detected</li>
+                  <li>Session controls limit actions</li>
+                </ul>
+                
+                <div class="flow-vertical" style="margin-top: var(--space-lg);">
+                  <div class="flow-vertical-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">User Access Attempt</div>
+                      <div class="flow-step-description">Request to access SharePoint from unknown device</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step warning">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Signals Evaluated</div>
+                      <div class="flow-step-description">Unmanaged device + new location = elevated risk</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step success">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Limited Access</div>
+                      <div class="flow-step-description">Browser-only, no download, session timeout 1hr</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="signals">Conditional Access Signals</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+              <rect width="800" height="400" fill="#0f1117"/>
+              
+              <!-- Input Signals -->
+              <text x="100" y="30" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">SIGNALS (IF)</text>
+              
+              <rect x="20" y="50" width="160" height="320" rx="8" fill="rgba(59, 130, 246, 0.05)" stroke="#3b82f6" stroke-dasharray="4"/>
+              
+              <rect x="35" y="70" width="130" height="40" rx="4" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="100" y="92" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">User / Group</text>
+              <text x="100" y="104" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Identity</text>
+              
+              <rect x="35" y="120" width="130" height="40" rx="4" fill="#1e2430" stroke="#10b981"/>
+              <text x="100" y="142" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Device State</text>
+              <text x="100" y="154" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Managed / Compliant</text>
+              
+              <rect x="35" y="170" width="130" height="40" rx="4" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="100" y="192" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Location</text>
+              <text x="100" y="204" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">IP / Country / Named</text>
+              
+              <rect x="35" y="220" width="130" height="40" rx="4" fill="#1e2430" stroke="#8b5cf6"/>
+              <text x="100" y="242" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Application</text>
+              <text x="100" y="254" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Target resource</text>
+              
+              <rect x="35" y="270" width="130" height="40" rx="4" fill="#1e2430" stroke="#ef4444"/>
+              <text x="100" y="292" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Risk Level</text>
+              <text x="100" y="304" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Sign-in / User risk</text>
+              
+              <rect x="35" y="320" width="130" height="40" rx="4" fill="#1e2430" stroke="#06b6d4"/>
+              <text x="100" y="342" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Client App</text>
+              <text x="100" y="354" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Browser / Mobile / Desktop</text>
+              
+              <!-- Policy Engine -->
+              <text x="400" y="30" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">POLICY ENGINE</text>
+              
+              <rect x="280" y="120" width="240" height="180" rx="8" fill="#1e2430" stroke="#10b981" stroke-width="2"/>
+              <text x="400" y="160" text-anchor="middle" fill="#f1f5f9" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600">Conditional Access</text>
+              <text x="400" y="180" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="10">Policy Evaluation</text>
+              
+              <text x="400" y="220" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="10">IF user in "Executives"</text>
+              <text x="400" y="238" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="10">AND device NOT compliant</text>
+              <text x="400" y="256" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="10">AND app = "Financials"</text>
+              <text x="400" y="280" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600">THEN → Block Access</text>
+              
+              <!-- Output Actions -->
+              <text x="700" y="30" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">ACTIONS (THEN)</text>
+              
+              <rect x="620" y="50" width="160" height="320" rx="8" fill="rgba(139, 92, 246, 0.05)" stroke="#8b5cf6" stroke-dasharray="4"/>
+              
+              <rect x="635" y="70" width="130" height="40" rx="4" fill="#1e2430" stroke="#10b981"/>
+              <text x="700" y="92" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">✓ Allow</text>
+              <text x="700" y="104" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Grant access</text>
+              
+              <rect x="635" y="120" width="130" height="40" rx="4" fill="#1e2430" stroke="#ef4444"/>
+              <text x="700" y="142" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">✗ Block</text>
+              <text x="700" y="154" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Deny access</text>
+              
+              <rect x="635" y="170" width="130" height="40" rx="4" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="700" y="192" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Require MFA</text>
+              <text x="700" y="204" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Step-up auth</text>
+              
+              <rect x="635" y="220" width="130" height="40" rx="4" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="700" y="242" text-anchor="middle" fill="#3b82f6" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Compliant Device</text>
+              <text x="700" y="254" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Require enrollment</text>
+              
+              <rect x="635" y="270" width="130" height="40" rx="4" fill="#1e2430" stroke="#8b5cf6"/>
+              <text x="700" y="292" text-anchor="middle" fill="#8b5cf6" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Session Controls</text>
+              <text x="700" y="304" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Limit capabilities</text>
+              
+              <rect x="635" y="320" width="130" height="40" rx="4" fill="#1e2430" stroke="#06b6d4"/>
+              <text x="700" y="342" text-anchor="middle" fill="#06b6d4" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">App Protection</text>
+              <text x="700" y="354" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">MAM policy</text>
+              
+              <!-- Arrows -->
+              <path d="M180 210 L280 210" stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+              <path d="M520 210 L620 210" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+              
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="policy-flow">Detailed Policy Evaluation Flow</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Microsoft Entra Conditional Access Evaluation</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Authentication Request Initiated</div>
+                  <div class="flow-step-description">User attempts to access Microsoft 365 from mobile device</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Request Context</span></div>
+                    <pre><code>User: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c5afb6a8acb1ad85a6aaabb1aab6aaeba6aaa8">[email&#160;protected]</a>
+Application: Microsoft Teams
+Client: iOS Mobile App (Outlook)
+IP Address: 203.0.113.45
+Location: Singapore (SG)
+Device: iPhone 15 Pro (Personal/Unmanaged)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Signal Collection</div>
+                  <div class="flow-step-description">Entra ID gathers all available signals about the request</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Collected Signals</span></div>
+                    <pre><code>Identity Signals:
+  User: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="563c253b3f223e16353938223925397835393b">[email&#160;protected]</a>
+  Groups: ["All Users", "Sales Team", "Mobile Users"]
+  Role: None assigned
+  
+Device Signals:
+  Device ID: Not registered (personal device)
+  Compliance: Unknown
+  OS: iOS 17.2
+  MDM Enrolled: No
+  
+Location Signals:
+  IP: 203.0.113.45
+  Named Location: None matched
+  Country: Singapore
+  Trusted Location: No
+  
+Risk Signals:
+  Sign-in Risk: Low (familiar client, new location)
+  User Risk: None
+  
+Application:
+  Target: Microsoft Teams (00000003-0000-0ff1-ce00-...)
+  Client App: Mobile app</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Policy Matching</div>
+                  <div class="flow-step-description">All applicable policies are identified based on assignments</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Matching Policies</span></div>
+                    <pre><code>Policy 1: "Require MFA for all users"
+  ✓ User in scope (All Users)
+  ✓ App in scope (All cloud apps)
+  → Grant: Require MFA
+  
+Policy 2: "Block access from untrusted countries"
+  ✓ User in scope (All Users)
+  ✗ Location NOT in blocked list (SG is allowed)
+  → Policy does not apply
+
+Policy 3: "Require compliant device for M365"
+  ✓ User in scope (All Users)
+  ✓ App in scope (Office 365)
+  ✗ Device NOT compliant
+  → Grant: Require compliant device OR App protection
+
+Policy 4: "Require app protection on mobile"
+  ✓ User in scope (Mobile Users group)
+  ✓ Device platform = iOS
+  ✓ App in scope (Office 365)
+  → Grant: Require app protection policy</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Control Aggregation</div>
+                  <div class="flow-step-description">All required controls from matching policies are combined</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Combined Requirements</span></div>
+                    <pre><code>Grant Controls Required (ALL must be satisfied):
+  1. Multi-factor authentication
+  2. Compliant device OR App protection policy
+
+Session Controls:
+  - Sign-in frequency: 24 hours
+  - Persistent browser session: Disabled
+
+Result: User must complete MFA AND either:
+  - Enroll device in Intune (make compliant)
+  - Use app with MAM protection (Company Portal)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Enforcement & User Experience</div>
+                  <div class="flow-step-description">User is prompted to satisfy required controls</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">User Journey</span></div>
+                    <pre><code>Step 1: MFA Challenge
+  → Push notification sent to Microsoft Authenticator
+  → User approves (number matching: 42)
+  ✓ MFA satisfied
+
+Step 2: App Protection Check
+  → Teams app has MAM policy applied
+  → Contoso app protection policy active
+  → Copy/paste to personal apps: Blocked
+  → Save to personal storage: Blocked
+  ✓ App protection satisfied
+
+Result: ACCESS GRANTED
+  Session: Teams mobile app
+  Restrictions: MAM controls active
+  Re-auth required: 24 hours</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="common-policies">Common Policy Patterns</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Policy</th>
+                  <th>Conditions</th>
+                  <th>Controls</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Baseline MFA</strong></td>
+                  <td>All users, All apps</td>
+                  <td>Require MFA</td>
+                  <td>Universal second factor</td>
+                </tr>
+                <tr>
+                  <td><strong>Block Legacy Auth</strong></td>
+                  <td>All users, Legacy clients</td>
+                  <td>Block</td>
+                  <td>Prevent POP/IMAP/SMTP auth bypass</td>
+                </tr>
+                <tr>
+                  <td><strong>Compliant Device</strong></td>
+                  <td>All users, Sensitive apps</td>
+                  <td>Require compliant device</td>
+                  <td>Ensure endpoint security</td>
+                </tr>
+                <tr>
+                  <td><strong>Block High Risk</strong></td>
+                  <td>Sign-in risk = High</td>
+                  <td>Block</td>
+                  <td>Stop compromised accounts</td>
+                </tr>
+                <tr>
+                  <td><strong>Risky Sign-in MFA</strong></td>
+                  <td>Sign-in risk = Medium</td>
+                  <td>Require MFA</td>
+                  <td>Step-up for suspicious activity</td>
+                </tr>
+                <tr>
+                  <td><strong>Admin Protection</strong></td>
+                  <td>Directory roles (GA, etc)</td>
+                  <td>Phishing-resistant MFA + Compliant</td>
+                  <td>Protect privileged accounts</td>
+                </tr>
+                <tr>
+                  <td><strong>Guest Access</strong></td>
+                  <td>Guest users, All apps</td>
+                  <td>MFA + ToU + Limited session</td>
+                  <td>Control external access</td>
+                </tr>
+                <tr>
+                  <td><strong>Country Block</strong></td>
+                  <td>All users, Blocked countries</td>
+                  <td>Block</td>
+                  <td>Geo-restriction</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="session-controls">Session Controls Deep Dive</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Sign-in Frequency</h4>
+              <p class="card-description">How often users must re-authenticate. Default is 90 days for managed devices. Can be set as low as 1 hour for sensitive apps.</p>
+              <p style="font-size: 0.875rem; margin-top: var(--space-sm);"><strong>Use:</strong> High-security apps, kiosks</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">Persistent Browser</h4>
+              <p class="card-description">Whether "stay signed in" is allowed. Disable for shared devices or guest access.</p>
+              <p style="font-size: 0.875rem; margin-top: var(--space-sm);"><strong>Use:</strong> Shared workstations</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">App Enforced Restrictions</h4>
+              <p class="card-description">Passes session context to apps (SharePoint, Exchange) to enforce download blocks, print restrictions.</p>
+              <p style="font-size: 0.875rem; margin-top: var(--space-sm);"><strong>Use:</strong> Unmanaged device access</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Defender for Cloud Apps</h4>
+              <p class="card-description">Routes session through CASB proxy for real-time monitoring, DLP, and block actions.</p>
+              <p style="font-size: 0.875rem; margin-top: var(--space-sm);"><strong>Use:</strong> Shadow IT control</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Implementation Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Conditional Access Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with Report-Only:</strong> Deploy new policies in report-only mode first. Review sign-in logs to identify impact before enforcement.</p>
+              <p><strong>2. Block Legacy Auth First:</strong> Legacy protocols (POP, IMAP, SMTP auth) bypass MFA. Block them before rolling out MFA policies.</p>
+              <p><strong>3. Create Break-Glass Accounts:</strong> Exclude emergency access accounts from all policies. Test them monthly.</p>
+              <p><strong>4. Use Named Locations:</strong> Define trusted IPs and countries. Reduces friction for known-good locations.</p>
+              <p><strong>5. Layer Policies:</strong> Build from broad (all users, MFA) to specific (admins, phishing-resistant MFA, compliant device).</p>
+              <p><strong>6. Combine with Identity Protection:</strong> Use risk-based policies to automatically respond to detected threats.</p>
+            </div>
+          </div>
+
+          <div class="info-box warning">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Common Mistakes
+            </div>
+            <div class="info-box-content">
+              <p><strong>Locking yourself out:</strong> Always test policies with a pilot group. Have break-glass accounts excluded.</p>
+              <p><strong>Forgetting service accounts:</strong> Service principals and app registrations may need exclusions or use workload identity.</p>
+              <p><strong>Over-blocking:</strong> Start permissive, then tighten. It's easier to add restrictions than recover from outages.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="mfa.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Multi-Factor Authentication</div>
+          </a>
+          <a href="pam.html" class="page-nav-link next">
+  

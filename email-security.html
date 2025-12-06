@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Email Security - secure email gateways, phishing protection, DMARC/DKIM/SPF, and business email compromise prevention.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">6. Data Protection</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="dlp.html" class="sidebar-nav-link">Data Loss Prevention</a></li>
+          <li class="sidebar-nav-item"><a href="email-security.html" class="sidebar-nav-link active">Email Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Data Protection</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Email Security</span>
+          </div>
+          <h1>Email Security</h1>
+          <p class="page-description">Email remains the #1 attack vector for enterprises. 90%+ of cyberattacks begin with a phishing email. Email security encompasses secure email gateways (SEG), advanced threat protection, email authentication (DMARC/DKIM/SPF), and protection against business email compromise (BEC).</p>
+        </div>
+
+        <section>
+          <h2 id="threats">Email Threat Landscape</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Phishing</h4>
+              <p class="card-description">Fraudulent emails impersonating trusted entities to steal credentials or deliver malware. Includes spear-phishing (targeted) and whaling (executives).</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-orange);">Business Email Compromise</h4>
+              <p class="card-description">Attacker impersonates CEO/CFO to trick employees into wire transfers or data disclosure. Often no malware involved—pure social engineering.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Malicious Attachments</h4>
+              <p class="card-description">Documents with macros, executables, or exploit code. Delivered as invoices, shipping notices, or business documents.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">Credential Harvesting</h4>
+              <p class="card-description">Links to fake login pages (Microsoft 365, banking). Captures username/password for account takeover.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="architecture">Email Security Architecture</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 320" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="320" fill="#0f1117"/>
+              
+              <!-- Sender -->
+              <rect x="30" y="120" width="90" height="80" rx="8" fill="rgba(100, 116, 139, 0.1)" stroke="#64748b"/>
+              <text x="75" y="155" text-anchor="middle" fill="#64748b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">SENDER</text>
+              <text x="75" y="175" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">External</text>
+              
+              <!-- SEG -->
+              <rect x="160" y="80" width="200" height="160" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="2"/>
+              <text x="260" y="105" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">SECURE EMAIL GATEWAY</text>
+              <text x="180" y="130" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Anti-spam filtering</text>
+              <text x="180" y="147" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Malware scanning</text>
+              <text x="180" y="164" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• URL rewriting/sandboxing</text>
+              <text x="180" y="181" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Attachment sandboxing</text>
+              <text x="180" y="198" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• SPF/DKIM/DMARC check</text>
+              <text x="180" y="215" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• BEC detection (AI)</text>
+              
+              <!-- Email Platform -->
+              <rect x="400" y="100" width="150" height="120" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="475" y="130" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">EMAIL PLATFORM</text>
+              <text x="475" y="155" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Microsoft 365</text>
+              <text x="475" y="170" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Google Workspace</text>
+              <text x="475" y="185" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">+ Native protection</text>
+              <text x="475" y="200" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">(Defender/ATP)</text>
+              
+              <!-- User -->
+              <rect x="590" y="120" width="90" height="80" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="635" y="155" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">USER</text>
+              <text x="635" y="175" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Inbox</text>
+              
+              <!-- Training -->
+              <rect x="720" y="100" width="100" height="120" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="770" y="130" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="9" font-weight="600">TRAINING</text>
+              <text x="770" y="155" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Phish simulations</text>
+              <text x="770" y="170" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Report button</text>
+              <text x="770" y="185" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Awareness</text>
+              <text x="770" y="200" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Last line of defense</text>
+              
+              <!-- Arrows -->
+              <path d="M120 160 L160 160" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M360 160 L400 160" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrowGreen)"/>
+              <path d="M550 160 L590 160" stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#arrowBlue)"/>
+              <path d="M680 160 L720 160" stroke="#8b5cf6" stroke-width="2" fill="none" marker-end="url(#arrowPurple)"/>
+              
+              <!-- Blocked path -->
+              <path d="M260 240 L260 280" stroke="#ef4444" stroke-width="2" stroke-dasharray="4" fill="none"/>
+              <rect x="200" y="280" width="120" height="30" rx="4" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="260" y="300" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="9">QUARANTINE</text>
+              
+              <!-- Labels -->
+              <text x="140" y="145" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Inbound</text>
+              <text x="380" y="145" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="7">Clean</text>
+              
+              <defs>
+                <marker id="arrowGray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                </marker>
+                <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+                </marker>
+                <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6"/>
+                </marker>
+                <marker id="arrowPurple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#8b5cf6"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="authentication">Email Authentication: SPF, DKIM, DMARC</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Protocol</th>
+                  <th>What It Does</th>
+                  <th>Protects Against</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>SPF</strong></td>
+                  <td>Lists authorized sending IPs for domain in DNS TXT record</td>
+                  <td>Direct domain spoofing from unauthorized servers</td>
+                </tr>
+                <tr>
+                  <td><strong>DKIM</strong></td>
+                  <td>Cryptographically signs emails; receiver verifies signature</td>
+                  <td>Message tampering, proves sender authenticity</td>
+                </tr>
+                <tr>
+                  <td><strong>DMARC</strong></td>
+                  <td>Policy for handling SPF/DKIM failures; enables reporting</td>
+                  <td>Tells receivers what to do with failed emails (reject/quarantine)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="code-block" style="margin-top: var(--space-lg);">
+            <div class="code-block-header"><span class="code-block-title">DNS Records Example</span></div>
+            <pre><code># SPF Record - Who can send email for your domain
+contoso.com.  TXT  "v=spf1 include:spf.protection.outlook.com 
+                    include:_spf.google.com -all"
+
+# DKIM Record - Public key for signature verification
+selector1._domainkey.contoso.com.  TXT  "v=DKIM1; k=rsa; p=MIIBIj..."
+
+# DMARC Record - Policy + reporting
+_dmarc.contoso.com.  TXT  "v=DMARC1; p=reject; rua=mailto:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="781c15190a1b381b17160c170b17561b1715">[email&#160;protected]</a>; 
+                           ruf=mailto:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="197d74786b7a597a76776d766a76377a7674">[email&#160;protected]</a>; pct=100"
+
+# DMARC Policy Levels:
+#   p=none      → Monitor only, don't take action (start here)
+#   p=quarantine → Send failures to spam/junk
+#   p=reject    → Block failures entirely (goal state)</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="bec">Business Email Compromise Detection</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">BEC Attack Detection</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Attacker Sends BEC Email</div>
+                  <div class="flow-step-description">Impersonates CEO to trick finance team</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Malicious Email</span></div>
+                    <pre><code>From: John Smith <john.smith@contoso-corp.com>  ← Lookalike domain!
+To: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="aad9cbd8cbc284c0c5c4cfd9eac9c5c4dec5d9c584c9c5c7">[email&#160;protected]</a> (Finance Manager)
+Subject: Urgent Wire Transfer Required
+
+Sarah,
+
+I need you to process an urgent wire transfer of $147,000 
+to our new vendor. This is time-sensitive for a deal closing 
+today. Please complete this immediately and confirm.
+
+Wire details:
+Bank: First National Bank
+Account: 1234567890
+Routing: 021000021
+
+This is confidential - please don't discuss with others.
+
+Thanks,
+John Smith
+CEO, Contoso</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">SEG Analysis</div>
+                  <div class="flow-step-description">AI detects BEC indicators</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">BEC Detection</span></div>
+                    <pre><code>Email Security Analysis:
+
+Domain Analysis:
+  ✗ Sender domain: contoso-corp.com (NOT contoso.com)
+  ✗ Domain age: 3 days (newly registered)
+  ✗ No SPF/DKIM/DMARC records
+  ✗ Lookalike domain detected (typosquatting)
+
+Content Analysis (AI/NLP):
+  ✗ Executive impersonation: "CEO, Contoso"
+  ✗ Financial request: Wire transfer
+  ✗ Urgency language: "urgent", "immediately", "time-sensitive"
+  ✗ Secrecy request: "don't discuss with others"
+  ✗ External bank account in body
+
+Behavioral Analysis:
+  ✗ Real CEO John Smith has never emailed Sarah Jones before
+  ✗ CEO normally uses different writing style
+  ✗ Unusual request pattern
+
+BEC Score: 95/100
+Verdict: BLOCK + ALERT</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Attack Prevented</div>
+                  <div class="flow-step-description">Email blocked, security team alerted</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Response</span></div>
+                    <pre><code>Actions Taken:
+  ✓ Email quarantined (never reached user)
+  ✓ Lookalike domain added to blocklist
+  ✓ SOC alerted with full email details
+  ✓ Finance team notified of attempted attack
+
+If User Had Received (additional controls):
+  - Warning banner: "External sender impersonating executive"
+  - Report phishing button → auto-removal from other inboxes
+  - Wire transfer requires verbal confirmation (business process)
+
+Financial Impact Prevented: $147,000</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Email Security Solutions</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Microsoft Defender for Office 365</div>
+            <div class="vendor-item">Proofpoint</div>
+            <div class="vendor-item">Mimecast</div>
+            <div class="vendor-item">Abnormal Security</div>
+            <div class="vendor-item">Cisco Secure Email</div>
+            <div class="vendor-item">Barracuda</div>
+            <div class="vendor-item">KnowBe4 (Training)</div>
+            <div class="vendor-item">Cofense (Phish Reporting)</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Email Security Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Email Security Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Implement DMARC at Reject:</strong> Start with p=none to monitor, move to quarantine, then reject. Protects your domain from spoofing.</p>
+              <p><strong>2. Layer Email Security:</strong> SEG + native platform protection (Defender ATP). Defense in depth catches what one misses.</p>
+              <p><strong>3. Enable Safe Links/Attachments:</strong> URL rewriting with time-of-click scanning. Sandbox attachments before delivery.</p>
+              <p><strong>4. External Email Banners:</strong> Clear warning on emails from outside organization. Helps users spot impersonation.</p>
+              <p><strong>5. Phishing Simulations:</strong> Regular simulated phishing campaigns. Train users, measure improvement, target training.</p>
+              <p><strong>6. Report Phishing Button:</strong> Make it easy for users to report suspicious emails. Enables rapid response and learning.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="dlp.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div

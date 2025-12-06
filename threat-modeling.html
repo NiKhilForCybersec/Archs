@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threat Modeling | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Threat Modeling - STRIDE, PASTA, attack trees, and threat modeling methodologies.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">1. Foundations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="principles.html" class="sidebar-nav-link">Security Principles</a></li>
+          <li class="sidebar-nav-item"><a href="threat-modeling.html" class="sidebar-nav-link active">Threat Modeling</a></li>
+          <li class="sidebar-nav-item"><a href="zero-trust.html" class="sidebar-nav-link">Zero Trust</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Foundations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Threat Modeling</span>
+          </div>
+          <h1>Threat Modeling</h1>
+          <p class="page-description">Threat modeling is a structured approach to identifying security threats, vulnerabilities, and countermeasures early in design. It answers: What are we building? What can go wrong? What are we doing about it?</p>
+        </div>
+
+        <section>
+          <h2 id="process">Threat Modeling Process</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Four Question Framework</span></div>
+            <pre><code># Threat Modeling Four Questions (Adam Shostack)
+
+1. WHAT ARE WE WORKING ON?
+   ┌────────────────────────────────────────────────────┐
+   │ • System architecture diagram                      │
+   │ • Data flow diagram (DFD)                         │
+   │ • Trust boundaries                                 │
+   │ • Assets and entry points                          │
+   └────────────────────────────────────────────────────┘
+                            │
+2. WHAT CAN GO WRONG?
+   ┌────────────────────────────────────────────────────┐
+   │ • Apply STRIDE to each component                  │
+   │ • Identify threats at trust boundaries            │
+   │ • Consider attacker motivations                    │
+   │ • Review historical vulnerabilities                │
+   └────────────────────────────────────────────────────┘
+                            │
+3. WHAT ARE WE GOING TO DO ABOUT IT?
+   ┌────────────────────────────────────────────────────┐
+   │ • Mitigate: Implement controls                    │
+   │ • Transfer: Insurance, SLA with vendor            │
+   │ • Accept: Document risk acceptance                │
+   │ • Avoid: Remove feature/component                 │
+   └────────────────────────────────────────────────────┘
+                            │
+4. DID WE DO A GOOD JOB?
+   ┌────────────────────────────────────────────────────┐
+   │ • Review completeness                              │
+   │ • Validate with security team                     │
+   │ • Test mitigations                                 │
+   │ • Update when architecture changes                │
+   └────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="stride">STRIDE Threat Categories</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Security Property</th>
+                  <th>Countermeasures</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>S</strong>poofing</td>
+                  <td>Pretending to be someone/something else</td>
+                  <td>Authentication</td>
+                  <td>MFA, certificates, tokens</td>
+                </tr>
+                <tr>
+                  <td><strong>T</strong>ampering</td>
+                  <td>Modifying data or code</td>
+                  <td>Integrity</td>
+                  <td>Signing, hashing, access controls</td>
+                </tr>
+                <tr>
+                  <td><strong>R</strong>epudiation</td>
+                  <td>Denying an action occurred</td>
+                  <td>Non-repudiation</td>
+                  <td>Audit logs, digital signatures</td>
+                </tr>
+                <tr>
+                  <td><strong>I</strong>nfo Disclosure</td>
+                  <td>Exposing information</td>
+                  <td>Confidentiality</td>
+                  <td>Encryption, access controls</td>
+                </tr>
+                <tr>
+                  <td><strong>D</strong>enial of Service</td>
+                  <td>Making system unavailable</td>
+                  <td>Availability</td>
+                  <td>Rate limiting, scaling, filtering</td>
+                </tr>
+                <tr>
+                  <td><strong>E</strong>levation of Privilege</td>
+                  <td>Gaining unauthorized access</td>
+                  <td>Authorization</td>
+                  <td>Least privilege, input validation</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="methodologies">Threat Modeling Methodologies</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">STRIDE</h4>
+              <p class="card-description">Microsoft's threat categorization. Systematic, developer-friendly. Best for: Application threat modeling.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">PASTA</h4>
+              <p class="card-description">Process for Attack Simulation and Threat Analysis. Risk-centric, 7-stage process. Best for: Business-aligned risk.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Attack Trees</h4>
+              <p class="card-description">Hierarchical diagram of attack goals and methods. Visual, intuitive. Best for: Specific attack scenarios.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">LINDDUN</h4>
+              <p class="card-description">Privacy-focused threat modeling. Linkability, Identifiability, etc. Best for: Privacy-sensitive systems.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="tools">Threat Modeling Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Microsoft Threat Modeling Tool</div>
+            <div class="vendor-item">OWASP Threat Dragon</div>
+            <div class="vendor-item">IriusRisk</div>
+            <div class="vendor-item">ThreatModeler</div>
+            <div class="vendor-item">draw.io (manual)</div>
+            <div class="vendor-item">Lucidchart</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Threat Modeling Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Threat Modeling Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start Early:</strong> Threat model during design, not after development. Changes are cheap here.</p>
+              <p><strong>2. Include Developers:</strong> They know the system best. Security facilitates, developers participate.</p>
+              <p><strong>3. Keep It Updated:</strong> Threat models are living documents. Update when architecture changes.</p>
+              <p><strong>4. Focus on Trust Boundaries:</strong> Most threats occur where trust levels change. Prioritize these.</p>
+              <p><strong>5. Don't Boil the Ocean:</strong> Time-box sessions. 60-90 minutes per component is often enough.</p>
+              <p><strong>6. Document Assumptions:</strong> Record what's assumed secure. Validate assumptions later.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="principles.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Security Principles</div>
+          </a>
+          <a href="zero-trust.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Zero Trust →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

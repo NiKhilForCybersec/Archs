@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Continuity & Disaster Recovery | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to BCP/DRP - business continuity planning, disaster recovery, RTO/RPO, and resilience strategies.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">11. Governance & Compliance</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="backup-recovery.html" class="sidebar-nav-link">Backup & Recovery</a></li>
+          <li class="sidebar-nav-item"><a href="bcp-drp.html" class="sidebar-nav-link active">BCP & DRP</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Governance & Compliance</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>BCP & DRP</span>
+          </div>
+          <h1>Business Continuity & Disaster Recovery</h1>
+          <p class="page-description">Business Continuity Planning (BCP) ensures critical business functions continue during disruptions. Disaster Recovery (DR) focuses on restoring IT systems after a disaster. Together, they minimize downtime and data loss.</p>
+        </div>
+
+        <section>
+          <h2 id="concepts">Key Concepts</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                RTO (Recovery Time Objective)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Maximum acceptable downtime</li>
+                  <li>How long can you be down?</li>
+                  <li>Drives DR architecture</li>
+                  <li>Example: RTO = 4 hours</li>
+                </ul>
+                <div class="info-box info" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Lower RTO = Higher cost</strong> (hot standby, active-active)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                RPO (Recovery Point Objective)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Maximum acceptable data loss</li>
+                  <li>How much data can you lose?</li>
+                  <li>Drives backup frequency</li>
+                  <li>Example: RPO = 1 hour</li>
+                </ul>
+                <div class="info-box info" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Lower RPO = Higher cost</strong> (continuous replication)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="tiers">DR Tiers</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tier</th>
+                  <th>Strategy</th>
+                  <th>RTO</th>
+                  <th>RPO</th>
+                  <th>Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Tier 0</strong></td>
+                  <td>No DR (backup only)</td>
+                  <td>Days-Weeks</td>
+                  <td>24+ hours</td>
+                  <td>$</td>
+                </tr>
+                <tr>
+                  <td><strong>Tier 1</strong></td>
+                  <td>Cold Site (empty facility)</td>
+                  <td>Days</td>
+                  <td>24 hours</td>
+                  <td>$$</td>
+                </tr>
+                <tr>
+                  <td><strong>Tier 2</strong></td>
+                  <td>Warm Standby (pilot light)</td>
+                  <td>Hours</td>
+                  <td>Hours</td>
+                  <td>$$$</td>
+                </tr>
+                <tr>
+                  <td><strong>Tier 3</strong></td>
+                  <td>Hot Standby (active-passive)</td>
+                  <td>Minutes</td>
+                  <td>Minutes</td>
+                  <td>$$$$</td>
+                </tr>
+                <tr>
+                  <td><strong>Tier 4</strong></td>
+                  <td>Active-Active (multi-region)</td>
+                  <td>Seconds</td>
+                  <td>Zero</td>
+                  <td>$$$$$</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="cloud-dr">Cloud DR Patterns</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">AWS DR Strategies</span></div>
+            <pre><code># DR Strategies by RTO/Cost
+
+1. BACKUP & RESTORE (RTO: Hours-Days, Cost: $)
+   ┌────────────────────────────────────────────┐
+   │ • S3 cross-region replication for backups  │
+   │ • AMIs copied to DR region                 │
+   │ • RDS automated backups to DR region       │
+   │ • Manual restore process                   │
+   └────────────────────────────────────────────┘
+
+2. PILOT LIGHT (RTO: Minutes-Hours, Cost: $$)
+   ┌────────────────────────────────────────────┐
+   │ • Core DB running in DR (RDS read replica) │
+   │ • AMIs ready, EC2 not running              │
+   │ • Scale up when disaster declared          │
+   │ • Route 53 failover routing                │
+   └────────────────────────────────────────────┘
+
+3. WARM STANDBY (RTO: Minutes, Cost: $$$)
+   ┌────────────────────────────────────────────┐
+   │ • Scaled-down version running in DR        │
+   │ • DB synchronously replicated              │
+   │ • Scale up during failover                 │
+   │ • Load balancer health checks              │
+   └────────────────────────────────────────────┘
+
+4. MULTI-SITE ACTIVE-ACTIVE (RTO: Seconds, Cost: $$$$)
+   ┌────────────────────────────────────────────┐
+   │ • Full production in both regions          │
+   │ • Global database (Aurora Global)          │
+   │ • Route 53 latency-based routing           │
+   │ • Automatic failover, no intervention      │
+   └────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="testing">DR Testing</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Tabletop Exercise</h4>
+              <p class="card-description">Discussion-based walkthrough of DR plan. Low risk, low cost. Identifies gaps in procedures. Quarterly recommended.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Simulation Test</h4>
+              <p class="card-description">Execute DR procedures without actual failover. Test backup restoration, communication plans. Semi-annual.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-orange);">Parallel Test</h4>
+              <p class="card-description">Bring up DR environment alongside production. Validate full functionality. Annual recommended.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Full Failover Test</h4>
+              <p class="card-description">Actual cutover to DR. Highest confidence but highest risk. Annual for critical systems, with rollback plan.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">BCP/DRP Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              BCP/DRP Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with BIA:</strong> Business Impact Analysis determines RTO/RPO for each system. Business drives requirements.</p>
+              <p><strong>2. Test Regularly:</strong> Untested DR plans fail when needed. Annual full tests, quarterly tabletops minimum.</p>
+              <p><strong>3. Automate Failover:</strong> Manual processes are slow and error-prone. Infrastructure as Code for DR.</p>
+              <p><strong>4. Document Everything:</strong> Runbooks for failover/failback. Contact lists, escalation paths.</p>
+              <p><strong>5. Consider Ransomware:</strong> Traditional DR may not help if backups are encrypted. Immutable backups, isolated recovery.</p>
+              <p><strong>6. Review After Incidents:</strong> Every outage is a DR test. Update plans based on lessons learned.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="backup-recovery.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Backup & Recovery</div>
+          </a>
+          <a href="risk-management.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Risk Management →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

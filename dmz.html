@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DMZ Architecture | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to DMZ Architecture - demilitarized zones, multi-tier designs, and secure perimeter patterns.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">2. Network Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="firewalls.html" class="sidebar-nav-link">Next-Gen Firewalls</a></li>
+          <li class="sidebar-nav-item"><a href="dmz.html" class="sidebar-nav-link active">DMZ Architecture</a></li>
+          <li class="sidebar-nav-item"><a href="segmentation.html" class="sidebar-nav-link">Network Segmentation</a></li>
+          <li class="sidebar-nav-item"><a href="micro-segmentation.html" class="sidebar-nav-link">Micro-Segmentation</a></li>
+          <li class="sidebar-nav-item"><a href="ztna.html" class="sidebar-nav-link">ZTNA</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Network Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>DMZ Architecture</span>
+          </div>
+          <h1>DMZ Architecture</h1>
+          <p class="page-description">A DMZ (Demilitarized Zone) is a network segment that sits between the untrusted internet and the trusted internal network. It hosts public-facing services while providing an additional layer of security to protect internal resources from direct internet exposure.</p>
+        </div>
+
+        <section>
+          <h2 id="purpose">Why Use a DMZ?</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                No DMZ (Direct Exposure)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Web server on internal network</li>
+                  <li>Firewall allows internet → internal</li>
+                  <li>Compromise = direct internal access</li>
+                  <li>Web server can reach everything</li>
+                  <li>Single firewall, single failure point</li>
+                </ul>
+                <div class="info-box danger" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Risk:</strong> Web app exploit → attacker on internal network → lateral movement to DC, databases, file shares.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                With DMZ (Layered Defense)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Web server in isolated DMZ</li>
+                  <li>Two firewalls (front + back)</li>
+                  <li>Compromise contained in DMZ</li>
+                  <li>Backend access via restricted ports only</li>
+                  <li>Defense in depth architecture</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Benefit:</strong> Web app exploit → attacker in DMZ → can only reach backend API on port 443 → internal network protected.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="architecture">Classic DMZ Architecture</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 450" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="450" fill="#0f1117"/>
+              
+              <!-- Internet -->
+              <rect x="350" y="20" width="150" height="50" rx="8" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="425" y="50" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">INTERNET (Untrusted)</text>
+              
+              <!-- External Firewall -->
+              <rect x="325" y="95" width="200" height="40" rx="6" fill="#1e2430" stroke="#f59e0b" stroke-width="2"/>
+              <text x="425" y="120" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">EXTERNAL FIREWALL</text>
+              
+              <!-- DMZ Zone -->
+              <rect x="100" y="160" width="650" height="120" rx="8" fill="rgba(245, 158, 11, 0.08)" stroke="#f59e0b" stroke-dasharray="4"/>
+              <text x="425" y="185" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">DMZ (Semi-Trusted)</text>
+              
+              <!-- DMZ Services -->
+              <rect x="130" y="205" width="110" height="55" rx="6" fill="#1e2430" stroke="#2a3142"/>
+              <text x="185" y="230" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Web Servers</text>
+              <text x="185" y="248" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Nginx / Apache</text>
+              
+              <rect x="260" y="205" width="110" height="55" rx="6" fill="#1e2430" stroke="#2a3142"/>
+              <text x="315" y="230" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Reverse Proxy</text>
+              <text x="315" y="248" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">HAProxy / F5</text>
+              
+              <rect x="390" y="205" width="110" height="55" rx="6" fill="#1e2430" stroke="#2a3142"/>
+              <text x="445" y="230" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Mail Gateway</text>
+              <text x="445" y="248" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Exchange Edge</text>
+              
+              <rect x="520" y="205" width="110" height="55" rx="6" fill="#1e2430" stroke="#2a3142"/>
+              <text x="575" y="230" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">WAF</text>
+              <text x="575" y="248" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">F5 ASM / Imperva</text>
+              
+              <rect x="650" y="205" width="90" height="55" rx="6" fill="#1e2430" stroke="#2a3142"/>
+              <text x="695" y="230" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">VPN</text>
+              <text x="695" y="248" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Gateway</text>
+              
+              <!-- Internal Firewall -->
+              <rect x="325" y="305" width="200" height="40" rx="6" fill="#1e2430" stroke="#10b981" stroke-width="2"/>
+              <text x="425" y="330" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">INTERNAL FIREWALL</text>
+              
+              <!-- Internal Network -->
+              <rect x="100" y="370" width="650" height="60" rx="8" fill="rgba(16, 185, 129, 0.08)" stroke="#10b981" stroke-dasharray="4"/>
+              <text x="425" y="395" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">INTERNAL NETWORK (Trusted)</text>
+              <text x="425" y="415" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">App Servers • Databases • Domain Controllers • Workstations</text>
+              
+              <!-- Traffic Flows -->
+              <path d="M425 70 L425 95" stroke="#ef4444" stroke-width="2" fill="none"/>
+              <path d="M425 135 L425 160" stroke="#f59e0b" stroke-width="2" fill="none"/>
+              <path d="M425 280 L425 305" stroke="#f59e0b" stroke-width="2" fill="none"/>
+              <path d="M425 345 L425 370" stroke="#10b981" stroke-width="2" fill="none"/>
+              
+              <!-- Legend -->
+              <rect x="30" y="20" width="200" height="110" rx="6" fill="#1e2430" stroke="#2a3142"/>
+              <text x="130" y="45" text-anchor="middle" fill="#f1f5f9" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="500">Allowed Traffic Flows</text>
+              <text x="50" y="65" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ Internet → DMZ (80, 443)</text>
+              <text x="50" y="80" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ DMZ → Internal (specific ports)</text>
+              <text x="50" y="95" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">✗ Internet → Internal (BLOCKED)</text>
+              <text x="50" y="110" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">✗ DMZ → DMZ (BLOCKED)</text>
+              <text x="50" y="125" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">⚠ Internal → DMZ (mgmt only)</text>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="traffic-flow">Traffic Flow: Web Request Through DMZ</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">User Accessing Internal Application via DMZ</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">External User Request</div>
+                  <div class="flow-step-description">User connects to public website from internet</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Initial Request</span></div>
+                    <pre><code>Source: 73.45.128.92 (Internet user)
+Destination: 203.0.113.10:443 (Public IP)
+Request: GET https://app.contoso.com/api/data</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">External Firewall Processing</div>
+                  <div class="flow-step-description">Edge firewall inspects and forwards to DMZ</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Firewall Rule</span></div>
+                    <pre><code>External Firewall Evaluation:
+  Rule: "Allow-HTTPS-to-DMZ"
+  Source Zone: Untrust (Internet)
+  Destination Zone: DMZ
+  Service: HTTPS (tcp/443)
+  Action: ALLOW
+  
+NAT: 203.0.113.10 → 10.100.1.10 (DMZ Web Server)
+Threat Prevention: Enabled
+SSL Inspection: Enabled (decrypt/inspect/re-encrypt)
+
+Result: PERMIT - Forward to DMZ</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">WAF/Reverse Proxy Processing</div>
+                  <div class="flow-step-description">DMZ web server validates request, proxies to backend</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">WAF Processing</span></div>
+                    <pre><code>WAF Inspection (10.100.1.10):
+  ✓ Request method: GET (allowed)
+  ✓ URI path: /api/data (valid endpoint)
+  ✓ SQL injection: Not detected
+  ✓ XSS: Not detected
+  ✓ Rate limit: 45/100 requests/min (OK)
+  
+Reverse Proxy Action:
+  Backend pool: 10.200.1.0/24 (Internal app servers)
+  Health check: 10.200.1.11 (healthy)
+  Forward to: 10.200.1.11:8443</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Internal Firewall Processing</div>
+                  <div class="flow-step-description">Traffic crosses from DMZ to internal network</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Internal Firewall</span></div>
+                    <pre><code>Internal Firewall Evaluation:
+  Source: 10.100.1.10 (DMZ Web Server)
+  Destination: 10.200.1.11:8443 (App Server)
+  
+  Rule: "Allow-DMZ-to-AppServers"
+  Source Zone: DMZ
+  Destination Zone: App-Tier
+  Source: DMZ-WebServers (group)
+  Destination: App-Servers (group)
+  Service: tcp/8443 ONLY
+  Action: ALLOW
+  
+  ⚠️ Note: DMZ cannot reach:
+    - Database tier (tcp/1433) - DENIED
+    - Domain controllers - DENIED
+    - Workstations - DENIED
+    - Other DMZ servers - DENIED
+
+Result: PERMIT - Limited access to app tier only</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Response Returned</div>
+                  <div class="flow-step-description">Data flows back through the same path</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Response Path</span></div>
+                    <pre><code>Response Flow:
+  App Server (10.200.1.11)
+    → Internal Firewall (stateful return)
+    → DMZ Web Server (10.100.1.10)
+    → External Firewall (stateful return)
+    → Internet User (73.45.128.92)
+    
+Total Inspection Points: 4
+  1. External FW (inbound)
+  2. WAF (application layer)
+  3. Internal FW (DMZ→Internal)
+  4. Internal FW (return traffic - stateful)</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="design-patterns">DMZ Design Patterns</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Pattern</th>
+                  <th>Description</th>
+                  <th>Use Case</th>
+                  <th>Complexity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Single Firewall (3-leg)</strong></td>
+                  <td>One firewall with 3 interfaces: internet, DMZ, internal</td>
+                  <td>Small environments, cost-sensitive</td>
+                  <td>Low</td>
+                </tr>
+                <tr>
+                  <td><strong>Dual Firewall</strong></td>
+                  <td>Separate edge and internal firewalls</td>
+                  <td>Enterprise standard, defense in depth</td>
+                  <td>Medium</td>
+                </tr>
+                <tr>
+                  <td><strong>Multi-Tier DMZ</strong></td>
+                  <td>Web tier, app tier, data tier — each isolated</td>
+                  <td>High-security apps, PCI environments</td>
+                  <td>High</td>
+                </tr>
+                <tr>
+                  <td><strong>Cloud DMZ</strong></td>
+                  <td>Virtual DMZ in cloud (Azure/AWS subnet isolation)</td>
+                  <td>Cloud-native applications</td>
+                  <td>Medium</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="services">What Belongs in a DMZ</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">✓ DMZ-Appropriate</h4>
+              <ul style="margin-top: var(--space-md); font-size: 0.875rem; color: var(--text-secondary);">
+                <li>Web servers (static content)</li>
+                <li>Reverse proxies / load balancers</li>
+                <li>Web Application Firewalls</li>
+                <li>Email gateways (MTA)</li>
+                <li>VPN concentrators</li>
+                <li>DNS servers (external)</li>
+                <li>FTP/SFTP servers</li>
+                <li>API gateways</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">✗ Never in DMZ</h4>
+              <ul style="margin-top: var(--space-md); font-size: 0.875rem; color: var(--text-secondary);">
+                <li>Domain Controllers</li>
+                <li>Databases with sensitive data</li>
+                <li>File servers</li>
+                <li>Internal DNS/DHCP</li>
+                <li>Backup systems</li>
+                <li>Management consoles</li>
+                <li>User workstations</li>
+                <li>Certificate authorities</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">DMZ Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              DMZ Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Use Different Firewall Vendors:</strong> If external is Palo Alto, make internal Cisco. A 0-day in one doesn't compromise both.</p>
+              <p><strong>2. No Direct Internet to Internal:</strong> All traffic must traverse DMZ. No firewall rules allowing internet directly to internal network.</p>
+              <p><strong>3. Restrict DMZ to DMZ Traffic:</strong> DMZ servers shouldn't communicate with each other unless required. Prevents lateral movement within DMZ.</p>
+              <p><strong>4. Minimal Services:</strong> DMZ servers run only what's needed. No unnecessary services, no development tools, no SSH from internet.</p>
+              <p><strong>5. Harden Aggressively:</strong> DMZ hosts are most exposed. Patch immediately, minimal software, host-based firewalls, EDR required.</p>
+              <p><strong>6. Monitor Everything:</strong> Full packet capture, all logs to SIEM, behavioral analysis. DMZ is where attacks start.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="firewalls.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Next-Gen Firewalls</div>
+          </a>
+          <a href="segmentation.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Network Segmentation →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

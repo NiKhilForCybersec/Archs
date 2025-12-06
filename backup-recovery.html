@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Backup & Recovery | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Backup and Recovery - ransomware resilience, immutable backups, 3-2-1 rule, and disaster recovery planning.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">9. Business Continuity</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="backup-recovery.html" class="sidebar-nav-link active">Backup & Recovery</a></li>
+          <li class="sidebar-nav-item"><a href="incident-response.html" class="sidebar-nav-link">Incident Response</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Business Continuity</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Backup & Recovery</span>
+          </div>
+          <h1>Backup & Recovery</h1>
+          <p class="page-description">Backups are your last line of defense against ransomware and data loss. Modern backup strategies must account for sophisticated attackers who specifically target backup systems. Immutable backups, air-gapped storage, and regular testing are essential for true resilience.</p>
+        </div>
+
+        <section>
+          <h2 id="problem">Why Traditional Backups Fail Against Ransomware</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Traditional Backup Approach
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Backups on network-attached storage</li>
+                  <li>Backup admin uses domain credentials</li>
+                  <li>Same network as production systems</li>
+                  <li>Backups can be modified or deleted</li>
+                  <li>No verification of backup integrity</li>
+                  <li>Restore rarely tested</li>
+                </ul>
+                <div class="info-box danger" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Risk:</strong> Ransomware gains Domain Admin → enumerates backup systems → deletes/encrypts all backups → demands ransom with no recovery option.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Ransomware-Resilient Backup
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Immutable backups (cannot be modified)</li>
+                  <li>Isolated credentials (not domain-joined)</li>
+                  <li>Air-gapped or isolated network</li>
+                  <li>WORM storage / object lock</li>
+                  <li>Integrity verification on every backup</li>
+                  <li>Regular restore testing</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Benefit:</strong> Ransomware gains DA → can't reach backup network → can't delete immutable backups → full recovery possible.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="321">The 3-2-1-1-0 Rule</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 280" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="280" fill="#0f1117"/>
+              
+              <!-- 3 -->
+              <rect x="30" y="50" width="140" height="180" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="100" y="90" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="48" font-weight="700">3</text>
+              <text x="100" y="120" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">COPIES</text>
+              <text x="100" y="150" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Production data</text>
+              <text x="100" y="168" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">+ 2 backup copies</text>
+              <text x="100" y="200" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Redundancy against</text>
+              <text x="100" y="215" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">single point of failure</text>
+              
+              <!-- 2 -->
+              <rect x="190" y="50" width="140" height="180" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="260" y="90" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="48" font-weight="700">2</text>
+              <text x="260" y="120" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">MEDIA TYPES</text>
+              <text x="260" y="150" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Disk + Cloud</text>
+              <text x="260" y="168" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">or Disk + Tape</text>
+              <text x="260" y="200" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Different failure</text>
+              <text x="260" y="215" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">modes</text>
+              
+              <!-- 1 -->
+              <rect x="350" y="50" width="140" height="180" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="420" y="90" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="48" font-weight="700">1</text>
+              <text x="420" y="120" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">OFFSITE</text>
+              <text x="420" y="150" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Cloud region</text>
+              <text x="420" y="168" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">or physical location</text>
+              <text x="420" y="200" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Protection against</text>
+              <text x="420" y="215" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">site disasters</text>
+              
+              <!-- 1 (Immutable) -->
+              <rect x="510" y="50" width="140" height="180" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="580" y="90" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="48" font-weight="700">1</text>
+              <text x="580" y="120" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">IMMUTABLE</text>
+              <text x="580" y="150" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Air-gapped or</text>
+              <text x="580" y="168" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">WORM/Object Lock</text>
+              <text x="580" y="200" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Protection against</text>
+              <text x="580" y="215" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">ransomware</text>
+              
+              <!-- 0 -->
+              <rect x="670" y="50" width="140" height="180" rx="8" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="740" y="90" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="48" font-weight="700">0</text>
+              <text x="740" y="120" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">ERRORS</text>
+              <text x="740" y="150" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Verified backups</text>
+              <text x="740" y="168" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Tested restores</text>
+              <text x="740" y="200" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">If you haven't tested</text>
+              <text x="740" y="215" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">restore, you don't have it</text>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="immutable">Immutable Backup Implementation</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">AWS S3 Object Lock (Immutable Backup)</span></div>
+            <pre><code># Create bucket with Object Lock enabled
+aws s3api create-bucket \
+  --bucket company-backups-immutable \
+  --object-lock-enabled-for-bucket
+
+# Set default retention (Compliance mode = even root can't delete)
+aws s3api put-object-lock-configuration \
+  --bucket company-backups-immutable \
+  --object-lock-configuration '{
+    "ObjectLockEnabled": "Enabled",
+    "Rule": {
+      "DefaultRetention": {
+        "Mode": "COMPLIANCE",
+        "Days": 30
+      }
+    }
+  }'
+
+# Upload backup with retention
+aws s3api put-object \
+  --bucket company-backups-immutable \
+  --key backups/2024-01-15/full-backup.tar.gz \
+  --body full-backup.tar.gz \
+  --object-lock-mode COMPLIANCE \
+  --object-lock-retain-until-date 2024-02-15T00:00:00Z
+
+# Result: This backup CANNOT be deleted until Feb 15, 2024
+# Even by: AWS root account, backup admins, ransomware
+# Only time can release the lock</code></pre>
+          </div>
+          
+          <div class="info-box info" style="margin-top: var(--space-lg);">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Immutability Options
+            </div>
+            <div class="info-box-content">
+              <p><strong>AWS S3 Object Lock:</strong> Compliance mode (immutable) or Governance mode (admins can override)</p>
+              <p><strong>Azure Immutable Blob:</strong> Time-based retention or legal hold policies</p>
+              <p><strong>Veeam Hardened Repository:</strong> Linux with immutability flag, single-use credentials</p>
+              <p><strong>Physical Air Gap:</strong> Tape in vault, disconnected systems—ultimate protection</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="recovery">Recovery Time Objectives</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Definition</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>RTO (Recovery Time Objective)</strong></td>
+                  <td>Maximum acceptable downtime</td>
+                  <td>ERP system: 4 hours, Email: 1 hour</td>
+                </tr>
+                <tr>
+                  <td><strong>RPO (Recovery Point Objective)</strong></td>
+                  <td>Maximum acceptable data loss</td>
+                  <td>Database: 15 minutes, File shares: 24 hours</td>
+                </tr>
+                <tr>
+                  <td><strong>MTTR (Mean Time to Recovery)</strong></td>
+                  <td>Average actual recovery time</td>
+                  <td>Measured from incident to full restoration</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="code-block" style="margin-top: var(--space-lg);">
+            <div class="code-block-header"><span class="code-block-title">Backup Strategy by RPO</span></div>
+            <pre><code>RPO: Near-Zero (< 15 minutes)
+  → Synchronous replication
+  → Database transaction logs shipped continuously
+  → Technologies: SQL Always On, Oracle Data Guard, Azure Site Recovery
+
+RPO: 1-4 Hours
+  → Hourly incremental backups
+  → Application-aware snapshots
+  → Technologies: Veeam, Commvault, storage snapshots
+
+RPO: 24 Hours
+  → Daily full/incremental backups
+  → Acceptable for non-critical systems
+  → Technologies: Traditional backup agents, file-level backup
+
+Critical Question: If we restore from last night's backup,
+what data do we lose? Is that acceptable for this system?</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="testing">Backup Testing</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Quarterly Backup Recovery Test</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Select Test Scope</div>
+                  <div class="flow-step-description">Choose critical systems for recovery test</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Test Plan</span></div>
+                    <pre><code>Q1 Recovery Test Plan:
+  System: ERP Database (SQL Server)
+  RPO Target: 15 minutes
+  RTO Target: 4 hours
+  Backup Source: Immutable cloud storage
+  
+Test Scenario:
+  "Complete ransomware scenario - restore from scratch"</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Execute Recovery</div>
+                  <div class="flow-step-description">Restore to isolated environment</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Recovery Steps</span></div>
+                    <pre><code>11:00 - Test initiated, timer started
+11:15 - Isolated test environment provisioned
+11:45 - Full backup retrieved from immutable storage
+12:30 - Database restored to test SQL server
+13:15 - Transaction logs applied (point-in-time recovery)
+13:45 - Application connectivity verified
+14:15 - Data integrity checks passed
+14:30 - Test complete
+
+Elapsed Time: 3 hours 30 minutes
+RTO Target: 4 hours ✓ PASS</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Document Results</div>
+                  <div class="flow-step-description">Record findings and improvements</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Test Report</span></div>
+                    <pre><code>Backup Recovery Test Report - Q1 2024
+
+Result: PASS
+RTO Achieved: 3:30 (Target: 4:00)
+RPO Achieved: 12 minutes (Target: 15 minutes)
+
+Findings:
+  ✓ Immutable backup integrity verified
+  ✓ Recovery documentation accurate
+  ✗ Network config required manual steps (30 min delay)
+  ✗ Service account password had changed since backup
+  
+Action Items:
+  1. Automate network configuration in recovery script
+  2. Add service account credentials to backup scope
+  3. Update runbook with lessons learned
+
+Next Test: Q2 2024 - Domain Controllers</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Backup Solutions</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Veeam</div>
+            <div class="vendor-item">Commvault</div>
+            <div class="vendor-item">Rubrik</div>
+            <div class="vendor-item">Cohesity</div>
+            <div class="vendor-item">Veritas NetBackup</div>
+            <div class="vendor-item">AWS Backup</div>
+            <div class="vendor-item">Azure Backup</div>
+            <div class="vendor-item">Dell PowerProtect</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Backup Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Ransomware-Resilient Backup Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Immutable Backups Required:</strong> At least one backup copy must be immutable (Object Lock, WORM, air-gap). This is non-negotiable.</p>
+              <p><strong>2. Separate Credentials:</strong> Backup admin accounts should NOT be domain-joined. Use dedicated, isolated authentication.</p>
+              <p><strong>3. Network Isolation:</strong> Backup infrastructure on separate network segment. Zero trust between production and backup networks.</p>
+              <p><strong>4. Test Recovery Regularly:</strong> Quarterly at minimum. Document and time the process. If you haven't tested it, assume it doesn't work.</p>
+              <p><strong>5. Backup the Backup Config:</strong> Backup server itself, catalog, configurations. You need these to restore anything else.</p>
+              <p><strong>6. Monitor Backup Jobs:</strong> Alert on failures immediately. Ransomware often disables backups days before encryption.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="dlp.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Data Loss Prevention</div>
+          </a>
+          <a href="incident-response.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Incident Response →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

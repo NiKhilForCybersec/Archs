@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSPM | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Data Security Posture Management - discovering, classifying, and protecting sensitive data across cloud environments.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">9. Data Protection</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="data-classification.html" class="sidebar-nav-link">Data Classification</a></li>
+          <li class="sidebar-nav-item"><a href="dspm.html" class="sidebar-nav-link active">DSPM</a></li>
+          <li class="sidebar-nav-item"><a href="dlp.html" class="sidebar-nav-link">DLP</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Data Protection</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>DSPM</span>
+          </div>
+          <h1>Data Security Posture Management (DSPM)</h1>
+          <p class="page-description">DSPM discovers and classifies sensitive data across cloud environments, identifies data security risks, and helps organizations understand where their sensitive data lives and how it's protected.</p>
+        </div>
+
+        <section>
+          <h2 id="problem">The Data Visibility Problem</h2>
+          
+          <div class="info-box warning">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Why Data Security is Hard
+            </div>
+            <div class="info-box-content">
+              <p><strong>Data Sprawl:</strong> Data copied across S3, RDS, Snowflake, SaaS apps. Where is the sensitive data?</p>
+              <p><strong>Shadow Data:</strong> Developers create test DBs with production data. Unknown copies proliferate.</p>
+              <p><strong>Dynamic Cloud:</strong> New datastores created daily. Manual tracking impossible.</p>
+              <p><strong>Access Complexity:</strong> Who can access the data? Over-permissioned roles everywhere.</p>
+              <p><strong>Compliance:</strong> GDPR, CCPA require knowing where personal data resides.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="capabilities">DSPM Capabilities</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>Description</th>
+                  <th>Benefit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Data Discovery</strong></td>
+                  <td>Find all datastores (S3, DBs, SaaS)</td>
+                  <td>Complete inventory of where data lives</td>
+                </tr>
+                <tr>
+                  <td><strong>Data Classification</strong></td>
+                  <td>Identify sensitive data (PII, PCI, PHI)</td>
+                  <td>Know what sensitive data exists</td>
+                </tr>
+                <tr>
+                  <td><strong>Data Flow Mapping</strong></td>
+                  <td>Track how data moves between systems</td>
+                  <td>Understand data lineage</td>
+                </tr>
+                <tr>
+                  <td><strong>Access Analysis</strong></td>
+                  <td>Who/what can access sensitive data</td>
+                  <td>Identify over-permissioned access</td>
+                </tr>
+                <tr>
+                  <td><strong>Risk Assessment</strong></td>
+                  <td>Unencrypted, public, excessive access</td>
+                  <td>Prioritize remediation</td>
+                </tr>
+                <tr>
+                  <td><strong>Compliance Mapping</strong></td>
+                  <td>Map data to regulatory requirements</td>
+                  <td>GDPR, CCPA, PCI compliance</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vs-dlp">DSPM vs DLP</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>
+                DLP (Data Loss Prevention)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Prevents data exfiltration</li>
+                  <li>Focuses on data in motion</li>
+                  <li>Policy enforcement</li>
+                  <li>Block/allow actions</li>
+                  <li>Reactive protection</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                DSPM
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Discovers and classifies data</li>
+                  <li>Focuses on data at rest</li>
+                  <li>Posture assessment</li>
+                  <li>Visibility and risk scoring</li>
+                  <li>Proactive risk reduction</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="info-box info" style="margin-top: var(--space-lg);">
+            <div class="info-box-content">
+              <p style="margin: 0;"><strong>DSPM + DLP Together:</strong> DSPM finds where sensitive data is and identifies risks. DLP enforces policies to protect it. Complementary, not competing.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">DSPM Vendors</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Wiz (DSPM)</div>
+            <div class="vendor-item">Dig Security (Palo Alto)</div>
+            <div class="vendor-item">Laminar (Rubrik)</div>
+            <div class="vendor-item">Sentra</div>
+            <div class="vendor-item">BigID</div>
+            <div class="vendor-item">Cyera</div>
+            <div class="vendor-item">Normalyze</div>
+            <div class="vendor-item">Varonis</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">DSPM Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              DSPM Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with Discovery:</strong> You can't protect what you don't know. Full data inventory first.</p>
+              <p><strong>2. Prioritize Crown Jewels:</strong> Focus on highest-value data first. Customer PII, financial data, IP.</p>
+              <p><strong>3. Remediate Shadow Data:</strong> Eliminate unnecessary copies. Less data = less risk.</p>
+              <p><strong>4. Integrate with DLP:</strong> Use DSPM findings to inform DLP policies.</p>
+              <p><strong>5. Automate Classification:</strong> Manual classification doesn't scale. Use ML-based classification.</p>
+              <p><strong>6. Continuous Monitoring:</strong> Data landscape changes constantly. One-time scans are insufficient.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="data-classification.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Data Classification</div>
+          </a>
+          <a href="dlp.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">DLP →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

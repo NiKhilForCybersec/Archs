@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Baselines | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Security Baselines - CIS benchmarks, hardening standards, and configuration management.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">1. Foundations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="principles.html" class="sidebar-nav-link">Security Principles</a></li>
+          <li class="sidebar-nav-item"><a href="security-baselines.html" class="sidebar-nav-link active">Security Baselines</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Foundations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Baselines</span>
+          </div>
+          <h1>Security Baselines</h1>
+          <p class="page-description">Security baselines define the minimum security configuration standards for systems, applications, and infrastructure. They reduce attack surface, ensure consistency, and provide a foundation for compliance.</p>
+        </div>
+
+        <section>
+          <h2 id="cis">CIS Benchmarks</h2>
+          
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Center for Internet Security (CIS) Benchmarks
+            </div>
+            <div class="info-box-content">
+              <p>CIS Benchmarks are consensus-based security configuration guides developed by security experts worldwide. They provide step-by-step hardening recommendations for operating systems, applications, cloud platforms, and network devices.</p>
+              <p><strong>Level 1:</strong> Basic security settings, minimal impact on functionality. Recommended for all systems.</p>
+              <p><strong>Level 2:</strong> Defense-in-depth settings, may impact functionality. For high-security environments.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="windows">Windows Server Hardening</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Key Windows Security Settings</span></div>
+            <pre><code># Windows Server 2022 - Critical Baseline Settings
+
+# 1. ACCOUNT POLICIES
+# ───────────────────
+# Password Policy (via GPO or Local Security Policy)
+Minimum password length: 14 characters
+Password complexity: Enabled
+Account lockout threshold: 5 invalid attempts
+Account lockout duration: 30 minutes
+
+# 2. AUDIT POLICIES
+# ─────────────────
+# Enable critical audit events
+auditpol /set /subcategory:"Logon" /success:enable /failure:enable
+auditpol /set /subcategory:"Account Lockout" /failure:enable
+auditpol /set /subcategory:"Sensitive Privilege Use" /success:enable
+auditpol /set /subcategory:"Process Creation" /success:enable
+
+# 3. DISABLE UNNECESSARY SERVICES
+# ───────────────────────────────
+Set-Service -Name "RemoteRegistry" -StartupType Disabled
+Set-Service -Name "SNMP" -StartupType Disabled
+Set-Service -Name "Telnet" -StartupType Disabled
+
+# 4. WINDOWS FIREWALL
+# ──────────────────
+Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
+Set-NetFirewallProfile -DefaultInboundAction Block
+Set-NetFirewallProfile -DefaultOutboundAction Allow
+
+# 5. SMB HARDENING
+# ───────────────
+Set-SmbServerConfiguration -EnableSMB1Protocol $false  # Critical!
+Set-SmbServerConfiguration -RequireSecuritySignature $true
+
+# 6. LSASS PROTECTION
+# ──────────────────
+# Enable Credential Guard (requires hardware support)
+# Registry: HKLM\SYSTEM\CurrentControlSet\Control\LSA
+# LsaCfgFlags = 1 (with UEFI lock)</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="linux">Linux Hardening</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Key Linux Security Settings</span></div>
+            <pre><code># Ubuntu/RHEL - Critical Baseline Settings
+
+# 1. SSH HARDENING (/etc/ssh/sshd_config)
+# ───────────────────────────────────────
+PermitRootLogin no
+PasswordAuthentication no  # Use keys only
+MaxAuthTries 3
+ClientAliveInterval 300
+ClientAliveCountMax 2
+AllowUsers admin deploy    # Explicit allow list
+Protocol 2
+
+# 2. FILESYSTEM SECURITY
+# ─────────────────────
+# Restrict /tmp, /var/tmp
+# /etc/fstab entries:
+tmpfs /tmp tmpfs defaults,noexec,nosuid,nodev 0 0
+
+# Set permissions on sensitive files
+chmod 600 /etc/shadow
+chmod 644 /etc/passwd
+chmod 700 /root
+
+# 3. KERNEL HARDENING (/etc/sysctl.conf)
+# ─────────────────────────────────────
+net.ipv4.ip_forward = 0
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.all.accept_source_route = 0
+kernel.randomize_va_space = 2  # ASLR
+fs.suid_dumpable = 0
+
+# 4. FIREWALL (UFW/firewalld)
+# ─────────────────────────
+ufw default deny incoming
+ufw default allow outgoing
+ufw allow ssh
+ufw enable
+
+# 5. REMOVE UNNECESSARY PACKAGES
+# ─────────────────────────────
+apt remove telnetd rsh-server xinetd  # Ubuntu
+yum remove telnet-server rsh-server   # RHEL</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="assessment">Baseline Assessment Tools</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tool</th>
+                  <th>Type</th>
+                  <th>Best For</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>CIS-CAT Pro</strong></td>
+                  <td>Commercial</td>
+                  <td>CIS benchmark scanning, reporting</td>
+                </tr>
+                <tr>
+                  <td><strong>OpenSCAP</strong></td>
+                  <td>Open Source</td>
+                  <td>SCAP compliance scanning, Linux</td>
+                </tr>
+                <tr>
+                  <td><strong>Microsoft Security Compliance Toolkit</strong></td>
+                  <td>Free</td>
+                  <td>Windows baseline analysis</td>
+                </tr>
+                <tr>
+                  <td><strong>Lynis</strong></td>
+                  <td>Open Source</td>
+                  <td>Linux/Unix security auditing</td>
+                </tr>
+                <tr>
+                  <td><strong>Qualys Policy Compliance</strong></td>
+                  <td>Commercial</td>
+                  <td>Enterprise compliance scanning</td>
+                </tr>
+                <tr>
+                  <td><strong>Tenable.sc</strong></td>
+                  <td>Commercial</td>
+                  <td>Compliance + vulnerability</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Baseline Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Security Baseline Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with Standards:</strong> Don't reinvent. Use CIS Benchmarks, DISA STIGs as your foundation.</p>
+              <p><strong>2. Test Before Deploying:</strong> Baselines can break applications. Lab testing is essential.</p>
+              <p><strong>3. Automate Enforcement:</strong> GPO for Windows, Ansible/Chef/Puppet for Linux. Manual hardening doesn't scale.</p>
+              <p><strong>4. Continuous Monitoring:</strong> Configuration drift happens. Scan regularly, alert on deviations.</p>
+              <p><strong>5. Document Exceptions:</strong> Not all settings work for all systems. Track approved exceptions.</p>
+              <p><strong>6. Golden Images:</strong> Bake baselines into VM templates. New systems start compliant.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="principles.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Security Principles</div>
+          </a>
+          <a href="zero-trust.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Zero Trust →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

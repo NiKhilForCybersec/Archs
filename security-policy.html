@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Policy | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Security Policy - policy hierarchy, essential policies, standards, and governance framework.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">11. Governance & Compliance</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="security-policy.html" class="sidebar-nav-link active">Security Policy</a></li>
+          <li class="sidebar-nav-item"><a href="compliance-frameworks.html" class="sidebar-nav-link">Compliance Frameworks</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Governance & Compliance</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Policy</span>
+          </div>
+          <h1>Security Policy</h1>
+          <p class="page-description">Security policies establish the foundation for an organization's security program. They define what must be protected, who is responsible, and the rules that govern behavior. Without policies, security is ad hoc and inconsistent.</p>
+        </div>
+
+        <section>
+          <h2 id="hierarchy">Policy Hierarchy</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Policy Document Hierarchy</span></div>
+            <pre><code># From Strategic to Tactical
+
+┌─────────────────────────────────────────────────────────────────┐
+│ POLICIES (What)                                                 │
+│ High-level statements of intent, approved by leadership        │
+│ Example: "All sensitive data must be encrypted"                │
+│ Review: Annual                                                  │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ STANDARDS (What specifically)                                   │
+│ Mandatory requirements, specific and measurable                │
+│ Example: "AES-256 for data at rest, TLS 1.3 for transit"       │
+│ Review: Annual or when technology changes                      │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ PROCEDURES (How)                                                │
+│ Step-by-step instructions for implementing standards           │
+│ Example: "How to enable BitLocker on Windows endpoints"        │
+│ Review: As needed, when processes change                       │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ GUIDELINES (Suggestions)                                        │
+│ Best practices, recommendations (not mandatory)                │
+│ Example: "Consider using hardware tokens for MFA"              │
+│ Review: As needed                                               │
+└─────────────────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="essential">Essential Security Policies</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Policy</th>
+                  <th>Purpose</th>
+                  <th>Key Elements</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Information Security Policy</strong></td>
+                  <td>Master policy, establishes program</td>
+                  <td>Scope, roles, responsibilities, governance</td>
+                </tr>
+                <tr>
+                  <td><strong>Acceptable Use Policy</strong></td>
+                  <td>Rules for using company systems</td>
+                  <td>Permitted/prohibited activities, monitoring</td>
+                </tr>
+                <tr>
+                  <td><strong>Access Control Policy</strong></td>
+                  <td>Who can access what</td>
+                  <td>Least privilege, authentication, authorization</td>
+                </tr>
+                <tr>
+                  <td><strong>Data Classification Policy</strong></td>
+                  <td>How to categorize and handle data</td>
+                  <td>Classification levels, handling requirements</td>
+                </tr>
+                <tr>
+                  <td><strong>Incident Response Policy</strong></td>
+                  <td>How to handle security incidents</td>
+                  <td>Roles, escalation, communication, reporting</td>
+                </tr>
+                <tr>
+                  <td><strong>Password Policy</strong></td>
+                  <td>Authentication requirements</td>
+                  <td>Complexity, rotation, MFA requirements</td>
+                </tr>
+                <tr>
+                  <td><strong>Remote Work Policy</strong></td>
+                  <td>Security for remote workers</td>
+                  <td>VPN, device security, physical security</td>
+                </tr>
+                <tr>
+                  <td><strong>Vendor Management Policy</strong></td>
+                  <td>Third-party security requirements</td>
+                  <td>Assessment, contracts, monitoring</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="template">Policy Structure</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Policy Template</span></div>
+            <pre><code># Standard Policy Template
+
+1. PURPOSE
+   Why this policy exists, what problem it addresses
+
+2. SCOPE
+   Who and what the policy applies to
+   (All employees, contractors, specific systems)
+
+3. POLICY STATEMENT
+   The actual requirements (what must be done)
+   - Clear, unambiguous language
+   - Measurable where possible
+   - No technical implementation details
+
+4. ROLES & RESPONSIBILITIES
+   - Policy Owner: Who maintains and updates
+   - Enforcement: Who ensures compliance
+   - Users: What individuals must do
+
+5. EXCEPTIONS
+   - How to request exceptions
+   - Approval authority
+   - Documentation requirements
+
+6. COMPLIANCE
+   - Consequences of non-compliance
+   - Reference to disciplinary process
+
+7. RELATED DOCUMENTS
+   - Standards, procedures, other policies
+
+8. REVISION HISTORY
+   - Version, date, author, changes
+
+9. APPROVAL
+   - Approved by, date, signature</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Policy Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Security Policy Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Keep It Simple:</strong> Policies should be readable by non-technical staff. Complex = ignored.</p>
+              <p><strong>2. Make It Enforceable:</strong> Don't write policies you can't or won't enforce. Unenforced policies breed contempt.</p>
+              <p><strong>3. Get Executive Sponsorship:</strong> Policies without leadership backing have no teeth.</p>
+              <p><strong>4. Review Regularly:</strong> Annual minimum. Technology and threats change; policies must keep up.</p>
+              <p><strong>5. Separate Policy from Procedure:</strong> Policies are stable; procedures change. Don't mix them.</p>
+              <p><strong>6. Communicate Effectively:</strong> Published policies mean nothing if employees don't know them. Training, awareness.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="principles.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Security Principles</div>
+          </a>
+          <a href="compliance-frameworks.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Compliance Frameworks →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

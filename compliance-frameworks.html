@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compliance Frameworks | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Security Compliance Frameworks - PCI-DSS, HIPAA, SOC 2, ISO 27001, NIST CSF, and regulatory requirements.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">11. Governance & Compliance</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="compliance-frameworks.html" class="sidebar-nav-link active">Compliance Frameworks</a></li>
+          <li class="sidebar-nav-item"><a href="risk-management.html" class="sidebar-nav-link">Risk Management</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Governance & Compliance</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Compliance Frameworks</span>
+          </div>
+          <h1>Compliance Frameworks</h1>
+          <p class="page-description">Security compliance frameworks provide structured approaches to protecting data and systems. Whether regulatory (PCI-DSS, HIPAA) or voluntary (SOC 2, ISO 27001), these frameworks establish security baselines and demonstrate due diligence to customers and regulators.</p>
+        </div>
+
+        <section>
+          <h2 id="overview">Framework Overview</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Framework</th>
+                  <th>Scope</th>
+                  <th>Required For</th>
+                  <th>Certification</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>PCI-DSS</strong></td>
+                  <td>Payment card data protection</td>
+                  <td>Anyone processing credit cards</td>
+                  <td>Annual assessment (QSA/SAQ)</td>
+                </tr>
+                <tr>
+                  <td><strong>HIPAA</strong></td>
+                  <td>Protected health information</td>
+                  <td>Healthcare, business associates</td>
+                  <td>No formal certification (audits)</td>
+                </tr>
+                <tr>
+                  <td><strong>SOC 2</strong></td>
+                  <td>Service organization controls</td>
+                  <td>SaaS, cloud providers (customer request)</td>
+                  <td>Type I or Type II report</td>
+                </tr>
+                <tr>
+                  <td><strong>ISO 27001</strong></td>
+                  <td>Information security management</td>
+                  <td>Voluntary (enterprise standard)</td>
+                  <td>3-year certification + annual audits</td>
+                </tr>
+                <tr>
+                  <td><strong>NIST CSF</strong></td>
+                  <td>Cybersecurity framework</td>
+                  <td>US federal contractors, voluntary</td>
+                  <td>Self-assessment</td>
+                </tr>
+                <tr>
+                  <td><strong>GDPR</strong></td>
+                  <td>Personal data protection</td>
+                  <td>EU data subjects</td>
+                  <td>No certification (regulatory)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="pci">PCI-DSS Requirements</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 320" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="320" fill="#0f1117"/>
+              
+              <text x="425" y="30" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600">PCI-DSS v4.0 - 12 REQUIREMENTS</text>
+              
+              <!-- Build & Maintain -->
+              <rect x="30" y="50" width="250" height="120" rx="6" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="155" y="75" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">BUILD & MAINTAIN SECURE NETWORK</text>
+              <text x="50" y="100" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">1. Install and maintain network security controls</text>
+              <text x="50" y="118" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">2. Apply secure configurations to all components</text>
+              
+              <!-- Protect Account Data -->
+              <rect x="300" y="50" width="250" height="120" rx="6" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="425" y="75" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">PROTECT ACCOUNT DATA</text>
+              <text x="320" y="100" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">3. Protect stored account data</text>
+              <text x="320" y="118" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">4. Protect CHD with strong cryptography</text>
+              
+              <!-- Vulnerability Management -->
+              <rect x="570" y="50" width="250" height="120" rx="6" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="695" y="75" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">VULNERABILITY MANAGEMENT</text>
+              <text x="590" y="100" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">5. Protect from malware</text>
+              <text x="590" y="118" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">6. Develop secure systems and software</text>
+              
+              <!-- Access Control -->
+              <rect x="30" y="190" width="250" height="120" rx="6" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="155" y="215" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">ACCESS CONTROL</text>
+              <text x="50" y="240" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">7. Restrict access by business need-to-know</text>
+              <text x="50" y="258" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">8. Identify users and authenticate access</text>
+              <text x="50" y="276" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">9. Restrict physical access</text>
+              
+              <!-- Monitor & Test -->
+              <rect x="300" y="190" width="250" height="120" rx="6" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="425" y="215" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">MONITOR & TEST</text>
+              <text x="320" y="240" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">10. Log and monitor all access</text>
+              <text x="320" y="258" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">11. Test security regularly</text>
+              
+              <!-- Security Policy -->
+              <rect x="570" y="190" width="250" height="120" rx="6" fill="rgba(6, 182, 212, 0.1)" stroke="#06b6d4"/>
+              <text x="695" y="215" text-anchor="middle" fill="#06b6d4" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">SECURITY POLICY</text>
+              <text x="590" y="240" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">12. Support information security with</text>
+              <text x="590" y="258" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">    organizational policies and programs</text>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="soc2">SOC 2 Trust Service Criteria</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Security (Required)</h4>
+              <p class="card-description">Protection against unauthorized access. Firewalls, access controls, MFA, encryption, monitoring. Foundation for all SOC 2 reports.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">Availability</h4>
+              <p class="card-description">System is available for operation as committed. SLAs, redundancy, disaster recovery, incident response.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Processing Integrity</h4>
+              <p class="card-description">System processing is complete, accurate, timely. Quality assurance, error handling, audit trails.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">Confidentiality</h4>
+              <p class="card-description">Information designated as confidential is protected. Encryption, access controls, data classification.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Privacy</h4>
+              <p class="card-description">Personal information collected, used, retained, disclosed per privacy notice. GDPR-like requirements.</p>
+            </div>
+          </div>
+          
+          <div class="info-box info" style="margin-top: var(--space-lg);">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              SOC 2 Type I vs Type II
+            </div>
+            <div class="info-box-content">
+              <p><strong>Type I:</strong> Point-in-time assessment. Controls are designed appropriately. Faster, cheaper, but limited value.</p>
+              <p><strong>Type II:</strong> Period assessment (6-12 months). Controls operated effectively. More valuable, required by sophisticated customers.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="nist">NIST Cybersecurity Framework</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">NIST CSF 2.0 Core Functions</span></div>
+            <pre><code>┌─────────────────────────────────────────────────────────────────────┐
+│                        NIST CSF 2.0 FUNCTIONS                       │
+├─────────────┬─────────────┬─────────────┬─────────────┬─────────────┤
+│   GOVERN    │  IDENTIFY   │   PROTECT   │   DETECT    │   RESPOND   │   RECOVER
+│   (New!)    │             │             │             │             │
+├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+│ • Org       │ • Asset     │ • Identity  │ • Continuous│ • Response  │ • Recovery
+│   context   │   management│   management│   monitoring│   planning  │   planning
+│ • Risk      │ • Business  │ • Awareness │ • Anomaly   │ • Analysis  │ • Improvements
+│   management│   environment│ • Data      │   detection │ • Mitigation│ • Communications
+│   strategy  │ • Governance│   security  │ • Event     │ • Reporting │
+│ • Policy    │ • Risk      │ • Info      │   detection │ • Communication
+│ • Oversight │   assessment│   protection│             │             │
+│ • Supply    │ • Supply    │ • Platform  │             │             │
+│   chain     │   chain risk│   security  │             │             │
+└─────────────┴─────────────┴─────────────┴─────────────┴─────────────┘
+
+Implementation Tiers:
+  Tier 1: Partial     - Ad hoc, reactive
+  Tier 2: Risk Informed - Risk awareness, not org-wide
+  Tier 3: Repeatable  - Formal policies, org-wide
+  Tier 4: Adaptive    - Continuous improvement, predictive</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="mapping">Framework Mapping</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Control Mapping Across Frameworks</span></div>
+            <pre><code># Example: Multi-Factor Authentication requirement
+
+PCI-DSS 4.0:
+  Requirement 8.4.2: MFA for all access into the CDE
+  Requirement 8.4.3: MFA for all non-console admin access
+
+SOC 2:
+  CC6.1: Logical access security (MFA as control activity)
+
+ISO 27001:
+  A.9.4.2: Secure log-on procedures
+
+NIST CSF:
+  PR.AC-7: Users, devices, and other assets are authenticated
+
+HIPAA:
+  §164.312(d): Person or entity authentication
+
+# Benefit of mapping:
+# - Implement MFA once, satisfy 5+ frameworks
+# - Reduces audit fatigue
+# - Unified control documentation
+# - GRC tools automate this mapping</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Compliance & GRC Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Vanta</div>
+            <div class="vendor-item">Drata</div>
+            <div class="vendor-item">Secureframe</div>
+            <div class="vendor-item">OneTrust</div>
+            <div class="vendor-item">ServiceNow GRC</div>
+            <div class="vendor-item">LogicGate</div>
+            <div class="vendor-item">Archer</div>
+            <div class="vendor-item">AuditBoard</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Compliance Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Compliance Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Build Once, Comply Many:</strong> Map controls across frameworks. Implement strong controls that satisfy multiple requirements simultaneously.</p>
+              <p><strong>2. Automate Evidence Collection:</strong> Use GRC platforms to continuously collect compliance evidence. No more audit fire drills.</p>
+              <p><strong>3. Continuous Compliance:</strong> Don't treat compliance as annual event. Continuous monitoring, continuous improvement.</p>
+              <p><strong>4. Security First, Compliance Second:</strong> Good security naturally achieves compliance. Checkbox compliance without security is theater.</p>
+              <p><strong>5. Document Everything:</strong> Policies, procedures, evidence of execution. If it's not documented, it didn't happen.</p>
+              <p><strong>6. Scope Carefully:</strong> Minimize compliance scope where possible (PCI CDE segmentation). Smaller scope = less cost.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="principles.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Security Principles</div>
+          </a>
+          <a href="risk-management.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Risk Management →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

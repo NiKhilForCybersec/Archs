@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Directory Services | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Directory Services security - Active Directory, Entra ID, LDAP hardening, and identity infrastructure protection.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">3. Identity & Access</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="directory-services.html" class="sidebar-nav-link active">Directory Services</a></li>
+          <li class="sidebar-nav-item"><a href="sso.html" class="sidebar-nav-link">Single Sign-On</a></li>
+          <li class="sidebar-nav-item"><a href="mfa.html" class="sidebar-nav-link">Multi-Factor Authentication</a></li>
+          <li class="sidebar-nav-item"><a href="pam.html" class="sidebar-nav-link">Privileged Access</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Identity & Access</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Directory Services</span>
+          </div>
+          <h1>Directory Services</h1>
+          <p class="page-description">Directory services are the foundation of enterprise identity. Active Directory and Entra ID store user identities, group memberships, and authentication data. Compromising directory services means compromising everything—making their security absolutely critical.</p>
+        </div>
+
+        <section>
+          <h2 id="landscape">Directory Services Landscape</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 320" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="320" fill="#0f1117"/>
+              
+              <!-- On-Premises -->
+              <rect x="30" y="40" width="380" height="240" rx="8" fill="rgba(59, 130, 246, 0.05)" stroke="#3b82f6" stroke-dasharray="4"/>
+              <text x="220" y="65" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">ON-PREMISES</text>
+              
+              <rect x="50" y="85" width="160" height="100" rx="6" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="130" y="115" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">ACTIVE DIRECTORY</text>
+              <text x="130" y="138" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Domain Controllers</text>
+              <text x="130" y="153" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">LDAP / Kerberos</text>
+              <text x="130" y="168" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Group Policy</text>
+              
+              <rect x="230" y="85" width="160" height="100" rx="6" fill="#1e2430" stroke="#10b981"/>
+              <text x="310" y="115" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">AD CS / AD FS</text>
+              <text x="310" y="138" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Certificate Services</text>
+              <text x="310" y="153" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Federation Services</text>
+              <text x="310" y="168" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">SAML / WS-Fed</text>
+              
+              <rect x="50" y="200" width="340" height="60" rx="6" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="220" y="225" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="9" font-weight="600">DOMAIN-JOINED RESOURCES</text>
+              <text x="220" y="245" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Workstations • Servers • File Shares • Applications</text>
+              
+              <!-- Cloud -->
+              <rect x="440" y="40" width="380" height="240" rx="8" fill="rgba(139, 92, 246, 0.05)" stroke="#8b5cf6" stroke-dasharray="4"/>
+              <text x="630" y="65" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">CLOUD (MICROSOFT ENTRA)</text>
+              
+              <rect x="460" y="85" width="160" height="100" rx="6" fill="#1e2430" stroke="#8b5cf6"/>
+              <text x="540" y="115" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">ENTRA ID</text>
+              <text x="540" y="138" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Cloud Identity</text>
+              <text x="540" y="153" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">OAuth / OIDC / SAML</text>
+              <text x="540" y="168" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Conditional Access</text>
+              
+              <rect x="640" y="85" width="160" height="100" rx="6" fill="#1e2430" stroke="#ec4899"/>
+              <text x="720" y="115" text-anchor="middle" fill="#ec4899" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">ENTRA ID PROTECTION</text>
+              <text x="720" y="138" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Risk Detection</text>
+              <text x="720" y="153" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Identity Governance</text>
+              <text x="720" y="168" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">PIM</text>
+              
+              <rect x="460" y="200" width="340" height="60" rx="6" fill="#1e2430" stroke="#06b6d4"/>
+              <text x="630" y="225" text-anchor="middle" fill="#06b6d4" font-family="Space Grotesk, sans-serif" font-size="9" font-weight="600">CLOUD RESOURCES</text>
+              <text x="630" y="245" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Microsoft 365 • Azure • SaaS Apps • Entra Joined Devices</text>
+              
+              <!-- Sync Arrow -->
+              <path d="M210 135 L460 135" stroke="#f59e0b" stroke-width="2" fill="none" marker-end="url(#arrowOrange)"/>
+              <path d="M460 145 L210 145" stroke="#f59e0b" stroke-width="2" fill="none" marker-end="url(#arrowOrange2)"/>
+              <rect x="300" y="125" width="90" height="30" rx="4" fill="#0f1117"/>
+              <text x="345" y="145" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="8">Entra Connect</text>
+              
+              <defs>
+                <marker id="arrowOrange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#f59e0b"/>
+                </marker>
+                <marker id="arrowOrange2" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                  <polygon points="10 0, 0 3.5, 10 7" fill="#f59e0b"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="attacks">Common Directory Attacks</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Kerberoasting</h4>
+              <p class="card-description">Request service tickets for SPNs, crack offline. Targets service accounts with weak passwords. Any domain user can perform this attack.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-orange);">DCSync</h4>
+              <p class="card-description">Impersonate DC to replicate password hashes. Requires Replicating Directory Changes. Often achieved via compromised admin account.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Golden Ticket</h4>
+              <p class="card-description">Forge Kerberos TGT using KRBTGT hash. Provides domain-wide access. Persists until KRBTGT password reset twice.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">Pass-the-Hash</h4>
+              <p class="card-description">Authenticate using NTLM hash without knowing password. Common lateral movement technique. Enabled by credential caching.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="tiering">AD Tiered Administration Model</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 340" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="340" fill="#0f1117"/>
+              
+              <!-- Tier 0 -->
+              <rect x="200" y="30" width="450" height="80" rx="8" fill="rgba(239, 68, 68, 0.15)" stroke="#ef4444" stroke-width="2"/>
+              <text x="425" y="55" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="700">TIER 0 - DOMAIN CONTROL</text>
+              <text x="425" y="78" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Domain Controllers • AD CS • Entra Connect • Domain Admins</text>
+              <text x="425" y="95" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">Compromise = Total domain compromise</text>
+              
+              <!-- Tier 1 -->
+              <rect x="150" y="130" width="550" height="80" rx="8" fill="rgba(245, 158, 11, 0.15)" stroke="#f59e0b" stroke-width="2"/>
+              <text x="425" y="155" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="700">TIER 1 - SERVER ADMINISTRATION</text>
+              <text x="425" y="178" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Member Servers • Applications • Databases • Server Admins</text>
+              <text x="425" y="195" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="8">Can access Tier 1 and below, NEVER Tier 0</text>
+              
+              <!-- Tier 2 -->
+              <rect x="100" y="230" width="650" height="80" rx="8" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="2"/>
+              <text x="425" y="255" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="700">TIER 2 - WORKSTATION ADMINISTRATION</text>
+              <text x="425" y="278" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Workstations • User Devices • Helpdesk • Workstation Admins</text>
+              <text x="425" y="295" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="8">Most exposed tier, cannot escalate to Tier 1 or 0</text>
+              
+              <!-- Isolation arrows -->
+              <text x="70" y="90" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="20">⛔</text>
+              <text x="70" y="190" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="20">⛔</text>
+              
+              <text x="780" y="90" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">T1/T2 admins</text>
+              <text x="780" y="105" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">cannot login</text>
+              
+              <text x="780" y="190" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">T2 admins</text>
+              <text x="780" y="205" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">cannot login</text>
+            </svg>
+          </div>
+          
+          <div class="info-box warning" style="margin-top: var(--space-lg);">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Why Tiering Matters
+            </div>
+            <div class="info-box-content">
+              <p>Without tiering: Attacker compromises workstation → steals cached Domain Admin credentials → instant domain compromise.</p>
+              <p>With tiering: Attacker compromises workstation → finds only Tier 2 credentials → cannot escalate to servers or DCs → attack contained.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="hardening">AD Hardening Checklist</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Critical AD Security Controls</span></div>
+            <pre><code># TIER 0 PROTECTION
+□ Dedicated Tier 0 admin accounts (never used on workstations)
+□ Privileged Access Workstations (PAWs) for DC administration
+□ Domain Admin accounts in Protected Users group
+□ KRBTGT password rotated twice annually
+□ Domain Controllers on dedicated network segment
+□ Defender for Identity monitoring all DCs
+
+# KERBEROS HARDENING
+□ Disable RC4 encryption (force AES)
+□ Service accounts use gMSA (25+ char auto-rotating passwords)
+□ Enable Kerberos armoring (FAST)
+□ Audit Kerberos ticket requests (Event ID 4769)
+
+# CREDENTIAL PROTECTION  
+□ Credential Guard enabled on all systems
+□ LAPS deployed for local admin passwords
+□ Disable NTLM where possible (audit first)
+□ Block credential delegation (CredSSP restrictions)
+
+# MONITORING & DETECTION
+□ Monitor sensitive groups (Domain Admins, Schema Admins)
+□ Alert on DCSync (Replicating Directory Changes)
+□ Detect Kerberoasting (mass TGS requests)
+□ Monitor AdminSDHolder modifications
+
+# PowerShell: Add users to Protected Users
+Add-ADGroupMember -Identity "Protected Users" -Members "admin-jsmith"
+
+# Protected Users restrictions:
+# - No NTLM authentication
+# - No DES or RC4 in Kerberos
+# - No credential delegation
+# - TGT lifetime reduced to 4 hours</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="entra">Entra ID Security</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Control</th>
+                  <th>Purpose</th>
+                  <th>Implementation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Conditional Access</strong></td>
+                  <td>Context-aware access decisions</td>
+                  <td>Require MFA, compliant device, trusted location</td>
+                </tr>
+                <tr>
+                  <td><strong>Identity Protection</strong></td>
+                  <td>Risk-based authentication</td>
+                  <td>Block/challenge risky sign-ins and users</td>
+                </tr>
+                <tr>
+                  <td><strong>PIM</strong></td>
+                  <td>Just-in-time privileged access</td>
+                  <td>Time-limited role activation with approval</td>
+                </tr>
+                <tr>
+                  <td><strong>Access Reviews</strong></td>
+                  <td>Periodic access certification</td>
+                  <td>Managers review and revoke stale access</td>
+                </tr>
+                <tr>
+                  <td><strong>Emergency Access</strong></td>
+                  <td>Break-glass accounts</td>
+                  <td>Cloud-only, excluded from CA, monitored</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Directory Security Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Directory Services Security Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Implement Tiered Administration:</strong> Tier 0/1/2 separation. Admin credentials for servers should never touch workstations.</p>
+              <p><strong>2. Deploy Defender for Identity:</strong> Real-time monitoring for AD attacks—Kerberoasting, DCSync, lateral movement, reconnaissance.</p>
+              <p><strong>3. Use Protected Users Group:</strong> Domain Admins, service accounts in Protected Users. Eliminates NTLM, forces Kerberos.</p>
+              <p><strong>4. gMSA for Service Accounts:</strong> Eliminate static service account passwords. 240-character auto-rotating passwords.</p>
+              <p><strong>5. Secure Entra Connect:</strong> This server can sync password hashes. Treat as Tier 0. Isolated, monitored, restricted.</p>
+              <p><strong>6. Regular KRBTGT Rotation:</strong> Rotate KRBTGT password twice per year. Invalidates Golden Tickets.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="principles.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Security Principles</div>
+          </a>
+          <a href="sso.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Single Sign-On →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

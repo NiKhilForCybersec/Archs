@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Cloud Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Multi-Cloud Security - unified security across AWS, Azure, GCP with consistent policies and visibility.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">5. Cloud Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="aws-security.html" class="sidebar-nav-link">AWS Security</a></li>
+          <li class="sidebar-nav-item"><a href="azure-security.html" class="sidebar-nav-link">Azure Security</a></li>
+          <li class="sidebar-nav-item"><a href="gcp-security.html" class="sidebar-nav-link">GCP Security</a></li>
+          <li class="sidebar-nav-item"><a href="multi-cloud.html" class="sidebar-nav-link active">Multi-Cloud Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Cloud Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Multi-Cloud Security</span>
+          </div>
+          <h1>Multi-Cloud Security</h1>
+          <p class="page-description">Most enterprises operate across multiple cloud providers. Multi-cloud security requires unified visibility, consistent policies, and cross-cloud expertise to avoid the complexity becoming a security liability.</p>
+        </div>
+
+        <section>
+          <h2 id="challenges">Multi-Cloud Challenges</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Different IAM Models</h4>
+              <p class="card-description">AWS IAM, Azure RBAC, GCP IAM all work differently. Same policy intent, different implementation.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-orange);">Visibility Gaps</h4>
+              <p class="card-description">Cloud-native tools only see their cloud. Need unified view across all environments.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Skills Shortage</h4>
+              <p class="card-description">Expertise in one cloud doesn't transfer. Teams stretched across multiple platforms.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Policy Consistency</h4>
+              <p class="card-description">Maintaining equivalent security posture across clouds with different controls.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="mapping">Security Control Mapping</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>AWS</th>
+                  <th>Azure</th>
+                  <th>GCP</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Identity</strong></td>
+                  <td>IAM, Identity Center</td>
+                  <td>Entra ID</td>
+                  <td>Cloud Identity</td>
+                </tr>
+                <tr>
+                  <td><strong>CSPM</strong></td>
+                  <td>Security Hub</td>
+                  <td>Defender for Cloud</td>
+                  <td>Security Command Center</td>
+                </tr>
+                <tr>
+                  <td><strong>Logging</strong></td>
+                  <td>CloudTrail, CloudWatch</td>
+                  <td>Activity Log, Monitor</td>
+                  <td>Cloud Audit Logs</td>
+                </tr>
+                <tr>
+                  <td><strong>Secrets</strong></td>
+                  <td>Secrets Manager</td>
+                  <td>Key Vault</td>
+                  <td>Secret Manager</td>
+                </tr>
+                <tr>
+                  <td><strong>Network Firewall</strong></td>
+                  <td>Security Groups, NACLs</td>
+                  <td>NSGs, Azure Firewall</td>
+                  <td>VPC Firewall Rules</td>
+                </tr>
+                <tr>
+                  <td><strong>Encryption</strong></td>
+                  <td>KMS</td>
+                  <td>Key Vault</td>
+                  <td>Cloud KMS</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="strategy">Multi-Cloud Security Strategy</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Unified Multi-Cloud Approach</span></div>
+            <pre><code># Multi-Cloud Security Architecture
+
+                    ┌─────────────────────────────────┐
+                    │   Unified Security Platform     │
+                    │   (CNAPP / SIEM / SOAR)         │
+                    │                                 │
+                    │  • Single pane of glass         │
+                    │  • Cross-cloud correlation      │
+                    │  • Consistent policies          │
+                    └───────────┬─────────────────────┘
+                                │
+          ┌─────────────────────┼─────────────────────┐
+          │                     │                     │
+          ▼                     ▼                     ▼
+    ┌──────────┐         ┌──────────┐         ┌──────────┐
+    │   AWS    │         │  Azure   │         │   GCP    │
+    │          │         │          │         │          │
+    │ CloudTrail│        │ Activity │         │ Audit    │
+    │ Security │         │ Defender │         │ SCC      │
+    │ Hub      │         │ for Cloud│         │          │
+    └──────────┘         └──────────┘         └──────────┘
+
+Key Principles:
+1. Centralize identity (federate to single IdP)
+2. Aggregate logs to central SIEM
+3. Use cloud-agnostic CNAPP for posture
+4. Define policies in code (Terraform, OPA)
+5. Automate compliance checks across all clouds</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="tools">Multi-Cloud Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Wiz</div>
+            <div class="vendor-item">Prisma Cloud</div>
+            <div class="vendor-item">Orca Security</div>
+            <div class="vendor-item">Lacework</div>
+            <div class="vendor-item">HashiCorp Terraform</div>
+            <div class="vendor-item">Open Policy Agent</div>
+            <div class="vendor-item">Splunk Cloud</div>
+            <div class="vendor-item">Microsoft Sentinel</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Multi-Cloud Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Multi-Cloud Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Federate Identity:</strong> Single IdP (Okta, Entra) federated to all clouds. One identity, consistent MFA.</p>
+              <p><strong>2. Centralize Logging:</strong> All cloud logs to one SIEM. Cross-cloud correlation requires unified data.</p>
+              <p><strong>3. Cloud-Agnostic CNAPP:</strong> Third-party CSPM/CWPP provides consistent posture view.</p>
+              <p><strong>4. Infrastructure as Code:</strong> Define security in Terraform/Pulumi. Consistent, auditable, version-controlled.</p>
+              <p><strong>5. Build Expertise Deliberately:</strong> Don't spread teams too thin. Consider primary/secondary cloud model.</p>
+              <p><strong>6. Policy Abstraction:</strong> Define security intent once, translate to cloud-specific controls.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="gcp-security.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← GCP Security</div>
+          </a>
+          <a href="cspm.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">CSPM →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

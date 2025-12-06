@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Segmentation | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to network segmentation - zones, VLANs, trust boundaries, and east-west traffic control.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">2. Network Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="firewalls.html" class="sidebar-nav-link">Next-Gen Firewalls</a></li>
+          <li class="sidebar-nav-item"><a href="dmz.html" class="sidebar-nav-link">DMZ Architecture</a></li>
+          <li class="sidebar-nav-item"><a href="segmentation.html" class="sidebar-nav-link active">Network Segmentation</a></li>
+          <li class="sidebar-nav-item"><a href="micro-segmentation.html" class="sidebar-nav-link">Micro-Segmentation</a></li>
+          <li class="sidebar-nav-item"><a href="ztna.html" class="sidebar-nav-link">ZTNA</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Network Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Network Segmentation</span>
+          </div>
+          <h1>Network Segmentation</h1>
+          <p class="page-description">Network segmentation divides a network into isolated zones to limit lateral movement, contain breaches, and enforce the principle of least privilege at the network layer. Properly implemented segmentation means a compromised workstation can't directly reach your database servers.</p>
+        </div>
+
+        <section>
+          <h2 id="problem">Why Segmentation Matters</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Flat Network (No Segmentation)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>All devices on same subnet (10.0.0.0/8)</li>
+                  <li>Workstations can reach servers directly</li>
+                  <li>Printers can talk to databases</li>
+                  <li>IoT devices on corporate network</li>
+                  <li>No east-west traffic inspection</li>
+                  <li>Single compromise = full network access</li>
+                </ul>
+                <div class="info-box danger" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Attack Path:</strong> Phishing email → compromised workstation → network scan → find DC → credential theft → domain admin → access everything</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Segmented Network
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Separate zones for different asset types</li>
+                  <li>Firewall between every zone</li>
+                  <li>Users can only reach authorized resources</li>
+                  <li>IoT/OT on isolated networks</li>
+                  <li>East-west traffic logged and inspected</li>
+                  <li>Compromise contained to segment</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Attack Contained:</strong> Phishing → compromised workstation → can't reach servers (blocked by firewall) → attacker stuck in user segment → detection triggers</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="zones">Common Network Zones</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 500" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="500" fill="#0f1117"/>
+              
+              <!-- Internet -->
+              <rect x="350" y="20" width="150" height="50" rx="8" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="425" y="50" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">INTERNET</text>
+              
+              <!-- External Firewall -->
+              <rect x="375" y="90" width="100" height="30" rx="4" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="425" y="110" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="9">Edge Firewall</text>
+              
+              <!-- DMZ -->
+              <rect x="300" y="140" width="250" height="80" rx="8" fill="rgba(245, 158, 11, 0.08)" stroke="#f59e0b" stroke-dasharray="4"/>
+              <text x="425" y="165" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">DMZ (Untrust → Semi-Trust)</text>
+              <rect x="320" y="180" width="80" height="30" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="360" y="200" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Web Servers</text>
+              <rect x="420" y="180" width="80" height="30" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="460" y="200" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Reverse Proxy</text>
+              
+              <!-- Internal Firewall -->
+              <rect x="375" y="240" width="100" height="30" rx="4" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="425" y="260" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="9">Internal Firewall</text>
+              
+              <!-- User Zone -->
+              <rect x="30" y="290" width="200" height="120" rx="8" fill="rgba(59, 130, 246, 0.08)" stroke="#3b82f6" stroke-dasharray="4"/>
+              <text x="130" y="315" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">USER ZONE</text>
+              <rect x="50" y="335" width="70" height="25" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="85" y="352" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Workstations</text>
+              <rect x="140" y="335" width="70" height="25" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="175" y="352" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Laptops</text>
+              <rect x="50" y="370" width="70" height="25" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="85" y="387" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Printers</text>
+              
+              <!-- Application Zone -->
+              <rect x="250" y="290" width="200" height="120" rx="8" fill="rgba(16, 185, 129, 0.08)" stroke="#10b981" stroke-dasharray="4"/>
+              <text x="350" y="315" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">APPLICATION ZONE</text>
+              <rect x="270" y="335" width="70" height="25" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="305" y="352" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">App Servers</text>
+              <rect x="360" y="335" width="70" height="25" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="395" y="352" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">APIs</text>
+              <rect x="315" y="370" width="70" height="25" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="350" y="387" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Middleware</text>
+              
+              <!-- Data Zone -->
+              <rect x="470" y="290" width="200" height="120" rx="8" fill="rgba(139, 92, 246, 0.08)" stroke="#8b5cf6" stroke-dasharray="4"/>
+              <text x="570" y="315" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">DATA ZONE</text>
+              <rect x="490" y="335" width="70" height="25" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="525" y="352" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Databases</text>
+              <rect x="580" y="335" width="70" height="25" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="615" y="352" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">File Shares</text>
+              <rect x="535" y="370" width="70" height="25" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="570" y="387" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Backup</text>
+              
+              <!-- Management Zone -->
+              <rect x="690" y="290" width="130" height="120" rx="8" fill="rgba(239, 68, 68, 0.08)" stroke="#ef4444" stroke-dasharray="4"/>
+              <text x="755" y="315" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">MGMT ZONE</text>
+              <rect x="705" y="335" width="100" height="25" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="755" y="352" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Domain Controllers</text>
+              <rect x="705" y="370" width="100" height="25" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="755" y="387" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">PAM / Jump Servers</text>
+              
+              <!-- IoT Zone -->
+              <rect x="30" y="430" width="200" height="60" rx="8" fill="rgba(6, 182, 212, 0.08)" stroke="#06b6d4" stroke-dasharray="4"/>
+              <text x="130" y="455" text-anchor="middle" fill="#06b6d4" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">IoT / OT ZONE (Isolated)</text>
+              <text x="130" y="475" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">HVAC • Cameras • Manufacturing</text>
+              
+              <!-- Arrows showing allowed flows -->
+              <path d="M425 70 L425 90" stroke="#64748b" stroke-width="1" fill="none"/>
+              <path d="M425 120 L425 140" stroke="#64748b" stroke-width="1" fill="none"/>
+              <path d="M425 220 L425 240" stroke="#64748b" stroke-width="1" fill="none"/>
+              
+              <!-- Zone to zone arrows -->
+              <path d="M230 350 L250 350" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M450 350 L470 350" stroke="#10b981" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M670 350 L690 350" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              
+              <!-- Legend -->
+              <rect x="30" y="20" width="180" height="90" rx="6" fill="#1e2430" stroke="#2a3142"/>
+              <text x="120" y="42" text-anchor="middle" fill="#f1f5f9" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="500">Traffic Flow Rules</text>
+              <text x="50" y="62" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="8">→ User → App: Allowed</text>
+              <text x="50" y="77" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="8">→ App → Data: Allowed</text>
+              <text x="50" y="92" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">→ User → Data: BLOCKED</text>
+              <text x="50" y="107" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">→ IoT → Any: BLOCKED</text>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="implementation">Segmentation Implementation</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>How It Works</th>
+                  <th>Pros</th>
+                  <th>Cons</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>VLANs</strong></td>
+                  <td>Layer 2 separation at switch level</td>
+                  <td>Simple, widely supported, no extra hardware</td>
+                  <td>No inspection between VLANs without L3</td>
+                </tr>
+                <tr>
+                  <td><strong>Firewall Zones</strong></td>
+                  <td>Routing between segments through NGFW</td>
+                  <td>Full L7 inspection, logging, policy</td>
+                  <td>Firewall becomes bottleneck, complex rules</td>
+                </tr>
+                <tr>
+                  <td><strong>SDN/Overlay</strong></td>
+                  <td>Software-defined network fabric</td>
+                  <td>Flexible, policy-driven, scalable</td>
+                  <td>Complexity, vendor lock-in</td>
+                </tr>
+                <tr>
+                  <td><strong>Micro-Segmentation</strong></td>
+                  <td>Host-based firewalls with central policy</td>
+                  <td>Granular (per-workload), works in cloud</td>
+                  <td>Agent required, complex policy mgmt</td>
+                </tr>
+                <tr>
+                  <td><strong>Air Gap</strong></td>
+                  <td>Complete physical separation</td>
+                  <td>Maximum isolation</td>
+                  <td>Operational overhead, data transfer challenges</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="traffic-flow">Traffic Flow Example: User to Database</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Segmented Access: User Querying Database</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Opens Application</div>
+                  <div class="flow-step-description">User in User Zone (10.10.0.0/16) accesses web application</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Initial Request</span></div>
+                    <pre><code>Source: 10.10.5.42 (VLAN 10 - User Zone)
+Destination: 10.20.1.15:443 (VLAN 20 - App Zone)
+User: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="640e17090d100c24070b0a100b170b4a070b09">[email&#160;protected]</a>
+Application: SAP Fiori</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Firewall Evaluates User → App</div>
+                  <div class="flow-step-description">Internal firewall checks policy for inter-zone traffic</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Policy Match</span></div>
+                    <pre><code>Firewall Rule: "Allow-Users-to-Apps"
+  Source Zone: User-Zone
+  Destination Zone: App-Zone
+  Application: sap (App-ID)
+  User: Any authenticated
+  Action: ALLOW
+  Logging: Session end
+  
+Result: PERMIT (User → App allowed)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">App Server Queries Database</div>
+                  <div class="flow-step-description">Application server in App Zone queries database in Data Zone</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Backend Query</span></div>
+                    <pre><code>Source: 10.20.1.15 (VLAN 20 - App Zone)
+Destination: 10.30.1.5:1433 (VLAN 30 - Data Zone)
+Protocol: SQL Server (TDS)
+
+Firewall Rule: "Allow-Apps-to-Data"
+  Source Zone: App-Zone
+  Destination Zone: Data-Zone
+  Service: mssql-db
+  Action: ALLOW
+  
+Result: PERMIT (App → Data allowed)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">✗</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Blocked: Direct User to Database</div>
+                  <div class="flow-step-description">If attacker on compromised workstation tries to access DB directly</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Blocked Attempt</span></div>
+                    <pre><code>Source: 10.10.5.42 (VLAN 10 - User Zone)
+Destination: 10.30.1.5:1433 (VLAN 30 - Data Zone)
+
+Firewall Rule Search:
+  No matching rule found for User → Data direct access
+  
+Implicit Rule: Deny-All
+  Action: DENY
+  Log: Security violation logged
+  Alert: Sent to SIEM
+
+Result: BLOCKED - User cannot reach database directly
+        Must go through application tier</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Segmentation Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with Asset Classification:</strong> You can't segment what you don't understand. Inventory assets, classify by sensitivity, identify data flows.</p>
+              <p><strong>2. Protect Crown Jewels First:</strong> Segment your most critical assets (DC, databases, PAM) before broader segmentation.</p>
+              <p><strong>3. Default Deny Between Zones:</strong> Block all traffic between zones by default. Explicitly allow only required flows.</p>
+              <p><strong>4. Log All Inter-Zone Traffic:</strong> Every packet crossing a zone boundary should be logged for visibility and forensics.</p>
+              <p><strong>5. Separate Management Plane:</strong> Dedicated management network for infrastructure access (out-of-band management).</p>
+              <p><strong>6. Isolate IoT/OT:</strong> IoT devices on separate network with minimal outbound access. They should never reach corporate resources.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="dmz.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← DMZ Architecture</div>
+          </a>
+          <a href="micro-segmentation.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Micro-Segmentation →

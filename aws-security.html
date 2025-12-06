@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to AWS Security - IAM, Security Groups, GuardDuty, Security Hub, and native security controls.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">5. Cloud Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="cspm.html" class="sidebar-nav-link">CSPM</a></li>
+          <li class="sidebar-nav-item"><a href="casb.html" class="sidebar-nav-link">CASB</a></li>
+          <li class="sidebar-nav-item"><a href="azure-security.html" class="sidebar-nav-link">Azure Security</a></li>
+          <li class="sidebar-nav-item"><a href="aws-security.html" class="sidebar-nav-link active">AWS Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Cloud Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>AWS Security</span>
+          </div>
+          <h1>AWS Security</h1>
+          <p class="page-description">AWS provides a comprehensive set of native security services following the shared responsibility model. Understanding these services and their integration is critical for securing cloud workloads on AWS.</p>
+        </div>
+
+        <section>
+          <h2 id="landscape">AWS Security Services Landscape</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 420" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="420" fill="#0f1117"/>
+              
+              <!-- Identity -->
+              <rect x="30" y="30" width="250" height="110" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="155" y="55" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">IDENTITY & ACCESS</text>
+              <text x="50" y="78" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• IAM (Users, Roles, Policies)</text>
+              <text x="50" y="94" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• AWS IAM Identity Center (SSO)</text>
+              <text x="50" y="110" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• AWS Organizations (SCPs)</text>
+              <text x="50" y="126" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Resource-based Policies</text>
+              
+              <!-- Network -->
+              <rect x="300" y="30" width="250" height="110" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="425" y="55" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">NETWORK SECURITY</text>
+              <text x="320" y="78" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Security Groups (stateful)</text>
+              <text x="320" y="94" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Network ACLs (stateless)</text>
+              <text x="320" y="110" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• AWS WAF & Shield</text>
+              <text x="320" y="126" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• VPC Flow Logs</text>
+              
+              <!-- Detection -->
+              <rect x="570" y="30" width="250" height="110" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="695" y="55" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">THREAT DETECTION</text>
+              <text x="590" y="78" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Amazon GuardDuty</text>
+              <text x="590" y="94" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Amazon Detective</text>
+              <text x="590" y="110" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Amazon Inspector</text>
+              <text x="590" y="126" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Amazon Macie</text>
+              
+              <!-- Data Protection -->
+              <rect x="30" y="160" width="250" height="110" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="155" y="185" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">DATA PROTECTION</text>
+              <text x="50" y="208" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• AWS KMS (Key Management)</text>
+              <text x="50" y="224" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• AWS Secrets Manager</text>
+              <text x="50" y="240" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• AWS Certificate Manager</text>
+              <text x="50" y="256" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• S3 Encryption & Access Points</text>
+              
+              <!-- Logging & Monitoring -->
+              <rect x="300" y="160" width="250" height="110" rx="8" fill="rgba(236, 72, 153, 0.1)" stroke="#ec4899"/>
+              <text x="425" y="185" text-anchor="middle" fill="#ec4899" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">LOGGING & MONITORING</text>
+              <text x="320" y="208" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• AWS CloudTrail</text>
+              <text x="320" y="224" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Amazon CloudWatch</text>
+              <text x="320" y="240" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• AWS Config</text>
+              <text x="320" y="256" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• VPC Flow Logs</text>
+              
+              <!-- Governance -->
+              <rect x="570" y="160" width="250" height="110" rx="8" fill="rgba(6, 182, 212, 0.1)" stroke="#06b6d4"/>
+              <text x="695" y="185" text-anchor="middle" fill="#06b6d4" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">GOVERNANCE & COMPLIANCE</text>
+              <text x="590" y="208" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• AWS Security Hub</text>
+              <text x="590" y="224" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• AWS Audit Manager</text>
+              <text x="590" y="240" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• AWS Control Tower</text>
+              <text x="590" y="256" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Service Control Policies</text>
+              
+              <!-- Central Hub: Security Hub -->
+              <rect x="275" y="295" width="300" height="100" rx="8" fill="rgba(245, 158, 11, 0.2)" stroke="#f59e0b" stroke-width="2"/>
+              <text x="425" y="325" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">AWS SECURITY HUB</text>
+              <text x="425" y="348" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Centralized Security Findings</text>
+              <text x="425" y="365" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">CIS Benchmarks • PCI DSS • AWS Best Practices</text>
+              <text x="425" y="382" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Aggregates: GuardDuty + Inspector + Macie + Config</text>
+              
+              <!-- Connection lines -->
+              <path d="M155 140 L155 295" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M425 140 L425 295" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M695 140 L695 270 L575 295" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M155 270 L275 295" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M425 270 L425 295" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M695 270 L575 295" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3" fill="none"/>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="iam">IAM Deep Dive</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">IAM Policy Evaluation: How AWS Decides Allow/Deny</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Request Context</div>
+                  <div class="flow-step-description">Principal attempts an action on a resource</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">API Request</span></div>
+                    <pre><code>Principal: arn:aws:iam::123456789012:user/developer
+Action: s3:GetObject  
+Resource: arn:aws:s3:::prod-data-bucket/sensitive/report.pdf
+Conditions: 
+  - Source IP: 10.0.1.50
+  - MFA: Not present
+  - Time: 2024-01-15T14:30:00Z</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Explicit Deny Check (SCPs, Identity, Resource)</div>
+                  <div class="flow-step-description">Any explicit deny = request denied immediately</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Service Control Policy (SCP)</span></div>
+                    <pre><code>// Organization SCP: Require MFA for sensitive buckets
+{
+  "Effect": "Deny",
+  "Action": "s3:*",
+  "Resource": "arn:aws:s3:::prod-data-bucket/sensitive/*",
+  "Condition": {
+    "BoolIfExists": {
+      "aws:MultiFactorAuthPresent": "false"
+    }
+  }
+}
+
+Evaluation: MFA not present → EXPLICIT DENY
+Result: REQUEST DENIED (SCP blocks before anything else)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">If No Deny: Check for Allow</div>
+                  <div class="flow-step-description">Must have explicit allow from identity AND resource policy</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Policy Evaluation Order</span></div>
+                    <pre><code>1. SCPs (Organization-level guardrails)
+   └─ Can only DENY, never grant permissions
+
+2. Resource-based Policies (S3 bucket policy, KMS key policy)
+   └─ Can allow cross-account access directly
+
+3. Identity-based Policies (IAM user/role policies)
+   └─ Permissions attached to the principal
+
+4. Permissions Boundaries (if set)
+   └─ Maximum permissions an identity can have
+
+5. Session Policies (for assumed roles)
+   └─ Further restricts role session
+
+FINAL: All applicable policies must allow
+       Any explicit deny wins</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Example: Correct Configuration</div>
+                  <div class="flow-step-description">User authenticates with MFA, request succeeds</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Successful Request</span></div>
+                    <pre><code>Principal: arn:aws:iam::123456789012:user/developer
+Action: s3:GetObject
+MFA: Present ✓
+
+SCP Check: MFA present → No deny
+Bucket Policy: Allows account 123456789012 → Allow
+IAM Policy: s3:GetObject on prod-data-bucket/* → Allow
+Permissions Boundary: Allows S3 actions → Allow
+
+Result: ACCESS GRANTED</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="guardduty">Amazon GuardDuty</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">GuardDuty Detection: Crypto Mining Attack</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Attacker Compromises EC2 Instance</div>
+                  <div class="flow-step-description">Vulnerable application exploited, crypto miner deployed</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Attack</span></div>
+                    <pre><code>Attacker exploits: Log4j vulnerability in web app
+Target: i-0abc123def456789 (web server)
+Action: Downloads and runs XMRig crypto miner
+  
+# Miner connects to mining pool
+xmrig -o stratum+tcp://pool.minexmr.com:4444 -u wallet123</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">GuardDuty Analyzes Data Sources</div>
+                  <div class="flow-step-description">ML models detect anomalous behavior</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Data Sources</span></div>
+                    <pre><code>GuardDuty continuously analyzes:
+  • VPC Flow Logs → Unusual outbound connections
+  • DNS Logs → Queries to mining pool domains
+  • CloudTrail → API activity anomalies
+  • S3 Data Events → Suspicious access patterns
+  • EKS Audit Logs → Container threats
+  
+Detection Signals:
+  ✗ DNS query: pool.minexmr.com (known mining pool)
+  ✗ Outbound traffic: Stratum protocol on port 4444
+  ✗ CPU utilization: Spike to 100%
+  ✗ Behavior: First time this instance contacts mining infra</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Finding Generated</div>
+                  <div class="flow-step-description">High-severity finding with full context</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">GuardDuty Finding</span></div>
+                    <pre><code>Finding Type: CryptoCurrency:EC2/BitcoinTool.B!DNS
+Severity: HIGH (8.0)
+Region: us-east-1
+Account: 123456789012
+
+Resource:
+  Type: EC2 Instance
+  ID: i-0abc123def456789
+  Tags: Name=web-server-prod, Environment=Production
+  
+Details:
+  Threat: EC2 instance is querying a domain associated 
+          with Bitcoin or cryptocurrency mining
+  Domain: pool.minexmr.com
+  First Seen: 2024-01-15T14:32:00Z
+  
+Recommended Action:
+  1. Isolate the instance
+  2. Investigate compromise vector
+  3. Terminate unauthorized processes
+  4. Rotate credentials
+  
+→ Finding sent to Security Hub
+→ EventBridge triggers Lambda for auto-remediation</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="sg-vs-nacl">Security Groups vs. NACLs</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Security Groups</th>
+                  <th>Network ACLs</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Level</strong></td>
+                  <td>Instance (ENI) level</td>
+                  <td>Subnet level</td>
+                </tr>
+                <tr>
+                  <td><strong>State</strong></td>
+                  <td>Stateful (return traffic auto-allowed)</td>
+                  <td>Stateless (must allow both directions)</td>
+                </tr>
+                <tr>
+                  <td><strong>Rules</strong></td>
+                  <td>Allow rules only</td>
+                  <td>Allow and Deny rules</td>
+                </tr>
+                <tr>
+                  <td><strong>Evaluation</strong></td>
+                  <td>All rules evaluated together</td>
+                  <td>Rules processed in number order</td>
+                </tr>
+                <tr>
+                  <td><strong>Default</strong></td>
+                  <td>Deny all inbound, allow all outbound</td>
+                  <td>Allow all (default NACL)</td>
+                </tr>
+                <tr>
+                  <td><strong>Use Case</strong></td>
+                  <td>Primary instance firewall</td>
+                  <td>Subnet-level guardrails, block bad IPs</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">AWS Security Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              AWS Security Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Use IAM Roles, Not Keys:</strong> EC2 instances, Lambda, ECS tasks should use IAM roles. Never embed access keys in code.</p>
+              <p><strong>2. Enable GuardDuty Everywhere:</strong> Enable in all regions, all accounts. It's the foundation of AWS threat detection.</p>
+              <p><strong>3. Centralize with Security Hub:</strong> Aggregate findings from GuardDuty, Inspector, Macie, Config. Single pane of glass.</p>
+              <p><strong>4. SCPs for Guardrails:</strong> Use Service Control Policies to prevent dangerous actions org-wide (e.g., block root user, require encryption).</p>
+              <p><strong>5. CloudTrail to S3 with Integrity:</strong> Enable CloudTrail in all regions, log to central S3 bucket with log file validation.</p>
+              <p><strong>6. Encrypt Everything:</strong> S3 default encryption, EBS encryption, RDS encryption. Use KMS customer-managed keys for sensitive data.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="azure-security.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Azure Security</div>
+          </a>
+          <a href="cspm.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">CSPM →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

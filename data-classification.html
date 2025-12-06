@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Classification | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Data Classification - sensitivity levels, labeling, handling requirements, and classification automation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">6. Data Protection</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="dlp.html" class="sidebar-nav-link">Data Loss Prevention</a></li>
+          <li class="sidebar-nav-item"><a href="data-classification.html" class="sidebar-nav-link active">Data Classification</a></li>
+          <li class="sidebar-nav-item"><a href="encryption.html" class="sidebar-nav-link">Encryption</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Data Protection</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Data Classification</span>
+          </div>
+          <h1>Data Classification</h1>
+          <p class="page-description">Data classification is the foundation of data protection. By categorizing data based on sensitivity, organizations can apply appropriate security controls, meet compliance requirements, and ensure resources are focused on protecting what matters most.</p>
+        </div>
+
+        <section>
+          <h2 id="levels">Classification Levels</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 280" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="280" fill="#0f1117"/>
+              
+              <!-- Restricted -->
+              <rect x="30" y="40" width="180" height="200" rx="8" fill="rgba(239, 68, 68, 0.2)" stroke="#ef4444" stroke-width="2"/>
+              <text x="120" y="70" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700">RESTRICTED</text>
+              <text x="120" y="90" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">Highest Sensitivity</text>
+              
+              <text x="50" y="120" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">Examples:</text>
+              <text x="50" y="138" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• M&A documents</text>
+              <text x="50" y="153" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Executive communications</text>
+              <text x="50" y="168" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Trade secrets</text>
+              <text x="50" y="183" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Encryption keys</text>
+              
+              <text x="50" y="210" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="7">Controls: Encryption, access</text>
+              <text x="50" y="222" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="7">logging, need-to-know only</text>
+              
+              <!-- Confidential -->
+              <rect x="235" y="40" width="180" height="200" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="325" y="70" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700">CONFIDENTIAL</text>
+              <text x="325" y="90" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="8">High Sensitivity</text>
+              
+              <text x="255" y="120" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">Examples:</text>
+              <text x="255" y="138" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Customer PII</text>
+              <text x="255" y="153" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Financial records</text>
+              <text x="255" y="168" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Employee data (HR)</text>
+              <text x="255" y="183" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Source code</text>
+              
+              <text x="255" y="210" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="7">Controls: Encryption, DLP,</text>
+              <text x="255" y="222" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="7">limited sharing</text>
+              
+              <!-- Internal -->
+              <rect x="440" y="40" width="180" height="200" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="530" y="70" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700">INTERNAL</text>
+              <text x="530" y="90" text-anchor="middle" fill="#3b82f6" font-family="IBM Plex Sans, sans-serif" font-size="8">Medium Sensitivity</text>
+              
+              <text x="460" y="120" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">Examples:</text>
+              <text x="460" y="138" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Internal policies</text>
+              <text x="460" y="153" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Project documentation</text>
+              <text x="460" y="168" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Meeting notes</text>
+              <text x="460" y="183" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Internal emails</text>
+              
+              <text x="460" y="210" fill="#3b82f6" font-family="IBM Plex Sans, sans-serif" font-size="7">Controls: Auth required,</text>
+              <text x="460" y="222" fill="#3b82f6" font-family="IBM Plex Sans, sans-serif" font-size="7">no external sharing</text>
+              
+              <!-- Public -->
+              <rect x="645" y="40" width="180" height="200" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="735" y="70" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700">PUBLIC</text>
+              <text x="735" y="90" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="8">Low Sensitivity</text>
+              
+              <text x="665" y="120" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">Examples:</text>
+              <text x="665" y="138" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Marketing materials</text>
+              <text x="665" y="153" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Press releases</text>
+              <text x="665" y="168" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Published financials</text>
+              <text x="665" y="183" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">• Public documentation</text>
+              
+              <text x="665" y="210" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="7">Controls: Integrity (no</text>
+              <text x="665" y="222" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="7">unauthorized changes)</text>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="handling">Data Handling Requirements</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Requirement</th>
+                  <th>Restricted</th>
+                  <th>Confidential</th>
+                  <th>Internal</th>
+                  <th>Public</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Encryption at Rest</strong></td>
+                  <td>Required (AES-256)</td>
+                  <td>Required</td>
+                  <td>Recommended</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><strong>Encryption in Transit</strong></td>
+                  <td>Required (TLS 1.3)</td>
+                  <td>Required</td>
+                  <td>Required</td>
+                  <td>Recommended</td>
+                </tr>
+                <tr>
+                  <td><strong>Access Control</strong></td>
+                  <td>Need-to-know, approved</td>
+                  <td>Role-based, justified</td>
+                  <td>Authenticated users</td>
+                  <td>None required</td>
+                </tr>
+                <tr>
+                  <td><strong>External Sharing</strong></td>
+                  <td>Prohibited (exceptions)</td>
+                  <td>Approval + NDA</td>
+                  <td>Not recommended</td>
+                  <td>Allowed</td>
+                </tr>
+                <tr>
+                  <td><strong>Printing</strong></td>
+                  <td>Prohibited</td>
+                  <td>Restricted</td>
+                  <td>Allowed</td>
+                  <td>Allowed</td>
+                </tr>
+                <tr>
+                  <td><strong>Cloud Storage</strong></td>
+                  <td>Approved locations only</td>
+                  <td>Corporate cloud only</td>
+                  <td>Corporate cloud</td>
+                  <td>Any</td>
+                </tr>
+                <tr>
+                  <td><strong>Retention</strong></td>
+                  <td>Defined + secure delete</td>
+                  <td>Defined retention</td>
+                  <td>Standard retention</td>
+                  <td>As needed</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="labeling">Data Labeling</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Microsoft Purview Sensitivity Labels</span></div>
+            <pre><code># Sensitivity Label Configuration
+
+Label: Restricted
+  Visual marking:
+    - Header: "RESTRICTED - DO NOT DISTRIBUTE"
+    - Footer: "This document contains restricted information"
+    - Watermark: "RESTRICTED"
+  Encryption:
+    - Azure RMS protection enabled
+    - Co-Author permissions for specific groups
+  Access:
+    - Specific users/groups only
+    - Expires after 90 days
+
+Label: Confidential  
+  Visual marking:
+    - Header: "CONFIDENTIAL"
+    - Footer: "Internal use only"
+  Encryption:
+    - Optional (user choice)
+  DLP Policy:
+    - Block external sharing
+    - Alert on email to external
+
+Label: Internal
+  Visual marking:
+    - Footer: "Internal Use Only"
+  No encryption required
+  
+Label: Public
+  No restrictions
+  No marking required
+
+# Auto-labeling (Trainable Classifiers)
+Conditions:
+  - Contains SSN pattern → Confidential
+  - Contains credit card → Confidential
+  - Contains "M&A" + financial data → Restricted
+  - Source code repositories → Confidential</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="discovery">Data Discovery</h2>
+          
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              You Can't Protect What You Can't Find
+            </div>
+            <div class="info-box-content">
+              <p><strong>Discovery Process:</strong></p>
+              <p>1. <strong>Inventory data repositories</strong> - File shares, databases, cloud storage, SaaS apps, endpoints</p>
+              <p>2. <strong>Scan for sensitive data</strong> - Use DLP content inspection, regex patterns, ML classifiers</p>
+              <p>3. <strong>Map data flows</strong> - Where does data move? Who accesses it? Where is it stored?</p>
+              <p>4. <strong>Classify discovered data</strong> - Apply labels based on content and context</p>
+              <p>5. <strong>Ongoing monitoring</strong> - Continuous discovery as data changes</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Data Classification Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Microsoft Purview</div>
+            <div class="vendor-item">Varonis</div>
+            <div class="vendor-item">Titus (HCL)</div>
+            <div class="vendor-item">Boldon James</div>
+            <div class="vendor-item">Digital Guardian</div>
+            <div class="vendor-item">BigID</div>
+            <div class="vendor-item">Securiti.ai</div>
+            <div class="vendor-item">Spirion</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Data Classification Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Classification Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Keep It Simple:</strong> 3-4 classification levels maximum. Complex schemes cause confusion and inconsistent application.</p>
+              <p><strong>2. Define Clear Criteria:</strong> Unambiguous definitions for each level. Employees shouldn't guess.</p>
+              <p><strong>3. Automate Classification:</strong> User-applied labels are inconsistent. Use content inspection, ML, and auto-labeling.</p>
+              <p><strong>4. Train Employees:</strong> Everyone creates data. Everyone needs to understand classification.</p>
+              <p><strong>5. Integrate with DLP:</strong> Classification labels should trigger DLP policies. Classification without enforcement is theater.</p>
+              <p><strong>6. Regular Review:</strong> Data sensitivity can change. Periodic review of classification accuracy.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="dlp.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Data Loss Prevention</div>
+          </a>
+          <a href="encryption.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Encryption →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

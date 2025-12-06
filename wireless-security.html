@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wireless Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Wireless Security - Wi-Fi security protocols, enterprise wireless architecture, and wireless threats.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">2. Network Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="segmentation.html" class="sidebar-nav-link">Network Segmentation</a></li>
+          <li class="sidebar-nav-item"><a href="wireless-security.html" class="sidebar-nav-link active">Wireless Security</a></li>
+          <li class="sidebar-nav-item"><a href="vpn.html" class="sidebar-nav-link">VPN Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Network Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Wireless Security</span>
+          </div>
+          <h1>Wireless Security</h1>
+          <p class="page-description">Wireless networks extend the attack surface beyond physical boundaries. Securing enterprise Wi-Fi requires proper authentication, encryption, network segmentation, and monitoring for rogue access points and wireless attacks.</p>
+        </div>
+
+        <section>
+          <h2 id="protocols">Wi-Fi Security Protocols</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Protocol</th>
+                  <th>Security</th>
+                  <th>Encryption</th>
+                  <th>Recommendation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>WEP</strong></td>
+                  <td style="color: var(--accent-red);">Broken</td>
+                  <td>RC4 (40/104-bit)</td>
+                  <td>Never use</td>
+                </tr>
+                <tr>
+                  <td><strong>WPA</strong></td>
+                  <td style="color: var(--accent-orange);">Weak</td>
+                  <td>TKIP</td>
+                  <td>Avoid if possible</td>
+                </tr>
+                <tr>
+                  <td><strong>WPA2-Personal</strong></td>
+                  <td style="color: var(--accent-yellow);">Adequate</td>
+                  <td>AES-CCMP</td>
+                  <td>Guest networks only</td>
+                </tr>
+                <tr>
+                  <td><strong>WPA2-Enterprise</strong></td>
+                  <td style="color: var(--accent-green);">Good</td>
+                  <td>AES-CCMP + 802.1X</td>
+                  <td>Corporate networks</td>
+                </tr>
+                <tr>
+                  <td><strong>WPA3-Personal</strong></td>
+                  <td style="color: var(--accent-green);">Good</td>
+                  <td>SAE + AES-GCMP</td>
+                  <td>Home/small office</td>
+                </tr>
+                <tr>
+                  <td><strong>WPA3-Enterprise</strong></td>
+                  <td style="color: var(--accent-green);">Best</td>
+                  <td>192-bit mode + 802.1X</td>
+                  <td>High-security environments</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="enterprise">Enterprise Wireless Architecture</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">802.1X/EAP Authentication</span></div>
+            <pre><code># Enterprise Wi-Fi with 802.1X
+
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│   Client    │──────│  Access     │──────│   RADIUS    │
+│  (Supplicant)│      │  Point      │      │   Server    │
+│             │      │  (Authenticator)   │  (NPS/FreeRADIUS)
+└─────────────┘      └─────────────┘      └──────┬──────┘
+                                                  │
+                                          ┌──────┴──────┐
+                                          │   Identity  │
+                                          │   Provider  │
+                                          │ (AD/Entra ID)│
+                                          └─────────────┘
+
+Authentication Flow:
+1. Client associates with SSID
+2. AP blocks all traffic except EAP
+3. Client sends EAP identity
+4. RADIUS validates against AD/IdP
+5. Certificate validation (EAP-TLS) or credentials (PEAP)
+6. RADIUS returns Accept + VLAN assignment
+7. Client receives network access
+
+EAP Methods:
+  EAP-TLS: Certificate on client. Most secure. Complex deployment.
+  PEAP-MSCHAPv2: Username/password + server cert. Common enterprise.
+  EAP-TTLS: Tunneled authentication. Flexible inner methods.</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="threats">Wireless Threats</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Evil Twin</h4>
+              <p class="card-description">Rogue AP mimics legitimate SSID. Captures credentials when users connect. Mitigate with 802.1X and certificate validation.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-orange);">Rogue Access Point</h4>
+              <p class="card-description">Unauthorized AP on corporate network. Creates unmonitored entry point. Detect with WIDS/WIPS.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Deauthentication Attack</h4>
+              <p class="card-description">Forces clients to disconnect, captures handshake for offline cracking. WPA3's SAE resists this.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">KRACK Attack</h4>
+              <p class="card-description">Key reinstallation attack on WPA2. Patch APs and clients. WPA3 not vulnerable.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Wireless Security Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Wireless Security Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Use WPA2/WPA3-Enterprise:</strong> 802.1X with certificates (EAP-TLS) is gold standard. No shared passwords.</p>
+              <p><strong>2. Segment Guest Networks:</strong> Guest SSID on isolated VLAN. No access to corporate resources.</p>
+              <p><strong>3. Deploy WIDS/WIPS:</strong> Detect rogue APs, evil twins, and wireless attacks. Alert and contain.</p>
+              <p><strong>4. Disable Legacy Protocols:</strong> No WEP, no WPA-TKIP. Force WPA2-AES minimum.</p>
+              <p><strong>5. Validate Server Certificates:</strong> Prevent evil twin by validating RADIUS server cert on clients.</p>
+              <p><strong>6. Physical Security:</strong> APs in secured locations. Disable unused ports on switches.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="segmentation.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Network Segmentation</div>
+          </a>
+          <a href="vpn.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">VPN Security →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

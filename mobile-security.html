@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Mobile Security - MDM, MAM, mobile threat defense, BYOD security, and enterprise mobility management.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">4. Endpoint Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="edr.html" class="sidebar-nav-link">EDR</a></li>
+          <li class="sidebar-nav-item"><a href="mobile-security.html" class="sidebar-nav-link active">Mobile Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Endpoint Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Mobile Security</span>
+          </div>
+          <h1>Mobile Security</h1>
+          <p class="page-description">Mobile devices access corporate data from anywhere, making them high-value targets. Enterprise mobility management (EMM) combines device management (MDM), application management (MAM), and mobile threat defense (MTD) to secure the mobile workforce.</p>
+        </div>
+
+        <section>
+          <h2 id="components">Mobile Security Components</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 280" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="280" fill="#0f1117"/>
+              
+              <!-- MDM -->
+              <rect x="30" y="40" width="180" height="200" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="120" y="70" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">MDM</text>
+              <text x="120" y="90" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Mobile Device Management</text>
+              
+              <text x="50" y="120" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Device enrollment</text>
+              <text x="50" y="138" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Configuration profiles</text>
+              <text x="50" y="156" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Passcode enforcement</text>
+              <text x="50" y="174" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Encryption validation</text>
+              <text x="50" y="192" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Remote wipe</text>
+              <text x="50" y="210" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Location tracking</text>
+              
+              <!-- MAM -->
+              <rect x="235" y="40" width="180" height="200" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="325" y="70" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">MAM</text>
+              <text x="325" y="90" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Mobile App Management</text>
+              
+              <text x="255" y="120" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• App deployment</text>
+              <text x="255" y="138" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• App configuration</text>
+              <text x="255" y="156" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• App protection policies</text>
+              <text x="255" y="174" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Data containerization</text>
+              <text x="255" y="192" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Selective wipe</text>
+              <text x="255" y="210" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Copy/paste controls</text>
+              
+              <!-- MTD -->
+              <rect x="440" y="40" width="180" height="200" rx="8" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="530" y="70" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">MTD</text>
+              <text x="530" y="90" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Mobile Threat Defense</text>
+              
+              <text x="460" y="120" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Malware detection</text>
+              <text x="460" y="138" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Phishing protection</text>
+              <text x="460" y="156" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Jailbreak detection</text>
+              <text x="460" y="174" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Network attacks (MITM)</text>
+              <text x="460" y="192" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Risky WiFi detection</text>
+              <text x="460" y="210" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• App risk scoring</text>
+              
+              <!-- UEM -->
+              <rect x="645" y="40" width="180" height="200" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="735" y="70" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">UEM</text>
+              <text x="735" y="90" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Unified Endpoint Management</text>
+              
+              <text x="665" y="120" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Single console</text>
+              <text x="665" y="138" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• iOS, Android, Windows</text>
+              <text x="665" y="156" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• macOS, ChromeOS</text>
+              <text x="665" y="174" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Consistent policies</text>
+              <text x="665" y="192" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Unified reporting</text>
+              <text x="665" y="210" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Zero Trust integration</text>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="byod">BYOD vs. Corporate-Owned</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                BYOD (Personal Device)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Employee-owned device</li>
+                  <li>MAM-only (no device control)</li>
+                  <li>Work profile / container</li>
+                  <li>Selective wipe (apps only)</li>
+                  <li>Privacy-respecting</li>
+                  <li>Lower cost, higher adoption</li>
+                </ul>
+                <div class="info-box info" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Best for:</strong> Knowledge workers, flexible policies, privacy-conscious cultures</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Corporate-Owned (COPE/COBO)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Company-owned device</li>
+                  <li>Full MDM + MAM control</li>
+                  <li>Full device management</li>
+                  <li>Full remote wipe capability</li>
+                  <li>Maximum security control</li>
+                  <li>Higher cost, full visibility</li>
+                </ul>
+                <div class="info-box info" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Best for:</strong> Regulated industries, executives, high-security roles</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="conditional-access">Mobile Conditional Access</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Intune + Conditional Access Flow</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Opens Corporate App</div>
+                  <div class="flow-step-description">Outlook, Teams, SharePoint on mobile</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Access Request</span></div>
+                    <pre><code>User: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c766f717568745c7f73716c7d7265327f7371">[email&#160;protected]</a>
+App: Microsoft Outlook
+Device: iPhone 14 Pro
+OS: iOS 17.2
+Location: Coffee shop WiFi
+Time: 8:45 AM Saturday</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Conditional Access Evaluation</div>
+                  <div class="flow-step-description">Check device compliance and risk</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Policy Check</span></div>
+                    <pre><code>Compliance Check (Intune):
+  ✓ Device enrolled in MDM
+  ✓ Encryption enabled
+  ✓ Passcode set (6+ digits)
+  ✓ Not jailbroken
+  ✓ OS up to date
+  ✓ MTD risk level: Low
+  
+Conditional Access Policy:
+  IF: Accessing Exchange Online
+  AND: Device is mobile
+  THEN: Require compliant device
+        Require approved client app
+        Require app protection policy</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Access Granted with Controls</div>
+                  <div class="flow-step-description">App protection policies enforced</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">App Protection</span></div>
+                    <pre><code>Access: GRANTED
+
+App Protection Policy Applied:
+  • PIN required to open app
+  • Data encrypted in app container
+  • Copy/paste to personal apps: Blocked
+  • Save to personal storage: Blocked  
+  • Screen capture: Blocked
+  • Print: Blocked
+  • Open in unmanaged apps: Blocked
+
+If device becomes non-compliant:
+  → Immediate access revocation
+  → User prompted to remediate</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="threats">Mobile Threat Landscape</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Mobile Malware</h4>
+              <p class="card-description">Trojans, spyware, banking malware. Sideloaded apps, malicious app stores. More common on Android than iOS.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-orange);">Phishing</h4>
+              <p class="card-description">SMS phishing (smishing), malicious links in email/messaging. Smaller screens make URL inspection harder.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Network Attacks</h4>
+              <p class="card-description">Rogue WiFi, MITM attacks, SSL stripping. Coffee shop and hotel networks are high-risk.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">Device Compromise</h4>
+              <p class="card-description">Jailbreaking/rooting removes security controls. Stolen devices with weak passcodes. Physical access attacks.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Mobile Security Solutions</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Microsoft Intune</div>
+            <div class="vendor-item">VMware Workspace ONE</div>
+            <div class="vendor-item">Jamf (Apple)</div>
+            <div class="vendor-item">MobileIron (Ivanti)</div>
+            <div class="vendor-item">Lookout (MTD)</div>
+            <div class="vendor-item">Zimperium (MTD)</div>
+            <div class="vendor-item">BlackBerry UEM</div>
+            <div class="vendor-item">Kandji (Apple)</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Mobile Security Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Mobile Security Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Require Device Enrollment:</strong> No access to corporate data without MDM/MAM enrollment. Conditional Access enforces this.</p>
+              <p><strong>2. Deploy MTD:</strong> Mobile threat defense catches what MDM can't—malware, phishing, network attacks. Integrate with Conditional Access.</p>
+              <p><strong>3. Use App Protection Policies:</strong> Even without full MDM, protect data in apps. Prevents copy/paste, screenshots, saves to personal cloud.</p>
+              <p><strong>4. Block Jailbroken Devices:</strong> Compromised devices cannot be trusted. Immediate compliance failure, access revoked.</p>
+              <p><strong>5. Enforce Strong Authentication:</strong> MFA required for all mobile access. Biometrics + PIN for app access.</p>
+              <p><strong>6. Plan for Device Loss:</strong> Remote wipe capability. Selective wipe for BYOD. Users must report lost devices immediately.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="edr.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← EDR</div>
+          </a>
+          <a href="xdr.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">XDR →

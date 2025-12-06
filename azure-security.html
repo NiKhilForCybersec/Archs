@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azure Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Azure Security - Microsoft Defender for Cloud, NSGs, Azure Firewall, Key Vault, and native security controls.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">5. Cloud Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="cspm.html" class="sidebar-nav-link">CSPM</a></li>
+          <li class="sidebar-nav-item"><a href="casb.html" class="sidebar-nav-link">CASB</a></li>
+          <li class="sidebar-nav-item"><a href="azure-security.html" class="sidebar-nav-link active">Azure Security</a></li>
+          <li class="sidebar-nav-item"><a href="aws-security.html" class="sidebar-nav-link">AWS Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Cloud Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Azure Security</span>
+          </div>
+          <h1>Azure Security</h1>
+          <p class="page-description">Azure provides a comprehensive set of native security services spanning identity, network, compute, data, and operations. Understanding these services and how they integrate is essential for building secure cloud architectures.</p>
+        </div>
+
+        <section>
+          <h2 id="landscape">Azure Security Services Landscape</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 420" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="420" fill="#0f1117"/>
+              
+              <!-- Identity -->
+              <rect x="30" y="30" width="250" height="110" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="155" y="55" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">IDENTITY & ACCESS</text>
+              <text x="50" y="78" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Microsoft Entra ID (Azure AD)</text>
+              <text x="50" y="94" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Conditional Access</text>
+              <text x="50" y="110" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Privileged Identity Management (PIM)</text>
+              <text x="50" y="126" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Managed Identities</text>
+              
+              <!-- Network -->
+              <rect x="300" y="30" width="250" height="110" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="425" y="55" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">NETWORK SECURITY</text>
+              <text x="320" y="78" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Network Security Groups (NSGs)</text>
+              <text x="320" y="94" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Azure Firewall</text>
+              <text x="320" y="110" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Azure WAF</text>
+              <text x="320" y="126" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• DDoS Protection</text>
+              
+              <!-- Compute -->
+              <rect x="570" y="30" width="250" height="110" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="695" y="55" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">COMPUTE SECURITY</text>
+              <text x="590" y="78" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Microsoft Defender for Servers</text>
+              <text x="590" y="94" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Microsoft Defender for Containers</text>
+              <text x="590" y="110" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Azure Confidential Computing</text>
+              <text x="590" y="126" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Just-in-Time VM Access</text>
+              
+              <!-- Data -->
+              <rect x="30" y="160" width="250" height="110" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="155" y="185" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">DATA PROTECTION</text>
+              <text x="50" y="208" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Azure Key Vault</text>
+              <text x="50" y="224" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Microsoft Purview</text>
+              <text x="50" y="240" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Azure Information Protection</text>
+              <text x="50" y="256" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Transparent Data Encryption (TDE)</text>
+              
+              <!-- Security Operations -->
+              <rect x="300" y="160" width="250" height="110" rx="8" fill="rgba(236, 72, 153, 0.1)" stroke="#ec4899"/>
+              <text x="425" y="185" text-anchor="middle" fill="#ec4899" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">SECURITY OPERATIONS</text>
+              <text x="320" y="208" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Microsoft Sentinel (SIEM)</text>
+              <text x="320" y="224" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Microsoft Defender for Cloud</text>
+              <text x="320" y="240" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Azure Monitor</text>
+              <text x="320" y="256" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Log Analytics</text>
+              
+              <!-- Governance -->
+              <rect x="570" y="160" width="250" height="110" rx="8" fill="rgba(6, 182, 212, 0.1)" stroke="#06b6d4"/>
+              <text x="695" y="185" text-anchor="middle" fill="#06b6d4" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">GOVERNANCE & COMPLIANCE</text>
+              <text x="590" y="208" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Azure Policy</text>
+              <text x="590" y="224" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Azure Blueprints</text>
+              <text x="590" y="240" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Management Groups</text>
+              <text x="590" y="256" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Resource Locks</text>
+              
+              <!-- Central Hub: Defender for Cloud -->
+              <rect x="275" y="295" width="300" height="100" rx="8" fill="rgba(59, 130, 246, 0.2)" stroke="#3b82f6" stroke-width="2"/>
+              <text x="425" y="325" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">MICROSOFT DEFENDER FOR CLOUD</text>
+              <text x="425" y="348" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Unified Security Posture Management</text>
+              <text x="425" y="365" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">CSPM • CWPP • Secure Score • Recommendations</text>
+              <text x="425" y="382" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Multi-cloud: Azure + AWS + GCP</text>
+              
+              <!-- Connection lines to Defender -->
+              <path d="M155 140 L155 295" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M425 140 L425 295" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M695 140 L695 270 L575 295" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M155 270 L275 295" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M425 270 L425 295" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M695 270 L575 295" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="nsg-flow">Network Security Groups (NSGs)</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">NSG Traffic Flow: Web App Architecture</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Internet User Request</div>
+                  <div class="flow-step-description">User connects to web application via Azure Load Balancer</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Inbound Request</span></div>
+                    <pre><code>Source: Internet (any)
+Destination: Azure Load Balancer Public IP
+Port: 443 (HTTPS)
+
+Load Balancer forwards to backend pool:
+  → Web tier VMs in web-subnet (10.0.1.0/24)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Web Tier NSG Evaluation</div>
+                  <div class="flow-step-description">NSG attached to web-subnet processes rules</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">NSG: web-tier-nsg</span></div>
+                    <pre><code>Inbound Rules (evaluated in priority order):
+
+Priority | Name              | Source      | Dest    | Port | Action
+---------|-------------------|-------------|---------|------|--------
+100      | Allow-LB-Health   | AzureLB     | Any     | Any  | Allow
+110      | Allow-HTTPS-In    | Internet    | Any     | 443  | Allow
+120      | Allow-HTTP-In     | Internet    | Any     | 80   | Allow
+200      | Allow-Mgmt-SSH    | 10.0.0.0/24 | Any     | 22   | Allow
+65000    | AllowVnetInBound  | VirtualNet  | VNet    | Any  | Allow
+65500    | DenyAllInBound    | Any         | Any     | Any  | DENY
+
+Result: HTTPS from Internet → ALLOWED (rule 110)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Web to App Tier Communication</div>
+                  <div class="flow-step-description">Web server calls API on app tier</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">NSG: app-tier-nsg</span></div>
+                    <pre><code>Web Server: GET http://10.0.2.10:8080/api/data
+
+App Tier NSG Inbound Rules:
+
+Priority | Name              | Source        | Dest | Port | Action
+---------|-------------------|---------------|------|------|--------
+100      | Allow-Web-to-App  | 10.0.1.0/24   | Any  | 8080 | Allow
+200      | Allow-Mgmt-SSH    | 10.0.0.0/24   | Any  | 22   | Allow
+65500    | DenyAllInBound    | Any           | Any  | Any  | DENY
+
+Result: Web subnet (10.0.1.0/24) → App on 8080 → ALLOWED
+
+⚠️ Note: Direct Internet → App tier is BLOCKED
+         Only web tier can reach app tier</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">App to Database Tier</div>
+                  <div class="flow-step-description">App server queries Azure SQL Database</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Database Access</span></div>
+                    <pre><code>App Server: SELECT * FROM customers
+
+Azure SQL Database Security:
+  1. Private Endpoint in data-subnet (10.0.3.0/24)
+  2. NSG on data-subnet:
+  
+Priority | Name              | Source        | Dest | Port | Action
+---------|-------------------|---------------|------|------|--------
+100      | Allow-App-to-SQL  | 10.0.2.0/24   | Any  | 1433 | Allow
+65500    | DenyAllInBound    | Any           | Any  | Any  | DENY
+
+  3. SQL Firewall: Allow VNet only
+  4. No public endpoint (disabled)
+
+Result: Multi-layer protection
+  - NSG: Only app tier on 1433
+  - Private Endpoint: No internet exposure
+  - SQL Firewall: Deny all public</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="defender">Microsoft Defender for Cloud</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Plan</th>
+                  <th>Protects</th>
+                  <th>Key Capabilities</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Foundational CSPM</strong></td>
+                  <td>All Azure resources (free)</td>
+                  <td>Secure Score, basic recommendations, asset inventory</td>
+                </tr>
+                <tr>
+                  <td><strong>Defender CSPM</strong></td>
+                  <td>Azure, AWS, GCP</td>
+                  <td>Attack path analysis, governance, agentless scanning</td>
+                </tr>
+                <tr>
+                  <td><strong>Defender for Servers</strong></td>
+                  <td>Azure VMs, Arc servers</td>
+                  <td>EDR (Defender for Endpoint), vulnerability assessment, FIM</td>
+                </tr>
+                <tr>
+                  <td><strong>Defender for Containers</strong></td>
+                  <td>AKS, container registries</td>
+                  <td>Image scanning, runtime protection, K8s hardening</td>
+                </tr>
+                <tr>
+                  <td><strong>Defender for Storage</strong></td>
+                  <td>Blob, Files, Data Lake</td>
+                  <td>Malware scanning, sensitive data detection, anomaly detection</td>
+                </tr>
+                <tr>
+                  <td><strong>Defender for SQL</strong></td>
+                  <td>Azure SQL, SQL on VMs</td>
+                  <td>Vulnerability assessment, threat detection, data classification</td>
+                </tr>
+                <tr>
+                  <td><strong>Defender for Key Vault</strong></td>
+                  <td>Azure Key Vault</td>
+                  <td>Unusual access patterns, suspicious operations</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="keyvault">Azure Key Vault</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">App Retrieving Secret from Key Vault (Managed Identity)</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">App Service Requests Secret</div>
+                  <div class="flow-step-description">Application needs database connection string</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Application Code</span></div>
+                    <pre><code>// C# - Using Managed Identity (no credentials in code!)
+var client = new SecretClient(
+    new Uri("https://contoso-kv.vault.azure.net/"),
+    new DefaultAzureCredential()  // Uses managed identity
+);
+
+KeyVaultSecret secret = await client.GetSecretAsync("db-connection-string");</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Managed Identity Authentication</div>
+                  <div class="flow-step-description">Azure authenticates the app's identity automatically</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Authentication Flow</span></div>
+                    <pre><code>App Service Managed Identity:
+  Identity Type: System-assigned
+  Object ID: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+  
+Azure AD Authentication:
+  1. App calls Azure Instance Metadata Service (IMDS)
+  2. IMDS returns token for the managed identity
+  3. Token scoped to Key Vault resource
+  
+No secrets, passwords, or certificates stored in app!</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Key Vault Access Policy Check</div>
+                  <div class="flow-step-description">Key Vault validates the identity has permission</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Access Control</span></div>
+                    <pre><code>Key Vault: contoso-kv
+Access Model: Azure RBAC (recommended)
+
+Role Assignment:
+  Principal: contoso-app-service (managed identity)
+  Role: Key Vault Secrets User
+  Scope: /subscriptions/.../resourceGroups/.../providers/
+         Microsoft.KeyVault/vaults/contoso-kv
+
+Evaluation:
+  ✓ Identity authenticated (valid token)
+  ✓ Role assigned (Secrets User)
+  ✓ Secret exists (db-connection-string)
+  
+Result: Secret value returned to application
+
+Audit Log:
+  Operation: SecretGet
+  Caller: contoso-app-service
+  Secret: db-connection-string
+  Result: Success</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Azure Security Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Azure Security Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Use Managed Identities:</strong> Never store credentials in code or config. Managed identities provide automatic, secure authentication.</p>
+              <p><strong>2. Enable Defender for Cloud:</strong> At minimum enable free tier. For production workloads, enable Defender plans for servers, containers, and databases.</p>
+              <p><strong>3. NSGs on Every Subnet:</strong> Default deny all. Explicitly allow only required traffic. Use Application Security Groups for dynamic membership.</p>
+              <p><strong>4. Private Endpoints for PaaS:</strong> Disable public endpoints on Azure SQL, Storage, Key Vault. Use Private Link for secure access.</p>
+              <p><strong>5. Azure Policy for Guardrails:</strong> Enforce security requirements at scale: require encryption, deny public IPs, require specific SKUs.</p>
+              <p><strong>6. Centralize Logs in Sentinel:</strong> Send all diagnostic logs, NSG flow logs, and activity logs to Log Analytics for threat detection.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="cspm.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← CSPM</div>
+          </a>
+          <a href="aws-security.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">AWS Security →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

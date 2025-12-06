@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Red Team Operations | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Red Team Operations - adversary simulation, TTPs, purple teaming, and MITRE ATT&CK mapping.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="penetration-testing.html" class="sidebar-nav-link">Penetration Testing</a></li>
+          <li class="sidebar-nav-item"><a href="red-team.html" class="sidebar-nav-link active">Red Team Operations</a></li>
+          <li class="sidebar-nav-item"><a href="threat-hunting.html" class="sidebar-nav-link">Threat Hunting</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Red Team Operations</span>
+          </div>
+          <h1>Red Team Operations</h1>
+          <p class="page-description">Red teaming is adversary simulation that tests an organization's detection and response capabilities. Unlike penetration testing, red teams operate with specific objectives, use real-world TTPs, and evaluate the entire security program—people, process, and technology.</p>
+        </div>
+
+        <section>
+          <h2 id="comparison">Red Team vs Penetration Test</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>
+                Penetration Testing
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Find vulnerabilities</li>
+                  <li>Defined scope/systems</li>
+                  <li>1-2 weeks typical</li>
+                  <li>Blue team usually aware</li>
+                  <li>Maximize findings</li>
+                  <li>Technical focus</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Red Team
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Achieve objectives</li>
+                  <li>Open scope (realistic)</li>
+                  <li>Weeks to months</li>
+                  <li>Blue team unaware</li>
+                  <li>Test detection/response</li>
+                  <li>People + process + tech</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="attack-chain">Red Team Attack Chain</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Cyber Kill Chain / MITRE ATT&CK</span></div>
+            <pre><code># Red Team Attack Progression
+
+RECONNAISSANCE (TA0043)
+├── OSINT: LinkedIn, GitHub, job postings
+├── Technical: DNS, subdomains, certificates
+└── Social: Employee names, email format
+
+INITIAL ACCESS (TA0001)
+├── Phishing: Spearphishing with malicious docs
+├── Public Exploits: CVEs on internet-facing services
+└── Valid Credentials: Credential stuffing, breached passwords
+
+EXECUTION (TA0002)
+├── User Execution: Macro-enabled documents
+├── Command Line: PowerShell, CMD
+└── Scripting: VBS, JavaScript
+
+PERSISTENCE (TA0003)
+├── Scheduled Tasks
+├── Registry Run Keys
+└── DLL Side-Loading
+
+PRIVILEGE ESCALATION (TA0004)
+├── Local: Unquoted service paths, kernel exploits
+├── Domain: Kerberoasting, AS-REP roasting
+└── Credential Access: LSASS dump, DCSync
+
+LATERAL MOVEMENT (TA0008)
+├── Pass-the-Hash/Ticket
+├── Remote Services: RDP, WinRM, SMB
+└── Internal Spearphishing
+
+COLLECTION & EXFILTRATION (TA0009, TA0010)
+├── Data Staging
+├── Encrypted C2 channels
+└── Cloud storage, DNS tunneling
+
+OBJECTIVE ACHIEVED
+└── Crown jewels accessed, objective documented</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="purple">Purple Teaming</h2>
+          
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Purple Team = Red + Blue Collaboration
+            </div>
+            <div class="info-box-content">
+              <p><strong>Process:</strong> Red team executes technique → Blue team attempts detection → Both teams analyze gaps → Improve detections → Repeat</p>
+              <p><strong>Benefits:</strong> Immediate feedback loop, improved detection rules, validated defenses, knowledge transfer to SOC.</p>
+              <p><strong>Tools:</strong> Atomic Red Team, MITRE Caldera, Infection Monkey for automated TTP execution.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="tools">Red Team Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Cobalt Strike</div>
+            <div class="vendor-item">Sliver (Open Source)</div>
+            <div class="vendor-item">Mythic C2</div>
+            <div class="vendor-item">BloodHound</div>
+            <div class="vendor-item">Rubeus</div>
+            <div class="vendor-item">Mimikatz</div>
+            <div class="vendor-item">Covenant</div>
+            <div class="vendor-item">Atomic Red Team</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Red Team Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Red Team Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Define Clear Objectives:</strong> "Access CEO email" or "exfiltrate customer data" not "find vulnerabilities."</p>
+              <p><strong>2. Emulate Real Threats:</strong> Use TTPs relevant to your threat model. Map to MITRE ATT&CK.</p>
+              <p><strong>3. Test Detection, Not Just Prevention:</strong> The goal is to improve blue team capabilities, not just find holes.</p>
+              <p><strong>4. Debrief Thoroughly:</strong> Share techniques, timeline, and detection gaps. Knowledge transfer is critical.</p>
+              <p><strong>5. Purple Team Regularly:</strong> Collaborative exercises improve defenses faster than adversarial-only.</p>
+              <p><strong>6. Document Everything:</strong> Timestamped logs enable blue team to correlate and improve detection.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="penetration-testing.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Penetration Testing</div>
+          </a>
+          <a href="threat-hunting.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Threat Hunting →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

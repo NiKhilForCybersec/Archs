@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Browser Security - enterprise browser management, browser isolation, and web security policies.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">4. Endpoint Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="edr.html" class="sidebar-nav-link">EDR</a></li>
+          <li class="sidebar-nav-item"><a href="browser-security.html" class="sidebar-nav-link active">Browser Security</a></li>
+          <li class="sidebar-nav-item"><a href="mobile-security.html" class="sidebar-nav-link">Mobile Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Endpoint Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Browser Security</span>
+          </div>
+          <h1>Browser Security</h1>
+          <p class="page-description">The browser is the primary interface to the internet and a major attack vector. Enterprise browser security encompasses managed browser configurations, browser isolation, extension control, and protection against web-based threats.</p>
+        </div>
+
+        <section>
+          <h2 id="threats">Browser Threat Landscape</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Drive-by Downloads</h4>
+              <p class="card-description">Malicious code executed by visiting compromised websites. Exploits browser or plugin vulnerabilities.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-orange);">Malicious Extensions</h4>
+              <p class="card-description">Browser extensions with excessive permissions that steal data, inject ads, or crypto-mine.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Credential Theft</h4>
+              <p class="card-description">Phishing sites, form grabbers, and password manager attacks targeting stored credentials.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Session Hijacking</h4>
+              <p class="card-description">Cookie theft, session token capture via XSS or network interception.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="policies">Browser Security Policies</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Chrome Enterprise Policies (GPO/Intune)</span></div>
+            <pre><code># Key Chrome Enterprise Security Policies
+
+# EXTENSION MANAGEMENT
+ExtensionInstallBlocklist: ["*"]          # Block all by default
+ExtensionInstallAllowlist: ["id1", "id2"] # Whitelist approved only
+ExtensionInstallForcelist: ["security-ext"] # Force install security tools
+
+# PASSWORD MANAGER
+PasswordManagerEnabled: true
+PasswordLeakDetectionEnabled: true        # Alert on breached passwords
+
+# SAFE BROWSING
+SafeBrowsingEnabled: true
+SafeBrowsingProtectionLevel: 2            # Enhanced protection
+
+# DOWNLOADS
+DownloadRestrictions: 1                   # Block dangerous files
+SafeBrowsingForTrustedSourcesEnabled: true
+
+# SITE ISOLATION
+SitePerProcess: true                      # Isolate each site in process
+
+# NETWORK
+DnsOverHttpsMode: "automatic"             # Enable DoH
+SSLVersionMin: "tls1.2"                   # Minimum TLS 1.2
+HSTS: enforce                             # HTTP Strict Transport Security
+
+# DATA PROTECTION
+SyncDisabled: true                        # Disable Chrome Sync to Google
+AutofillCreditCardEnabled: false          # No credit card autofill
+CookiesAllowedForUrls: ["internal.company.com"]
+CookiesBlockedForUrls: ["*.tracking.com"]
+
+# PRIVACY
+BlockThirdPartyCookies: true
+MetricsReportingEnabled: false</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="isolation">Browser Isolation</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect></svg>
+                Local Browser Isolation
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Browser runs in local VM/container</li>
+                  <li>Disposable environment</li>
+                  <li>Resources on endpoint</li>
+                  <li>Latency minimal</li>
+                </ul>
+                <div class="info-box info" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Tools:</strong> Bromium (HP), Windows Sandbox</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><cloud/></svg>
+                Remote Browser Isolation (RBI)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Browser runs in cloud</li>
+                  <li>Only pixels streamed to user</li>
+                  <li>Zero local execution</li>
+                  <li>Some latency added</li>
+                </ul>
+                <div class="info-box info" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Tools:</strong> Zscaler, Menlo, Cloudflare</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="enterprise-browsers">Enterprise Browsers</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Solution</th>
+                  <th>Type</th>
+                  <th>Key Features</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Chrome Enterprise</strong></td>
+                  <td>Managed Browser</td>
+                  <td>Policy management, extension control, reporting</td>
+                </tr>
+                <tr>
+                  <td><strong>Edge for Business</strong></td>
+                  <td>Managed Browser</td>
+                  <td>Intune integration, DLP, conditional access</td>
+                </tr>
+                <tr>
+                  <td><strong>Island</strong></td>
+                  <td>Enterprise Browser</td>
+                  <td>Built-in DLP, ZTNA, last-mile security</td>
+                </tr>
+                <tr>
+                  <td><strong>Talon (Palo Alto)</strong></td>
+                  <td>Enterprise Browser</td>
+                  <td>Chromium-based, zero trust browser</td>
+                </tr>
+                <tr>
+                  <td><strong>LayerX</strong></td>
+                  <td>Browser Extension</td>
+                  <td>Add security to existing browsers</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Browser Security Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Browser Security Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Standardize on One Browser:</strong> Easier to manage, policy, and monitor. Chrome or Edge for enterprise.</p>
+              <p><strong>2. Whitelist Extensions:</strong> Block all extensions by default. Only allow approved, business-needed ones.</p>
+              <p><strong>3. Enable Safe Browsing:</strong> Enhanced protection mode catches more threats.</p>
+              <p><strong>4. Auto-Update:</strong> Browser updates patch critical vulnerabilities. Don't let users defer.</p>
+              <p><strong>5. Consider RBI for Risk:</strong> High-risk users (executives, finance) benefit from browser isolation.</p>
+              <p><strong>6. Integrate with SWG:</strong> Proxy all browser traffic through Secure Web Gateway.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="edr.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← EDR</div>
+          </a>
+          <a href="mobile-security.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Mobile Security →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

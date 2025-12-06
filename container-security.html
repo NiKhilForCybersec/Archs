@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Container Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Container Security - image scanning, runtime protection, Kubernetes security, and supply chain integrity.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">5. Cloud Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="cspm.html" class="sidebar-nav-link">CSPM</a></li>
+          <li class="sidebar-nav-item"><a href="container-security.html" class="sidebar-nav-link active">Container Security</a></li>
+          <li class="sidebar-nav-item"><a href="azure-security.html" class="sidebar-nav-link">Azure Security</a></li>
+          <li class="sidebar-nav-item"><a href="aws-security.html" class="sidebar-nav-link">AWS Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Cloud Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Container Security</span>
+          </div>
+          <h1>Container Security</h1>
+          <p class="page-description">Containers introduce new attack surfaces across the build, deploy, and runtime phases. Container security encompasses image scanning, registry security, runtime protection, Kubernetes hardening, and supply chain integrity to secure modern cloud-native applications.</p>
+        </div>
+
+        <section>
+          <h2 id="lifecycle">Container Security Lifecycle</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 280" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="280" fill="#0f1117"/>
+              
+              <!-- Build -->
+              <rect x="30" y="60" width="180" height="160" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="120" y="90" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">BUILD</text>
+              <text x="50" y="115" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Base image selection</text>
+              <text x="50" y="132" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Dependency scanning (SCA)</text>
+              <text x="50" y="149" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• SAST / Secret scanning</text>
+              <text x="50" y="166" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Dockerfile best practices</text>
+              <text x="50" y="183" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Image signing</text>
+              <text x="50" y="200" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Minimal base images</text>
+              
+              <!-- Ship -->
+              <rect x="240" y="60" width="180" height="160" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="330" y="90" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">SHIP / STORE</text>
+              <text x="260" y="115" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Registry security</text>
+              <text x="260" y="132" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Image vulnerability scanning</text>
+              <text x="260" y="149" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Signature verification</text>
+              <text x="260" y="166" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Access controls (RBAC)</text>
+              <text x="260" y="183" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Image promotion policies</text>
+              <text x="260" y="200" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Immutable tags</text>
+              
+              <!-- Deploy -->
+              <rect x="450" y="60" width="180" height="160" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="540" y="90" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">DEPLOY</text>
+              <text x="470" y="115" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Admission controllers</text>
+              <text x="470" y="132" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Pod Security Standards</text>
+              <text x="470" y="149" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Network policies</text>
+              <text x="470" y="166" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Resource limits</text>
+              <text x="470" y="183" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Secrets management</text>
+              <text x="470" y="200" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Service mesh (mTLS)</text>
+              
+              <!-- Run -->
+              <rect x="660" y="60" width="160" height="160" rx="8" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="740" y="90" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">RUN</text>
+              <text x="680" y="115" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Runtime protection</text>
+              <text x="680" y="132" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Behavioral monitoring</text>
+              <text x="680" y="149" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Drift detection</text>
+              <text x="680" y="166" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Threat detection</text>
+              <text x="680" y="183" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Forensics</text>
+              <text x="680" y="200" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Incident response</text>
+              
+              <!-- Arrows -->
+              <path d="M210 140 L240 140" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M420 140 L450 140" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M630 140 L660 140" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              
+              <!-- Labels -->
+              <text x="120" y="245" text-anchor="middle" fill="#3b82f6" font-family="IBM Plex Sans, sans-serif" font-size="9">Shift Left</text>
+              <text x="330" y="245" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="9">Gate</text>
+              <text x="540" y="245" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="9">Enforce</text>
+              <text x="740" y="245" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="9">Detect</text>
+              
+              <defs>
+                <marker id="arrowGray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="scanning">Image Vulnerability Scanning</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">CI/CD Pipeline Image Scan</span></div>
+            <pre><code># GitHub Actions - Scan image before push to registry
+name: Container Security
+on: [push]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build image
+        run: docker build -t myapp:${{ github.sha }} .
+      
+      - name: Scan for vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'myapp:${{ github.sha }}'
+          format: 'sarif'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'  # Fail build on CRITICAL/HIGH
+          
+      - name: Sign image (if scan passes)
+        run: |
+          cosign sign --key cosign.key myapp:${{ github.sha }}
+          
+      - name: Push to registry (only signed images)
+        run: |
+          docker push registry.company.com/myapp:${{ github.sha }}</code></pre>
+          </div>
+          
+          <div class="code-block" style="margin-top: var(--space-lg);">
+            <div class="code-block-header"><span class="code-block-title">Trivy Scan Output</span></div>
+            <pre><code>$ trivy image myapp:latest
+
+myapp:latest (alpine 3.18.4)
+Total: 2 (CRITICAL: 1, HIGH: 1)
+
+┌──────────────┬────────────────┬──────────┬─────────────────────────────────┐
+│   Library    │ Vulnerability  │ Severity │          Fixed Version          │
+├──────────────┼────────────────┼──────────┼─────────────────────────────────┤
+│ libcrypto3   │ CVE-2024-0727  │ CRITICAL │ 3.1.4-r3                        │
+│ libssl3      │ CVE-2024-0727  │ HIGH     │ 3.1.4-r3                        │
+└──────────────┴────────────────┴──────────┴─────────────────────────────────┘
+
+Action Required:
+  Update base image: FROM alpine:3.18.4 → FROM alpine:3.18.5
+  Or pin specific package versions in Dockerfile</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="kubernetes">Kubernetes Security Controls</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Pod Security Standards - Restricted</span></div>
+            <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: secure-pod
+spec:
+  securityContext:
+    runAsNonRoot: true           # Never run as root
+    runAsUser: 1000              # Specific non-root user
+    fsGroup: 1000                # File system group
+    seccompProfile:
+      type: RuntimeDefault       # Enable seccomp filtering
+      
+  containers:
+  - name: app
+    image: registry.company.com/myapp:v1.2.3@sha256:abc...  # Pin by digest
+    securityContext:
+      allowPrivilegeEscalation: false   # Block privilege escalation
+      readOnlyRootFilesystem: true      # Immutable container filesystem
+      capabilities:
+        drop:
+          - ALL                         # Drop all Linux capabilities
+    resources:
+      limits:
+        memory: "256Mi"
+        cpu: "500m"
+      requests:
+        memory: "128Mi"
+        cpu: "250m"
+    volumeMounts:
+    - name: tmp
+      mountPath: /tmp
+      
+  volumes:
+  - name: tmp
+    emptyDir: {}                        # Writable temp directory only</code></pre>
+          </div>
+          
+          <div class="code-block" style="margin-top: var(--space-lg);">
+            <div class="code-block-header"><span class="code-block-title">Network Policy - Default Deny</span></div>
+            <pre><code>apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: production
+spec:
+  podSelector: {}          # Apply to all pods in namespace
+  policyTypes:
+  - Ingress
+  - Egress
+  # No ingress/egress rules = deny all traffic by default
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend-to-backend
+  namespace: production
+spec:
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: frontend    # Only frontend pods can reach backend
+    ports:
+    - protocol: TCP
+      port: 8080</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="runtime">Runtime Threat Detection</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Runtime Protection Detects Container Escape Attempt</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Attacker Exploits Vulnerability</div>
+                  <div class="flow-step-description">RCE in application, attacker has shell in container</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Attack Activity</span></div>
+                    <pre><code># Attacker in container, attempting escape
+$ cat /etc/os-release          # Reconnaissance
+$ mount                        # Check for host mounts
+$ ls -la /var/run/docker.sock  # Docker socket exposed?
+$ curl http://169.254.169.254/ # IMDS token theft attempt</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Runtime Agent Detects Anomaly</div>
+                  <div class="flow-step-description">Behavioral baseline violated</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Runtime Detection</span></div>
+                    <pre><code>Falco Runtime Alert:
+
+Rule: Terminal shell in container
+Container: myapp-pod-7b8f9
+Image: registry.company.com/myapp:v1.2.3
+Severity: WARNING
+Command: /bin/sh
+
+Rule: Read sensitive file in container
+Container: myapp-pod-7b8f9
+File: /etc/shadow
+Severity: CRITICAL
+
+Rule: Contact cloud metadata service
+Container: myapp-pod-7b8f9
+Connection: 169.254.169.254:80
+Severity: CRITICAL
+MITRE: T1552.005 - Cloud Instance Metadata API</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Automated Response</div>
+                  <div class="flow-step-description">Container isolated, pod terminated</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Response Actions</span></div>
+                    <pre><code>Automated Response Triggered:
+  1. Network policy applied - pod isolated
+  2. Pod terminated and rescheduled (clean image)
+  3. Snapshot captured for forensics
+  4. Alert sent to SOC with full context
+  
+Manual Investigation:
+  - Review image for vulnerabilities
+  - Check how attacker gained initial access
+  - Verify no lateral movement occurred
+  - Rotate any exposed credentials</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Container Security Solutions</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Aqua Security</div>
+            <div class="vendor-item">Palo Alto Prisma Cloud</div>
+            <div class="vendor-item">Sysdig</div>
+            <div class="vendor-item">Snyk Container</div>
+            <div class="vendor-item">Wiz</div>
+            <div class="vendor-item">Trivy (OSS)</div>
+            <div class="vendor-item">Falco (OSS)</div>
+            <div class="vendor-item">Tenable.cs</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Container Security Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Container Security Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Use Minimal Base Images:</strong> Distroless, Alpine, or scratch. Fewer packages = smaller attack surface.</p>
+              <p><strong>2. Never Run as Root:</strong> Always specify non-root USER in Dockerfile. Enable runAsNonRoot in K8s.</p>
+              <p><strong>3. Scan in CI/CD:</strong> Block builds with CRITICAL vulnerabilities. Shift security left.</p>
+              <p><strong>4. Sign and Verify Images:</strong> Use Cosign/Notary. Only deploy signed images from trusted registries.</p>
+              <p><strong>5. Network Policies:</strong> Default deny, explicit allow. Micro-segment at the pod level.</p>
+              <p><strong>6. Runtime Protection:</strong> Behavioral monitoring catches what static scanning misses. Detect anomalies in production.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="cspm.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← CSPM</div>
+          </a>
+          <a href="azure-security.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Azure Security →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

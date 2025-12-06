@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIEM Architecture | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to SIEM architecture - log collection, correlation, detection engineering with Splunk and Microsoft Sentinel examples.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">9. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="siem.html" class="sidebar-nav-link active">SIEM Architecture</a></li>
+          <li class="sidebar-nav-item"><a href="log-management.html" class="sidebar-nav-link">Log Collection</a></li>
+          <li class="sidebar-nav-item"><a href="security-monitoring.html" class="sidebar-nav-link">Detection Engineering</a></li>
+          <li class="sidebar-nav-item"><a href="soar.html" class="sidebar-nav-link">SOAR</a></li>
+          <li class="sidebar-nav-item"><a href="threat-intel.html" class="sidebar-nav-link">Threat Intelligence</a></li>
+          <li class="sidebar-nav-item"><a href="incident-response.html" class="sidebar-nav-link">Incident Response</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>SIEM Architecture</span>
+          </div>
+          <h1>SIEM Architecture</h1>
+          <p class="page-description">Security Information and Event Management (SIEM) systems aggregate logs from across the enterprise, correlate events, detect threats, and support incident investigation. Modern SIEM platforms combine traditional log management with advanced analytics, UEBA, and SOAR capabilities.</p>
+        </div>
+
+        <section>
+          <h2 id="overview">SIEM Functions</h2>
+          <p>A SIEM platform performs several critical security functions:</p>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Log Aggregation</h4>
+              <p class="card-description">Centralized collection of security logs from firewalls, endpoints, servers, applications, cloud services, and identity systems.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">Normalization</h4>
+              <p class="card-description">Converting diverse log formats into a common schema for consistent querying and correlation across sources.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">Correlation</h4>
+              <p class="card-description">Connecting related events across systems to identify attack patterns that wouldn't be visible in isolated logs.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Alerting</h4>
+              <p class="card-description">Real-time detection rules that trigger alerts when suspicious activity matches defined patterns or thresholds.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-cyan);">Investigation</h4>
+              <p class="card-description">Search and analysis tools for threat hunting and incident investigation with full historical context.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Compliance</h4>
+              <p class="card-description">Retention policies, audit trails, and reporting to meet regulatory requirements (PCI-DSS, HIPAA, SOX).</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="comparison">Traditional vs. Modern SIEM</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Traditional SIEM (Legacy)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>On-premises appliances</li>
+                  <li>License by EPS (events per second)</li>
+                  <li>Manual rule writing (regex-heavy)</li>
+                  <li>Limited cloud visibility</li>
+                  <li>High false positive rates</li>
+                  <li>Separate tools for each function</li>
+                  <li>Complex scaling</li>
+                  <li>90-day retention typical</li>
+                </ul>
+              </div>
+            </div>
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Modern SIEM (Cloud-Native)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Cloud-native architecture</li>
+                  <li>License by data ingestion (GB/day)</li>
+                  <li>Built-in detection content (MITRE-mapped)</li>
+                  <li>Native cloud & SaaS connectors</li>
+                  <li>ML-based anomaly detection</li>
+                  <li>Integrated UEBA & SOAR</li>
+                  <li>Elastic auto-scaling</li>
+                  <li>1-7 year retention standard</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="architecture">SIEM Architecture Diagram</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 450" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="450" fill="#0f1117"/>
+              
+              <!-- Log Sources -->
+              <rect x="30" y="30" width="180" height="390" rx="8" fill="rgba(59, 130, 246, 0.05)" stroke="#3b82f6" stroke-dasharray="4"/>
+              <text x="120" y="55" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">LOG SOURCES</text>
+              
+              <rect x="50" y="75" width="140" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="120" y="97" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Firewalls / NGFW</text>
+              
+              <rect x="50" y="120" width="140" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="120" y="142" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">EDR / Endpoint</text>
+              
+              <rect x="50" y="165" width="140" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="120" y="187" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Identity (AD / Entra)</text>
+              
+              <rect x="50" y="210" width="140" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="120" y="232" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Cloud (AWS/Azure/GCP)</text>
+              
+              <rect x="50" y="255" width="140" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="120" y="277" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Email Gateway</text>
+              
+              <rect x="50" y="300" width="140" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="120" y="322" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Servers (Windows/Linux)</text>
+              
+              <rect x="50" y="345" width="140" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="120" y="367" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Web Proxy / SWG</text>
+              
+              <!-- Collection Layer -->
+              <rect x="240" y="100" width="120" height="250" rx="8" fill="rgba(245, 158, 11, 0.05)" stroke="#f59e0b" stroke-dasharray="4"/>
+              <text x="300" y="125" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">COLLECTION</text>
+              
+              <rect x="255" y="150" width="90" height="40" rx="4" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="300" y="172" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Syslog</text>
+              
+              <rect x="255" y="200" width="90" height="40" rx="4" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="300" y="222" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">API Connectors</text>
+              
+              <rect x="255" y="250" width="90" height="40" rx="4" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="300" y="272" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Agents</text>
+              
+              <rect x="255" y="300" width="90" height="40" rx="4" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="300" y="322" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Forwarders</text>
+              
+              <!-- SIEM Core -->
+              <rect x="400" y="50" width="250" height="350" rx="8" fill="rgba(16, 185, 129, 0.05)" stroke="#10b981" stroke-dasharray="4"/>
+              <text x="525" y="75" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">SIEM PLATFORM</text>
+              
+              <rect x="420" y="95" width="210" height="45" rx="4" fill="#1e2430" stroke="#10b981"/>
+              <text x="525" y="117" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Parsing & Normalization</text>
+              <text x="525" y="132" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">CIM / OCSF Schema</text>
+              
+              <rect x="420" y="150" width="210" height="45" rx="4" fill="#1e2430" stroke="#8b5cf6"/>
+              <text x="525" y="172" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Detection Engine</text>
+              <text x="525" y="187" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Rules • ML • UEBA</text>
+              
+              <rect x="420" y="205" width="210" height="45" rx="4" fill="#1e2430" stroke="#06b6d4"/>
+              <text x="525" y="227" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Correlation Engine</text>
+              <text x="525" y="242" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Cross-source event linking</text>
+              
+              <rect x="420" y="260" width="210" height="45" rx="4" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="525" y="282" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Data Lake / Index</text>
+              <text x="525" y="297" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Hot • Warm • Cold tiers</text>
+              
+              <rect x="420" y="315" width="100" height="40" rx="4" fill="#1e2430" stroke="#ef4444"/>
+              <text x="470" y="338" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Threat Intel</text>
+              
+              <rect x="530" y="315" width="100" height="40" rx="4" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="580" y="338" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">SOAR</text>
+              
+              <!-- Output -->
+              <rect x="690" y="100" width="130" height="250" rx="8" fill="rgba(139, 92, 246, 0.05)" stroke="#8b5cf6" stroke-dasharray="4"/>
+              <text x="755" y="125" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">OUTPUT</text>
+              
+              <rect x="705" y="150" width="100" height="35" rx="4" fill="#1e2430" stroke="#ef4444"/>
+              <text x="755" y="172" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Alerts</text>
+              
+              <rect x="705" y="195" width="100" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="755" y="217" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Dashboards</text>
+              
+              <rect x="705" y="240" width="100" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="755" y="262" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Reports</text>
+              
+              <rect x="705" y="285" width="100" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="755" y="307" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Ticketing (API)</text>
+              
+              <!-- Arrows -->
+              <path d="M210 220 L240 220" stroke="#3b82f6" stroke-width="2" fill="none"/>
+              <path d="M360 220 L400 220" stroke="#f59e0b" stroke-width="2" fill="none"/>
+              <path d="M650 220 L690 220" stroke="#10b981" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="detection-example">Detection Rule Example: Brute Force Attack</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Microsoft Sentinel KQL Detection</div>
+            
+            <div class="code-block">
+              <div class="code-block-header">
+                <span class="code-block-title">KQL - Failed Logon Brute Force Detection</span>
+                <button class="copy-button">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  Copy
+                </button>
+              </div>
+              <pre><code>// Detect brute force attacks: 10+ failed logins followed by success
+let threshold = 10;
+let timeWindow = 1h;
+
+SecurityEvent
+| where EventID == 4625  // Failed logon
+| summarize 
+    FailedAttempts = count(),
+    FirstFailure = min(TimeGenerated),
+    LastFailure = max(TimeGenerated),
+    TargetAccounts = make_set(TargetUserName)
+    by SourceIP = IpAddress, TargetComputer = Computer
+| where FailedAttempts >= threshold
+| join kind=inner (
+    SecurityEvent
+    | where EventID == 4624  // Successful logon
+    | where TimeGenerated > ago(timeWindow)
+    | project SuccessTime = TimeGenerated, SourceIP = IpAddress, 
+              SuccessAccount = TargetUserName, TargetComputer = Computer
+) on SourceIP, TargetComputer
+| where SuccessTime > LastFailure
+| extend TimeDelta = datetime_diff('minute', SuccessTime, LastFailure)
+| where TimeDelta <= 30  // Success within 30 min of last failure
+| project 
+    SourceIP,
+    TargetComputer,
+    FailedAttempts,
+    SuccessAccount,
+    FirstFailure,
+    LastFailure,
+    SuccessTime,
+    TimeDelta,
+    TargetAccounts</code></pre>
+            </div>
+
+            <div class="info-box warning" style="margin-top: var(--space-lg);">
+              <div class="info-box-title">MITRE ATT&CK Mapping</div>
+              <div class="info-box-content">
+                <p><strong>Tactic:</strong> Credential Access (TA0006)</p>
+                <p><strong>Technique:</strong> Brute Force (T1110)</p>
+                <p><strong>Sub-technique:</strong> Password Guessing (T1110.001)</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">SIEM Vendor Comparison</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Microsoft Sentinel</div>
+            <div class="vendor-item">Splunk Enterprise</div>
+            <div class="vendor-item">Google Chronicle</div>
+            <div class="vendor-item">IBM QRadar</div>
+            <div class="vendor-item">Elastic Security</div>
+            <div class="vendor-item">Sumo Logic</div>
+            <div class="vendor-item">LogRhythm</div>
+            <div class="vendor-item">Securonix</div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>Microsoft Sentinel</th>
+                  <th>Splunk</th>
+                  <th>Chronicle</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Deployment</td>
+                  <td>Cloud-native (Azure)</td>
+                  <td>On-prem / Cloud</td>
+                  <td>Cloud-native (GCP)</td>
+                </tr>
+                <tr>
+                  <td>Pricing Model</td>
+                  <td>GB ingestion</td>
+                  <td>GB indexed/day</td>
+                  <td>Per user</td>
+                </tr>
+                <tr>
+                  <td>Query Language</td>
+                  <td>KQL</td>
+                  <td>SPL</td>
+                  <td>YARA-L</td>
+                </tr>
+                <tr>
+                  <td>Native SOAR</td>
+                  <td class="check-yes">✓ Logic Apps</td>
+                  <td class="check-yes">✓ SOAR add-on</td>
+                  <td class="check-yes">✓ SOAR included</td>
+                </tr>
+                <tr>
+                  <td>UEBA</td>
+                  <td class="check-yes">✓ Built-in</td>
+                  <td class="check-yes">✓ Add-on</td>
+                  <td class="check-yes">✓ Built-in</td>
+                </tr>
+                <tr>
+                  <td>M365 Integration</td>
+                  <td class="check-yes">✓ Native</td>
+                  <td class="check-yes">✓ Add-on</td>
+                  <td class="check-partial">API</td>
+                </tr>
+                <tr>
+                  <td>Retention</td>
+                  <td>90 days hot, 2yr archive</td>
+                  <td>Configurable</td>
+                  <td>12 months standard</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">SIEM Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Implementation Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Define Use Cases First:</strong> Don't collect logs just because you can. Define detection use cases, then determine required data sources.</p>
+              <p><strong>2. Normalize Early:</strong> Invest in proper parsing and field extraction upfront. Inconsistent data makes correlation impossible.</p>
+              <p><strong>3. Tune Aggressively:</strong> A SIEM generating 1000 alerts/day with 90% false positives is worse than useless. Quality over quantity.</p>
+              <p><strong>4. Map to MITRE ATT&CK:</strong> Ensure detection coverage across the attack lifecycle. Identify and fill gaps systematically.</p>
+              <p><strong>5. Automate Response:</strong> Integrate with SOAR for automated enrichment and response. Reduce analyst fatigue.</p>
+              <p><strong>6. Measure Effectiveness:</strong> Track MTTD (Mean Time to Detect) and MTTR (Mean Time to Respond). Continuously improve.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="soc-operations.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← SOC Operating Models</div>
+          </a>
+          <a href="log-management.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Log Collection Strategies →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

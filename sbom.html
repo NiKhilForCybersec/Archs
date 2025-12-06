@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SBOM | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Software Bill of Materials (SBOM) - component inventory, supply chain security, and vulnerability tracking.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">8. Application Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="application-security.html" class="sidebar-nav-link">Application Security</a></li>
+          <li class="sidebar-nav-item"><a href="sbom.html" class="sidebar-nav-link active">SBOM</a></li>
+          <li class="sidebar-nav-item"><a href="devsecops.html" class="sidebar-nav-link">DevSecOps</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Application Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>SBOM</span>
+          </div>
+          <h1>Software Bill of Materials (SBOM)</h1>
+          <p class="page-description">An SBOM is a comprehensive inventory of all components, libraries, and dependencies in software. Like a food ingredient list, SBOMs enable organizations to quickly identify vulnerable components (like Log4j) across their software portfolio.</p>
+        </div>
+
+        <section>
+          <h2 id="why">Why SBOM Matters</h2>
+          
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Log4Shell: The SBOM Wake-Up Call
+            </div>
+            <div class="info-box-content">
+              <p>When Log4j vulnerability (CVE-2021-44228) emerged, organizations without SBOMs spent days or weeks finding affected systems. Those with SBOMs queried their inventory in minutes.</p>
+              <p><strong>Executive Order 14028</strong> now requires SBOMs for software sold to the US government.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="formats">SBOM Formats</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Format</th>
+                  <th>Origin</th>
+                  <th>Best For</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>SPDX</strong></td>
+                  <td>Linux Foundation</td>
+                  <td>Open source, license compliance</td>
+                </tr>
+                <tr>
+                  <td><strong>CycloneDX</strong></td>
+                  <td>OWASP</td>
+                  <td>Security-focused, vulnerability tracking</td>
+                </tr>
+                <tr>
+                  <td><strong>SWID Tags</strong></td>
+                  <td>ISO/IEC</td>
+                  <td>Installed software inventory</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="contents">SBOM Contents</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">CycloneDX SBOM Example</span></div>
+            <pre><code>{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-12-06T10:00:00Z",
+    "component": {
+      "name": "my-application",
+      "version": "1.0.0",
+      "type": "application"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "lodash",
+      "version": "4.17.21",
+      "purl": "pkg:npm/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f894979c998b90b8ccd6c9cfd6cac9">[email&#160;protected]</a>",
+      "licenses": [{ "license": { "id": "MIT" } }],
+      "hashes": [
+        { "alg": "SHA-256", "content": "abc123..." }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "log4j-core",
+      "version": "2.14.1",  // VULNERABLE!
+      "purl": "pkg:maven/org.apache.logging.log4j/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d3bfbcb4e7b9feb0bca1b693e1fde2e7fde2">[email&#160;protected]</a>"
+    }
+  ],
+  "vulnerabilities": [
+    {
+      "id": "CVE-2021-44228",
+      "source": { "name": "NVD" },
+      "affects": [{ "ref": "log4j-core" }],
+      "ratings": [{ "severity": "critical", "score": 10.0 }]
+    }
+  ]
+}</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="tools">SBOM Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Syft (Anchore)</div>
+            <div class="vendor-item">Trivy</div>
+            <div class="vendor-item">OWASP Dependency-Track</div>
+            <div class="vendor-item">Snyk</div>
+            <div class="vendor-item">FOSSA</div>
+            <div class="vendor-item">GitHub Dependency Graph</div>
+            <div class="vendor-item">CycloneDX CLI</div>
+            <div class="vendor-item">SPDX Tools</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">SBOM Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              SBOM Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Generate in CI/CD:</strong> Create SBOM at build time. Automate, don't manually maintain.</p>
+              <p><strong>2. Include Transitive Dependencies:</strong> Your app uses A, A uses B. B's vulnerabilities affect you.</p>
+              <p><strong>3. Store and Version:</strong> SBOMs are artifacts. Store with releases. Query across versions.</p>
+              <p><strong>4. Continuous Monitoring:</strong> New CVEs emerge daily. Continuously scan SBOMs against vulnerability databases.</p>
+              <p><strong>5. Require from Vendors:</strong> Request SBOMs from software suppliers. Part of vendor risk management.</p>
+              <p><strong>6. Use Standard Formats:</strong> SPDX or CycloneDX. Enables tooling interoperability.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="application-security.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Application Security</div>
+          </a>
+          <a href="devsecops.html" class="page-nav-

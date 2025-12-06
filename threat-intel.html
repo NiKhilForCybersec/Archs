@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threat Intelligence | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Threat Intelligence - CTI lifecycle, IOCs, TTP analysis, and operationalizing intel.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="siem.html" class="sidebar-nav-link">SIEM</a></li>
+          <li class="sidebar-nav-item"><a href="soar.html" class="sidebar-nav-link">SOAR</a></li>
+          <li class="sidebar-nav-item"><a href="incident-response.html" class="sidebar-nav-link">Incident Response</a></li>
+          <li class="sidebar-nav-item"><a href="threat-hunting.html" class="sidebar-nav-link">Threat Hunting</a></li>
+          <li class="sidebar-nav-item"><a href="threat-intel.html" class="sidebar-nav-link active">Threat Intelligence</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Threat Intelligence</span>
+          </div>
+          <h1>Threat Intelligence</h1>
+          <p class="page-description">Cyber Threat Intelligence (CTI) is evidence-based knowledge about threats that enables informed decisions. It transforms raw data about adversaries into actionable insights that improve detection, accelerate response, and inform security strategy.</p>
+        </div>
+
+        <section>
+          <h2 id="pyramid">The Pyramid of Pain</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 350" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="350" fill="#0f1117"/>
+              
+              <!-- Pyramid -->
+              <polygon points="425,30 150,320 700,320" fill="none" stroke="#3b82f6" stroke-width="2"/>
+              
+              <!-- Levels (from top to bottom) -->
+              <!-- TTPs -->
+              <polygon points="425,30 350,100 500,100" fill="rgba(139, 92, 246, 0.2)" stroke="#8b5cf6"/>
+              <text x="425" y="75" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">TTPs</text>
+              
+              <!-- Tools -->
+              <polygon points="350,100 300,150 550,150 500,100" fill="rgba(236, 72, 153, 0.2)" stroke="#ec4899"/>
+              <text x="425" y="132" text-anchor="middle" fill="#ec4899" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="500">Tools</text>
+              
+              <!-- Network/Host Artifacts -->
+              <polygon points="300,150 250,200 600,200 550,150" fill="rgba(245, 158, 11, 0.2)" stroke="#f59e0b"/>
+              <text x="425" y="182" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="500">Network/Host Artifacts</text>
+              
+              <!-- Domain Names -->
+              <polygon points="250,200 200,250 650,250 600,200" fill="rgba(59, 130, 246, 0.2)" stroke="#3b82f6"/>
+              <text x="425" y="232" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="500">Domain Names</text>
+              
+              <!-- IP Addresses -->
+              <polygon points="200,250 175,285 675,285 650,250" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981"/>
+              <text x="425" y="275" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="500">IP Addresses</text>
+              
+              <!-- Hash Values -->
+              <polygon points="175,285 150,320 700,320 675,285" fill="rgba(100, 116, 139, 0.2)" stroke="#64748b"/>
+              <text x="425" y="310" text-anchor="middle" fill="#64748b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="500">Hash Values</text>
+              
+              <!-- Annotations -->
+              <text x="750" y="70" fill="#8b5cf6" font-family="IBM Plex Sans, sans-serif" font-size="9">TOUGH - Attacker must change behavior</text>
+              <text x="750" y="130" fill="#ec4899" font-family="IBM Plex Sans, sans-serif" font-size="9">CHALLENGING - Requires new tooling</text>
+              <text x="750" y="180" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="9">ANNOYING - Some effort to change</text>
+              <text x="750" y="230" fill="#3b82f6" font-family="IBM Plex Sans, sans-serif" font-size="9">SIMPLE - Easy to register new</text>
+              <text x="750" y="275" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="9">EASY - Trivial to change</text>
+              <text x="750" y="310" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">TRIVIAL - Recompile = new hash</text>
+              
+              <!-- Pain Arrow -->
+              <path d="M120 320 L120 50" stroke="#ef4444" stroke-width="3" fill="none" marker-end="url(#arrowRed)"/>
+              <text x="80" y="190" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="10" transform="rotate(-90, 80, 190)">MORE PAIN →</text>
+              
+              <defs>
+                <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+          
+          <div class="info-box info" style="margin-top: var(--space-lg);">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Pyramid of Pain
+            </div>
+            <div class="info-box-content">
+              <p>The Pyramid of Pain (David Bianco) illustrates how much "pain" different indicator types cause attackers when detected and blocked. <strong>Hash values</strong> at the bottom are trivial to evade (recompile = new hash). <strong>TTPs</strong> at the top require the attacker to fundamentally change their tradecraft.</p>
+              <p><strong>Key insight:</strong> Focus detection on TTPs and behaviors, not just IOCs. Behavioral detections force attackers to change how they operate, not just what tools they use.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="intel-types">Types of Threat Intelligence</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Audience</th>
+                  <th>Content</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Strategic</strong></td>
+                  <td>Executives, Board</td>
+                  <td>High-level trends, risk landscape, business impact</td>
+                  <td>"Ransomware targeting manufacturing increased 47% in Q3"</td>
+                </tr>
+                <tr>
+                  <td><strong>Tactical</strong></td>
+                  <td>SOC Analysts, IR</td>
+                  <td>TTPs, attack patterns, MITRE mappings</td>
+                  <td>"APT29 uses DLL side-loading via Teams updater (T1574.002)"</td>
+                </tr>
+                <tr>
+                  <td><strong>Operational</strong></td>
+                  <td>IR Teams, Threat Hunters</td>
+                  <td>Specific campaigns, actor attribution, timing</td>
+                  <td>"FIN7 campaign targeting retail POS systems active Dec 2024"</td>
+                </tr>
+                <tr>
+                  <td><strong>Technical</strong></td>
+                  <td>Security Tools, Automation</td>
+                  <td>IOCs: hashes, IPs, domains, file paths</td>
+                  <td>"C2: 185.234.72[.]19, Hash: a1b2c3d4..."</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="lifecycle">Intelligence Lifecycle</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 220" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="220" fill="#0f1117"/>
+              
+              <!-- Direction -->
+              <rect x="30" y="60" width="120" height="100" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="90" y="95" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">1. DIRECTION</text>
+              <text x="90" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Requirements</text>
+              <text x="90" y="128" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Priorities</text>
+              <text x="90" y="141" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Questions to answer</text>
+              
+              <!-- Collection -->
+              <rect x="170" y="60" width="120" height="100" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="230" y="95" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">2. COLLECTION</text>
+              <text x="230" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">OSINT feeds</text>
+              <text x="230" y="128" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Commercial intel</text>
+              <text x="230" y="141" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Internal telemetry</text>
+              
+              <!-- Processing -->
+              <rect x="310" y="60" width="120" height="100" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="370" y="95" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">3. PROCESSING</text>
+              <text x="370" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Normalize data</text>
+              <text x="370" y="128" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Deduplicate</text>
+              <text x="370" y="141" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Enrich & correlate</text>
+              
+              <!-- Analysis -->
+              <rect x="450" y="60" width="120" height="100" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="510" y="95" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">4. ANALYSIS</text>
+              <text x="510" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Assess relevance</text>
+              <text x="510" y="128" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Determine impact</text>
+              <text x="510" y="141" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Create products</text>
+              
+              <!-- Dissemination -->
+              <rect x="590" y="60" width="120" height="100" rx="8" fill="rgba(236, 72, 153, 0.1)" stroke="#ec4899"/>
+              <text x="650" y="90" text-anchor="middle" fill="#ec4899" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">5. DISSEMINATION</text>
+              <text x="650" y="110" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Share with SOC</text>
+              <text x="650" y="123" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Push to tools</text>
+              <text x="650" y="136" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Brief stakeholders</text>
+              
+              <!-- Feedback -->
+              <rect x="730" y="60" width="90" height="100" rx="8" fill="rgba(6, 182, 212, 0.1)" stroke="#06b6d4"/>
+              <text x="775" y="95" text-anchor="middle" fill="#06b6d4" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">6. FEEDBACK</text>
+              <text x="775" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Was it useful?</text>
+              <text x="775" y="128" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Refine process</text>
+              
+              <!-- Arrows -->
+              <path d="M150 110 L170 110" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M290 110 L310 110" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M430 110 L450 110" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M570 110 L590 110" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M710 110 L730 110" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              
+              <!-- Feedback loop -->
+              <path d="M775 160 L775 190 L90 190 L90 160" stroke="#06b6d4" stroke-width="1" stroke-dasharray="4" fill="none"/>
+              <text x="425" y="205" text-anchor="middle" fill="#06b6d4" font-family="IBM Plex Sans, sans-serif" font-size="8">Continuous Improvement Loop</text>
+              
+              <defs>
+                <marker id="arrowGray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="operationalize">Operationalizing Threat Intel</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">From Intel Report to Detection Rule</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Receive Threat Intelligence Report</div>
+                  <div class="flow-step-description">Commercial feed reports new APT29 campaign</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Intel Report</span></div>
+                    <pre><code>Source: Mandiant Threat Intel
+Date: 2024-01-15
+Title: APT29 Targeting Financial Services with Novel Loader
+
+Summary:
+APT29 (Cozy Bear) observed using new loader dubbed
+"QUARTERRIG" delivered via spear-phishing. Loader uses
+DLL search order hijacking with legitimate Microsoft
+Teams updater.
+
+TTPs:
+- T1566.001: Spear-phishing with attachment
+- T1574.001: DLL Search Order Hijacking  
+- T1059.001: PowerShell execution
+- T1071.001: HTTPS C2
+
+IOCs:
+- teamsupdate[.]services (C2 domain)
+- 185.234.72[.]19 (C2 IP)
+- a7b3c1d4e5f6... (QUARTERRIG SHA256)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Assess Relevance</div>
+                  <div class="flow-step-description">Does this apply to our organization?</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Relevance Assessment</span></div>
+                    <pre><code>Relevance Checklist:
+  ✓ Industry: Financial Services (we are a bank)
+  ✓ Geography: North America (we operate here)
+  ✓ Technology: Microsoft Teams (we use it)
+  ✓ Attack Vector: Email (primary entry point)
+  
+Verdict: HIGHLY RELEVANT - Prioritize immediately
+
+Risk Assessment:
+  Likelihood: HIGH (active campaign, targeting our sector)
+  Impact: CRITICAL (APT29 = nation-state, data theft)
+  Priority: P1 - Immediate action required</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Create Detections</div>
+                  <div class="flow-step-description">Build detection rules for both IOCs and TTPs</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Detection Rules</span></div>
+                    <pre><code>// IOC-based detection (quick but fragile)
+let C2_Domains = dynamic(["teamsupdate.services"]);
+let C2_IPs = dynamic(["185.234.72.19"]);
+
+DnsEvents
+| where Name has_any (C2_Domains)
+| project TimeGenerated, Computer, Name
+
+NetworkEvents  
+| where RemoteIP in (C2_IPs)
+| project TimeGenerated, DeviceName, RemoteIP
+
+// TTP-based detection (robust, survives IOC rotation)
+// Detect DLL hijacking via Teams updater path
+DeviceProcessEvents
+| where FolderPath endswith "\\Microsoft\\Teams\\current\\squirrel.exe"
+| where ProcessCommandLine has "update"
+| join kind=inner (
+    DeviceImageLoadEvents
+    | where FolderPath !startswith "C:\\Program Files"
+    | where FileName endswith ".dll"
+) on DeviceId, Timestamp
+| project TimeGenerated, DeviceName, ProcessCommandLine, LoadedDLL=FileName</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Deploy & Monitor</div>
+                  <div class="flow-step-description">Push IOCs to blocking controls, deploy detection rules</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Deployment</span></div>
+                    <pre><code>Blocking Actions:
+  ✓ Firewall: Block 185.234.72.19 (outbound)
+  ✓ DNS: Sinkhole teamsupdate.services
+  ✓ Email Gateway: Block attachment hash
+  ✓ EDR: Add hash to blocklist
+
+Detection Deployment:
+  ✓ SIEM: Deploy KQL detection rules
+  ✓ EDR: Custom IOC watchlist created
+  ✓ Proxy: SSL inspection for C2 domain patterns
+
+Validation:
+  ✓ Test detection fires on simulated activity
+  ✓ Confirm blocks working (test connection)
+  ✓ Brief SOC on new detection context
+
+Monitoring:
+  - Dashboard created for APT29 indicators
+  - Scheduled hunt for historical matches
+  - 30-day retention on IOCs before review</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="sources">Intelligence Sources</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">Free/OSINT</h4>
+              <ul style="margin-top: var(--space-md); font-size: 0.875rem; color: var(--text-secondary);">
+                <li>MITRE ATT&CK</li>
+                <li>AlienVault OTX</li>
+                <li>Abuse.ch (URLhaus, MalwareBazaar)</li>
+                <li>CISA Alerts</li>
+                <li>VirusTotal (limited)</li>
+                <li>Twitter/X security researchers</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Commercial</h4>
+              <ul style="margin-top: var(--space-md); font-size: 0.875rem; color: var(--text-secondary);">
+                <li>Mandiant Advantage</li>
+                <li>CrowdStrike Falcon Intel</li>
+                <li>Recorded Future</li>
+                <li>Flashpoint</li>
+                <li>Intel 471</li>
+                <li>GreyNoise</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">Sharing Communities</h4>
+              <ul style="margin-top: var(--space-md); font-size: 0.875rem; color: var(--text-secondary);">
+                <li>ISACs (FS-ISAC, H-ISAC)</li>
+                <li>FIRST</li>
+                <li>InfraGard</li>
+                <li>Vendor intel sharing</li>
+                <li>Peer networks</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Threat Intel Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Threat Intelligence Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Focus on TTPs Over IOCs:</strong> IOCs have short shelf lives. TTP-based detections survive attacker infrastructure changes.</p>
+              <p><strong>2. Relevance Filtering:</strong> Not all intel is relevant to you. Filter by industry, geography, and technology stack before acting.</p>
+              <p><strong>3. Automate IOC Ingestion:</strong> Use TIP platforms (MISP, ThreatConnect) to automatically push IOCs to security tools.</p>
+              <p><strong>4. Measure Effectiveness:</strong> Track: How many alerts came from intel? How many were true positives? Did we detect before damage?</p>
+              <p><strong>5. Share Back:</strong> Participate in ISACs and sharing communities. Intel is a two-way street.</p>
+              <p><strong>6. Age Out Old IOCs:</strong> IOCs decay. Review and remove old indicators that generate noise without value.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="threat-hunting.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Threat Hunting</div>
+          </a>
+          <a href="siem.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">SIEM →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

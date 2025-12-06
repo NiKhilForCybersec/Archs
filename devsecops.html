@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevSecOps | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to DevSecOps - shift-left security, CI/CD pipeline security, SAST, DAST, SCA, and secure development practices.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">8. Application Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="devsecops.html" class="sidebar-nav-link active">DevSecOps</a></li>
+          <li class="sidebar-nav-item"><a href="waf.html" class="sidebar-nav-link">Web Application Firewall</a></li>
+          <li class="sidebar-nav-item"><a href="api-security.html" class="sidebar-nav-link">API Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Application Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>DevSecOps</span>
+          </div>
+          <h1>DevSecOps</h1>
+          <p class="page-description">DevSecOps integrates security into every phase of the software development lifecycle. By shifting security left—addressing vulnerabilities in design and code rather than production—organizations reduce risk, accelerate delivery, and build security into their DNA.</p>
+        </div>
+
+        <section>
+          <h2 id="pipeline">Secure CI/CD Pipeline</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 200" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="200" fill="#0f1117"/>
+              
+              <!-- Code -->
+              <rect x="30" y="60" width="100" height="80" rx="6" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="80" y="90" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">CODE</text>
+              <text x="80" y="110" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Pre-commit hooks</text>
+              <text x="80" y="122" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Secret scanning</text>
+              
+              <!-- Build -->
+              <rect x="155" y="60" width="100" height="80" rx="6" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="205" y="90" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">BUILD</text>
+              <text x="205" y="110" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">SAST scan</text>
+              <text x="205" y="122" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">SCA (dependencies)</text>
+              
+              <!-- Test -->
+              <rect x="280" y="60" width="100" height="80" rx="6" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="330" y="90" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">TEST</text>
+              <text x="330" y="110" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">DAST scan</text>
+              <text x="330" y="122" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Security unit tests</text>
+              
+              <!-- Release -->
+              <rect x="405" y="60" width="100" height="80" rx="6" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="455" y="90" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">RELEASE</text>
+              <text x="455" y="110" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Image scanning</text>
+              <text x="455" y="122" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Sign artifacts</text>
+              
+              <!-- Deploy -->
+              <rect x="530" y="60" width="100" height="80" rx="6" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="580" y="90" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">DEPLOY</text>
+              <text x="580" y="110" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">IaC security scan</text>
+              <text x="580" y="122" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Config validation</text>
+              
+              <!-- Operate -->
+              <rect x="655" y="60" width="100" height="80" rx="6" fill="rgba(6, 182, 212, 0.1)" stroke="#06b6d4"/>
+              <text x="705" y="90" text-anchor="middle" fill="#06b6d4" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">OPERATE</text>
+              <text x="705" y="110" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">RASP / WAF</text>
+              <text x="705" y="122" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Runtime monitoring</text>
+              
+              <!-- Monitor -->
+              <rect x="780" y="60" width="50" height="80" rx="6" fill="rgba(236, 72, 153, 0.1)" stroke="#ec4899"/>
+              <text x="805" y="95" text-anchor="middle" fill="#ec4899" font-family="Space Grotesk, sans-serif" font-size="9" font-weight="600">MON</text>
+              <text x="805" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="6">Vuln mgmt</text>
+              
+              <!-- Arrows -->
+              <path d="M130 100 L155 100" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M255 100 L280 100" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M380 100 L405 100" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M505 100 L530 100" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M630 100 L655 100" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M755 100 L780 100" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              
+              <!-- Labels -->
+              <text x="425" y="170" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600">← SHIFT LEFT: Find vulnerabilities earlier = cheaper to fix →</text>
+              
+              <defs>
+                <marker id="arrowGray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="tools">Security Testing Tools</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>What It Does</th>
+                  <th>When</th>
+                  <th>Tools</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>SAST</strong></td>
+                  <td>Analyzes source code for vulnerabilities</td>
+                  <td>Build time</td>
+                  <td>SonarQube, Checkmarx, Semgrep</td>
+                </tr>
+                <tr>
+                  <td><strong>SCA</strong></td>
+                  <td>Scans dependencies for known CVEs</td>
+                  <td>Build time</td>
+                  <td>Snyk, Dependabot, OWASP DC</td>
+                </tr>
+                <tr>
+                  <td><strong>DAST</strong></td>
+                  <td>Tests running application for vulnerabilities</td>
+                  <td>Test/Staging</td>
+                  <td>OWASP ZAP, Burp Suite, Nuclei</td>
+                </tr>
+                <tr>
+                  <td><strong>Container Scan</strong></td>
+                  <td>Scans container images for CVEs</td>
+                  <td>Release</td>
+                  <td>Trivy, Grype, Clair</td>
+                </tr>
+                <tr>
+                  <td><strong>IaC Scan</strong></td>
+                  <td>Checks infrastructure code for misconfigs</td>
+                  <td>Deploy</td>
+                  <td>Checkov, tfsec, KICS</td>
+                </tr>
+                <tr>
+                  <td><strong>Secret Scan</strong></td>
+                  <td>Finds hardcoded secrets in code/config</td>
+                  <td>Commit</td>
+                  <td>GitLeaks, TruffleHog, detect-secrets</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="pipeline-config">Pipeline Security Configuration</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">GitHub Actions Security Pipeline</span></div>
+            <pre><code>name: Security Pipeline
+on: [push, pull_request]
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      # Secret scanning (pre-commit should catch, this is backup)
+      - name: GitLeaks Scan
+        uses: gitleaks/gitleaks-action@v2
+        
+      # SAST - Static code analysis
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        with:
+          args: >
+            -Dsonar.qualitygate.wait=true
+            
+      # SCA - Dependency vulnerabilities
+      - name: Snyk Dependency Scan
+        uses: snyk/actions/node@master
+        with:
+          args: --severity-threshold=high
+          
+      # Container image scanning
+      - name: Build Image
+        run: docker build -t myapp:${{ github.sha }} .
+        
+      - name: Trivy Container Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: myapp:${{ github.sha }}
+          severity: CRITICAL,HIGH
+          exit-code: 1  # Fail pipeline on findings
+          
+      # IaC scanning (if Terraform/CloudFormation)
+      - name: Checkov IaC Scan
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ./infrastructure
+          soft_fail: false
+
+  # DAST runs against deployed staging environment
+  dast-scan:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: OWASP ZAP Scan
+        uses: zaproxy/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1d7c7e69747273307b687171306e7e7c735d6b2d3329332d">[email&#160;protected]</a>
+        with:
+          target: 'https://staging.myapp.com'
+          rules_file_name: '.zap/rules.tsv'</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="quality-gates">Security Quality Gates</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Pipeline Quality Gate Decision</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Security Scan Results</div>
+                  <div class="flow-step-description">All scanners report findings</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Scan Results</span></div>
+                    <pre><code>SAST (SonarQube):
+  Critical: 0, High: 2, Medium: 15, Low: 47
+
+SCA (Snyk):
+  Critical: 1 (log4j in transitive dep)
+  High: 3, Medium: 12
+
+Container (Trivy):
+  Critical: 0, High: 1 (base image CVE)
+  
+Secrets (GitLeaks):
+  Findings: 0</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Quality Gate Evaluation</div>
+                  <div class="flow-step-description">Check against defined thresholds</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Gate Rules</span></div>
+                    <pre><code>Quality Gate: FAILED
+
+Rules:
+  ✓ No secrets detected
+  ✓ SAST critical = 0
+  ✗ SCA critical > 0 (found: 1)  ← BLOCKER
+  ✓ Container critical = 0
+  ✗ SCA high > 2 (found: 3)      ← BLOCKER
+
+Decision: BLOCK DEPLOYMENT
+Reason: Critical dependency vulnerability (CVE-2021-44228)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Remediation Workflow</div>
+                  <div class="flow-step-description">Developer fixes, re-scan, deploy</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Fix and Retry</span></div>
+                    <pre><code># Developer updates dependency
+npm update <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3e5251590a54135d514c5b7e0c100f09100f">[email&#160;protected]</a>
+
+# Re-run pipeline
+git commit -m "fix: update log4j to patched version"
+git push
+
+# New scan results
+SCA (Snyk):
+  Critical: 0 ✓
+  High: 2 ✓
+
+Quality Gate: PASSED
+→ Deployment proceeds</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">DevSecOps Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Snyk</div>
+            <div class="vendor-item">SonarQube</div>
+            <div class="vendor-item">Checkmarx</div>
+            <div class="vendor-item">Veracode</div>
+            <div class="vendor-item">Semgrep</div>
+            <div class="vendor-item">GitLab Security</div>
+            <div class="vendor-item">GitHub Advanced Security</div>
+            <div class="vendor-item">OWASP ZAP</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">DevSecOps Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              DevSecOps Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Automate Everything:</strong> Security scans in every pipeline. No manual gates that can be bypassed. Make secure the easy path.</p>
+              <p><strong>2. Fail Fast:</strong> Secret scanning in pre-commit hooks. SAST before code review. Find issues before they're merged.</p>
+              <p><strong>3. Define Quality Gates:</strong> Clear thresholds for critical/high findings. Block deployments that don't meet standards.</p>
+              <p><strong>4. Developer-Friendly Findings:</strong> Integrate into IDE, PR comments. Provide fix guidance. Don't just dump scan reports.</p>
+              <p><strong>5. Track Metrics:</strong> Mean time to remediate. Vulnerability escape rate. Security debt over time.</p>
+              <p><strong>6. Security Champions:</strong> Embedded security advocates in dev teams. First line of defense, not bottleneck.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="api-security.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← API Security</div>
+          </a>
+          <a href="waf.html" class="page-nav-link n

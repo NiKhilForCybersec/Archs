@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Detection & Response | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to NDR - network traffic analysis, behavioral detection, and threat hunting with network telemetry.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="siem.html" class="sidebar-nav-link">SIEM</a></li>
+          <li class="sidebar-nav-item"><a href="edr.html" class="sidebar-nav-link">EDR</a></li>
+          <li class="sidebar-nav-item"><a href="xdr.html" class="sidebar-nav-link">XDR</a></li>
+          <li class="sidebar-nav-item"><a href="ndr.html" class="sidebar-nav-link active">NDR</a></li>
+          <li class="sidebar-nav-item"><a href="soar.html" class="sidebar-nav-link">SOAR</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>NDR</span>
+          </div>
+          <h1>Network Detection & Response (NDR)</h1>
+          <p class="page-description">NDR monitors network traffic to detect threats that bypass endpoint security. Using machine learning and behavioral analytics, NDR identifies lateral movement, command and control, data exfiltration, and other malicious activity by analyzing network metadata and packets.</p>
+        </div>
+
+        <section>
+          <h2 id="comparison">IDS vs. NDR</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                Traditional IDS/IPS
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Signature-based detection</li>
+                  <li>Matches known attack patterns</li>
+                  <li>Point-in-time analysis</li>
+                  <li>High volume of alerts, many false positives</li>
+                  <li>Cannot detect novel attacks</li>
+                  <li>Limited visibility into encrypted traffic</li>
+                </ul>
+                <div class="info-box warning" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Limitation:</strong> Attacker uses custom malware → no matching signature → attack proceeds undetected.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Network Detection & Response
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Behavioral + ML-based detection</li>
+                  <li>Learns normal, alerts on anomalies</li>
+                  <li>Historical analysis and correlation</li>
+                  <li>Prioritized, high-fidelity alerts</li>
+                  <li>Detects unknown threats via behavior</li>
+                  <li>Encrypted traffic analysis (JA3/JA4, metadata)</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Benefit:</strong> Custom malware → unusual beaconing pattern → NDR detects anomaly → alert with full network context.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="architecture">NDR Data Sources & Architecture</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 350" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="350" fill="#0f1117"/>
+              
+              <!-- Data Sources -->
+              <text x="130" y="30" text-anchor="middle" fill="#64748b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">DATA SOURCES</text>
+              
+              <rect x="30" y="50" width="100" height="60" rx="4" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="80" y="75" text-anchor="middle" fill="#3b82f6" font-family="IBM Plex Sans, sans-serif" font-size="9">TAP/SPAN</text>
+              <text x="80" y="92" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Full packet capture</text>
+              
+              <rect x="150" y="50" width="100" height="60" rx="4" fill="#1e2430" stroke="#10b981"/>
+              <text x="200" y="75" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="9">NetFlow/IPFIX</text>
+              <text x="200" y="92" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Flow metadata</text>
+              
+              <rect x="30" y="125" width="100" height="60" rx="4" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="80" y="150" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="9">DNS Logs</text>
+              <text x="80" y="167" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Query/Response</text>
+              
+              <rect x="150" y="125" width="100" height="60" rx="4" fill="#1e2430" stroke="#8b5cf6"/>
+              <text x="200" y="150" text-anchor="middle" fill="#8b5cf6" font-family="IBM Plex Sans, sans-serif" font-size="9">Cloud VPC</text>
+              <text x="200" y="167" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Flow logs</text>
+              
+              <!-- NDR Engine -->
+              <rect x="320" y="50" width="200" height="180" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="2"/>
+              <text x="420" y="80" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">NDR ENGINE</text>
+              
+              <text x="340" y="105" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Protocol decoding</text>
+              <text x="340" y="122" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• ML behavioral analysis</text>
+              <text x="340" y="139" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Encrypted traffic analysis</text>
+              <text x="340" y="156" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• JA3/JA4 fingerprinting</text>
+              <text x="340" y="173" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Entity modeling</text>
+              <text x="340" y="190" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Threat intelligence</text>
+              <text x="340" y="207" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• PCAP retention</text>
+              
+              <!-- Outputs -->
+              <text x="680" y="30" text-anchor="middle" fill="#64748b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">OUTPUTS</text>
+              
+              <rect x="590" y="50" width="120" height="50" rx="4" fill="#1e2430" stroke="#ef4444"/>
+              <text x="650" y="72" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="9">Detections</text>
+              <text x="650" y="88" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Prioritized alerts</text>
+              
+              <rect x="720" y="50" width="100" height="50" rx="4" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="770" y="72" text-anchor="middle" fill="#3b82f6" font-family="IBM Plex Sans, sans-serif" font-size="9">SIEM</text>
+              <text x="770" y="88" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Correlation</text>
+              
+              <rect x="590" y="115" width="120" height="50" rx="4" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="650" y="137" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="9">Investigation</text>
+              <text x="650" y="153" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Packet drill-down</text>
+              
+              <rect x="720" y="115" width="100" height="50" rx="4" fill="#1e2430" stroke="#8b5cf6"/>
+              <text x="770" y="137" text-anchor="middle" fill="#8b5cf6" font-family="IBM Plex Sans, sans-serif" font-size="9">SOAR</text>
+              <text x="770" y="153" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Response</text>
+              
+              <!-- Arrows -->
+              <path d="M130 80 L320 80" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M250 80 L320 80" stroke="#10b981" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M130 155 L320 120" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M250 155 L320 140" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M520 100 L590 75" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrowGreen)"/>
+              <path d="M520 140 L590 140" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrowGreen)"/>
+              
+              <!-- Detection Categories -->
+              <rect x="30" y="250" width="790" height="80" rx="8" fill="rgba(59, 130, 246, 0.05)" stroke="#3b82f6"/>
+              <text x="425" y="275" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">NDR DETECTION CATEGORIES</text>
+              <text x="120" y="300" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">C2 Beaconing</text>
+              <text x="250" y="300" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="8">Lateral Movement</text>
+              <text x="380" y="300" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="8">Data Exfiltration</text>
+              <text x="510" y="300" text-anchor="middle" fill="#8b5cf6" font-family="IBM Plex Sans, sans-serif" font-size="8">Scanning/Recon</text>
+              <text x="640" y="300" text-anchor="middle" fill="#3b82f6" font-family="IBM Plex Sans, sans-serif" font-size="8">Credential Theft</text>
+              <text x="770" y="300" text-anchor="middle" fill="#ec4899" font-family="IBM Plex Sans, sans-serif" font-size="8">Protocol Abuse</text>
+              
+              <defs>
+                <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="detection">NDR Detection: Lateral Movement</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">NDR Detects Lateral Movement via SMB</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Attacker Moves Laterally</div>
+                  <div class="flow-step-description">Compromised workstation attempts to spread</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Attack Activity</span></div>
+                    <pre><code># Attacker on compromised host (WORKSTATION-42)
+# Uses stolen credentials to move laterally
+
+psexec \\SERVER-01 -u admin -p P@ssw0rd cmd.exe
+psexec \\SERVER-02 -u admin -p P@ssw0rd cmd.exe
+psexec \\SERVER-03 -u admin -p P@ssw0rd cmd.exe
+... (continues across 15 servers in 10 minutes)
+
+Network Activity:
+  Source: 10.100.1.50 (WORKSTATION-42)
+  Destination: Multiple servers (10.100.2.x)
+  Protocol: SMB (TCP/445)
+  Pattern: Sequential connection attempts</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">NDR Behavioral Analysis</div>
+                  <div class="flow-step-description">ML model detects anomalous behavior</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">NDR Analysis</span></div>
+                    <pre><code>Entity: WORKSTATION-42 (10.100.1.50)
+Baseline Profile:
+  - Normal SMB connections: 2-3 servers (file shares)
+  - Typical targets: FILE-SERVER-01, PRINT-SERVER
+  - Connection frequency: Low
+
+Current Behavior:
+  ✗ SMB connections to 15 new servers in 10 minutes
+  ✗ Targets include domain controllers, app servers
+  ✗ Sequential connection pattern (enumeration)
+  ✗ PsExec service creation detected
+  ✗ Admin$ share access (unusual for workstation)
+
+Anomaly Score: 97/100
+Classification: Lateral Movement (T1021.002)
+Confidence: HIGH</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Alert with Full Context</div>
+                  <div class="flow-step-description">NDR provides investigation-ready alert</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">NDR Alert</span></div>
+                    <pre><code>ALERT: Lateral Movement - SMB Exploitation
+
+Severity: CRITICAL
+Time: 2024-01-15 14:32:47 - 14:42:15 UTC
+Source: WORKSTATION-42 (10.100.1.50)
+User: jsmith (likely compromised)
+
+Affected Systems (15):
+  - SERVER-01, SERVER-02, SERVER-03...
+  - DC-01 (Domain Controller!) ← HIGH PRIORITY
+
+Evidence:
+  - 15 SMB connections in 10 minutes
+  - PsExec service creation on 12 systems
+  - Admin$ share enumeration
+  - Pass-the-hash indicators
+
+PCAP Available: Yes (click to download)
+Related Alerts: 
+  - Kerberoasting attempt (30 min earlier)
+  - Unusual DNS queries (same host)
+
+Recommended Actions:
+  1. Isolate WORKSTATION-42 immediately
+  2. Reset jsmith credentials
+  3. Review accessed servers for persistence
+  4. Check DC-01 for Golden Ticket indicators</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="encrypted">Encrypted Traffic Analysis</h2>
+          
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Seeing Through Encryption
+            </div>
+            <div class="info-box-content">
+              <p>90%+ of network traffic is encrypted. NDR doesn't decrypt—instead it analyzes metadata:</p>
+              <p><strong>JA3/JA4 Fingerprinting:</strong> TLS handshake creates unique fingerprint. Known malware has known JA3 hashes.</p>
+              <p><strong>Certificate Analysis:</strong> Self-signed certs, unusual issuers, cert age, subject anomalies.</p>
+              <p><strong>Connection Metadata:</strong> Timing, packet sizes, frequency patterns reveal behavior without decryption.</p>
+              <p><strong>DNS Correlation:</strong> What domains were resolved before this encrypted connection?</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">NDR Vendors</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Darktrace</div>
+            <div class="vendor-item">ExtraHop</div>
+            <div class="vendor-item">Vectra AI</div>
+            <div class="vendor-item">Corelight (Zeek)</div>
+            <div class="vendor-item">Cisco Secure Network Analytics</div>
+            <div class="vendor-item">Gigamon</div>
+            <div class="vendor-item">Arista NDR</div>
+            <div class="vendor-item">IronNet</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">NDR Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              NDR Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Cover Critical Segments:</strong> At minimum: internet egress, data center core, cloud VPCs. Prioritize where crown jewels live.</p>
+              <p><strong>2. Baseline Before Alerting:</strong> Let NDR learn normal behavior for 2-4 weeks before tuning alerts. Reduces false positives significantly.</p>
+              <p><strong>3. Integrate with EDR/SIEM:</strong> NDR + EDR = complete picture. Network sees what endpoints miss, and vice versa.</p>
+              <p><strong>4. Retain PCAP for Forensics:</strong> When incident happens, you'll want packet-level evidence. Plan storage accordingly.</p>
+              <p><strong>5. Monitor East-West:</strong> Most attacks move laterally. Internal network visibility is as important as perimeter.</p>
+              <p><strong>6. Include Cloud Traffic:</strong> VPC flow logs, cloud-native NDR sensors. Cloud workloads need same visibility.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="xdr.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← XDR</div>
+          </a>
+          <a href="soar.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">SOAR →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

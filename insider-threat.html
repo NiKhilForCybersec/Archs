@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insider Threat | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Insider Threat detection and prevention - UEBA, indicators of compromise, and insider risk programs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="threat-hunting.html" class="sidebar-nav-link">Threat Hunting</a></li>
+          <li class="sidebar-nav-item"><a href="insider-threat.html" class="sidebar-nav-link active">Insider Threat</a></li>
+          <li class="sidebar-nav-item"><a href="threat-intel.html" class="sidebar-nav-link">Threat Intelligence</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Insider Threat</span>
+          </div>
+          <h1>Insider Threat</h1>
+          <p class="page-description">Insider threats originate from individuals with legitimate access—employees, contractors, or partners—who misuse that access intentionally or inadvertently. Detecting and preventing insider threats requires a combination of technical controls, behavioral analytics, and organizational measures.</p>
+        </div>
+
+        <section>
+          <h2 id="types">Insider Threat Types</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Malicious Insider</h4>
+              <p class="card-description">Intentional harm—data theft, sabotage, fraud. Often motivated by financial gain, revenge, or ideology. Hardest to detect.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-orange);">Negligent Insider</h4>
+              <p class="card-description">Unintentional harm through carelessness—clicking phishing links, misconfiguring systems, losing devices. Most common type.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Compromised Insider</h4>
+              <p class="card-description">Legitimate user whose credentials are stolen. Attacker operates using valid credentials. Often indistinguishable initially.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">Third-Party Insider</h4>
+              <p class="card-description">Contractor, vendor, or partner with access. May have different motivations or weaker security controls.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="indicators">Behavioral Indicators</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Insider Threat Indicators</span></div>
+            <pre><code># Technical Indicators (Detectable)
+
+DATA EXFILTRATION PATTERNS:
+• Large data downloads unusual for role
+• USB usage spikes, especially before departure
+• Email to personal accounts with attachments
+• Cloud storage uploads (Dropbox, Google Drive)
+• After-hours access to sensitive repositories
+
+ACCESS ANOMALIES:
+• Access to systems outside job function
+• Privilege escalation attempts
+• Accessing departing colleague's files
+• VPN from unusual locations
+• Failed access to restricted resources
+
+BEHAVIORAL ANOMALIES:
+• Login time changes (suddenly working late)
+• Increased printing activity
+• Bypassing security controls
+• Screenshot/screen recording tools
+• Disabling endpoint security
+
+# HR/Organizational Indicators (Context)
+
+HIGH-RISK SITUATIONS:
+• Recently passed over for promotion
+• Notice given (departing employee)
+• Under investigation or PIP
+• Financial difficulties (bankruptcy, divorce)
+• Ideological conflicts expressed
+• Working with competitor recruiter
+
+BEHAVIORAL CHANGES:
+• Sudden interest in other departments
+• Asking about projects outside scope
+• Working odd hours without explanation
+• Hostility toward organization</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="detection">Detection Approaches</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>What It Detects</th>
+                  <th>Limitations</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>UEBA</strong></td>
+                  <td>Anomalous behavior vs baseline</td>
+                  <td>Requires training period, false positives</td>
+                </tr>
+                <tr>
+                  <td><strong>DLP</strong></td>
+                  <td>Sensitive data exfiltration</td>
+                  <td>Can be bypassed, doesn't see encrypted</td>
+                </tr>
+                <tr>
+                  <td><strong>PAM Monitoring</strong></td>
+                  <td>Privileged user activity</td>
+                  <td>Limited to privileged accounts</td>
+                </tr>
+                <tr>
+                  <td><strong>Email Monitoring</strong></td>
+                  <td>Suspicious email patterns</td>
+                  <td>Privacy concerns, encrypted email</td>
+                </tr>
+                <tr>
+                  <td><strong>Endpoint Monitoring</strong></td>
+                  <td>File access, USB, printing</td>
+                  <td>Agent required, privacy balance</td>
+                </tr>
+                <tr>
+                  <td><strong>HR Integration</strong></td>
+                  <td>High-risk employee situations</td>
+                  <td>Requires cross-team collaboration</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Insider Threat Solutions</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Microsoft Purview IRM</div>
+            <div class="vendor-item">Proofpoint ITM</div>
+            <div class="vendor-item">DTEX</div>
+            <div class="vendor-item">Securonix</div>
+            <div class="vendor-item">Exabeam</div>
+            <div class="vendor-item">Code42 Incydr</div>
+            <div class="vendor-item">Teramind</div>
+            <div class="vendor-item">Varonis</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Insider Threat Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Insider Threat Program Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Cross-Functional Team:</strong> Security, HR, Legal, Management must collaborate. No single team owns insider risk.</p>
+              <p><strong>2. Baseline Normal Behavior:</strong> UEBA needs baseline. Know what normal looks like before detecting anomalies.</p>
+              <p><strong>3. Departing Employee Process:</strong> Enhanced monitoring for employees who give notice. Immediate access revocation on termination.</p>
+              <p><strong>4. Privacy Balance:</strong> Monitor proportionally. Legal review of monitoring policies. Employee transparency where possible.</p>
+              <p><strong>5. Least Privilege:</strong> Reduce insider risk by reducing access. Users can't steal what they can't access.</p>
+              <p><strong>6. Reporting Culture:</strong> Enable anonymous reporting. Employees often notice behavioral changes first.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="threat-hunting.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Threat Hunting</div>
+          </a>
+          <a href="threat-intel.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Threat Intelligence →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

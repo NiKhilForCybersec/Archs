@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CIEM | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Cloud Infrastructure Entitlement Management - managing cloud identities and permissions at scale.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">5. Cloud Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="cspm.html" class="sidebar-nav-link">CSPM</a></li>
+          <li class="sidebar-nav-item"><a href="ciem.html" class="sidebar-nav-link active">CIEM</a></li>
+          <li class="sidebar-nav-item"><a href="cwpp.html" class="sidebar-nav-link">CWPP</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Cloud Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>CIEM</span>
+          </div>
+          <h1>Cloud Infrastructure Entitlement Management (CIEM)</h1>
+          <p class="page-description">CIEM manages identities and entitlements across multi-cloud environments. It discovers over-permissioned identities, enforces least privilege, and provides visibility into the complex web of cloud IAM permissions.</p>
+        </div>
+
+        <section>
+          <h2 id="problem">The Cloud Permissions Problem</h2>
+          
+          <div class="info-box warning">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Why Cloud Permissions Are Hard
+            </div>
+            <div class="info-box-content">
+              <p><strong>Scale:</strong> AWS has 10,000+ permissions across 300+ services. Managing manually is impossible.</p>
+              <p><strong>Complexity:</strong> IAM policies, resource policies, permission boundaries, SCPs all interact.</p>
+              <p><strong>Over-Provisioning:</strong> Developers request broad permissions. 95% of granted permissions go unused.</p>
+              <p><strong>Non-Human Identities:</strong> Service accounts, roles, Lambda execution roles multiply the problem.</p>
+              <p><strong>Multi-Cloud:</strong> AWS IAM, Azure RBAC, GCP IAM all work differently.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="capabilities">CIEM Capabilities</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>Description</th>
+                  <th>Benefit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Permission Discovery</strong></td>
+                  <td>Map all identities and their effective permissions</td>
+                  <td>Visibility into who can access what</td>
+                </tr>
+                <tr>
+                  <td><strong>Usage Analysis</strong></td>
+                  <td>Track which permissions are actually used</td>
+                  <td>Identify unused/excessive permissions</td>
+                </tr>
+                <tr>
+                  <td><strong>Risk Scoring</strong></td>
+                  <td>Prioritize high-risk identities (admin, external)</td>
+                  <td>Focus remediation efforts</td>
+                </tr>
+                <tr>
+                  <td><strong>Right-Sizing</strong></td>
+                  <td>Recommend minimal permission policies</td>
+                  <td>Automated least privilege</td>
+                </tr>
+                <tr>
+                  <td><strong>Cross-Cloud</strong></td>
+                  <td>Unified view across AWS, Azure, GCP</td>
+                  <td>Consistent governance</td>
+                </tr>
+                <tr>
+                  <td><strong>Anomaly Detection</strong></td>
+                  <td>Alert on unusual permission usage</td>
+                  <td>Detect compromised identities</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="workflow">CIEM Workflow</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Permission Right-Sizing Process</span></div>
+            <pre><code># CIEM Permission Optimization Workflow
+
+1. DISCOVERY
+   ┌────────────────────────────────────────────────────┐
+   │ Connect to cloud accounts (AWS, Azure, GCP)       │
+   │ Enumerate all identities:                         │
+   │   • Users, groups, roles                          │
+   │   • Service accounts                              │
+   │   • Lambda execution roles                        │
+   │   • Cross-account trust relationships             │
+   └────────────────────────────────────────────────────┘
+                            │
+                            ▼
+2. PERMISSION ANALYSIS
+   ┌────────────────────────────────────────────────────┐
+   │ Calculate effective permissions:                  │
+   │   Identity policies + Resource policies +         │
+   │   Permission boundaries + SCPs = Effective Access │
+   │                                                   │
+   │ Track actual usage via CloudTrail/Activity Logs   │
+   └────────────────────────────────────────────────────┘
+                            │
+                            ▼
+3. GAP ANALYSIS
+   ┌────────────────────────────────────────────────────┐
+   │ Granted Permissions: s3:*, ec2:*, iam:*          │
+   │ Used Permissions:    s3:GetObject, s3:PutObject  │
+   │ ─────────────────────────────────────────────────│
+   │ Unused (Remove):     ec2:*, iam:*, s3:Delete*   │
+   │ Risk Score:          HIGH (admin access unused)  │
+   └────────────────────────────────────────────────────┘
+                            │
+                            ▼
+4. REMEDIATION
+   ┌────────────────────────────────────────────────────┐
+   │ Generate right-sized policy:                      │
+   │ {                                                 │
+   │   "Effect": "Allow",                              │
+   │   "Action": ["s3:GetObject", "s3:PutObject"],    │
+   │   "Resource": "arn:aws:s3:::bucket-name/*"       │
+   │ }                                                 │
+   │                                                   │
+   │ Apply via IaC pipeline or direct remediation     │
+   └────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">CIEM Solutions</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Wiz</div>
+            <div class="vendor-item">Prisma Cloud</div>
+            <div class="vendor-item">Ermetic (Tenable)</div>
+            <div class="vendor-item">CrowdStrike</div>
+            <div class="vendor-item">Sonrai Security</div>
+            <div class="vendor-item">Zscaler</div>
+            <div class="vendor-item">AWS IAM Access Analyzer</div>
+            <div class="vendor-item">Azure Entra Permissions</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">CIEM Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              CIEM Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with Discovery:</strong> You can't secure what you don't know. Full identity inventory first.</p>
+              <p><strong>2. Focus on High Risk:</strong> Admin access, cross-account roles, internet-facing services get priority.</p>
+              <p><strong>3. Track Non-Human Identities:</strong> Service accounts often have excessive permissions. They're targets.</p>
+              <p><strong>4. Automate Right-Sizing:</strong> Manual permission reviews don't scale. Use CIEM recommendations.</p>
+              <p><strong>5. Integrate with IaC:</strong> Enforce least privilege at deployment. Don't just detect, prevent.</p>
+              <p><strong>6. Continuous Monitoring:</strong> Permissions drift. New services, new permissions. Ongoing vigilance.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="cspm.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← CSPM</div>
+          </a>
+          <a href="cwpp.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">CWPP →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

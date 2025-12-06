@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PKI & Certificates | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Public Key Infrastructure - certificate authorities, certificate lifecycle, and enterprise PKI implementation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">6. Data Protection</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="encryption.html" class="sidebar-nav-link">Encryption</a></li>
+          <li class="sidebar-nav-item"><a href="key-management.html" class="sidebar-nav-link">Key Management</a></li>
+          <li class="sidebar-nav-item"><a href="pki.html" class="sidebar-nav-link active">PKI & Certificates</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Data Protection</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>PKI & Certificates</span>
+          </div>
+          <h1>PKI & Certificates</h1>
+          <p class="page-description">Public Key Infrastructure (PKI) provides the trust foundation for secure communications. Certificates enable TLS encryption, code signing, email security, and device authentication across the enterprise.</p>
+        </div>
+
+        <section>
+          <h2 id="hierarchy">Certificate Hierarchy</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Two-Tier PKI Architecture</span></div>
+            <pre><code># Enterprise PKI Hierarchy
+
+                    ┌─────────────────────┐
+                    │     Root CA         │
+                    │  (Offline, HSM)     │
+                    │  Validity: 20 years │
+                    └──────────┬──────────┘
+                               │
+           ┌───────────────────┼───────────────────┐
+           │                   │                   │
+           ▼                   ▼                   ▼
+┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐
+│  Issuing CA 1    │ │  Issuing CA 2    │ │  Issuing CA 3    │
+│  (Web/TLS)       │ │  (Code Signing)  │ │  (User/Device)   │
+│  Validity: 10yr  │ │  Validity: 10yr  │ │  Validity: 10yr  │
+└────────┬─────────┘ └────────┬─────────┘ └────────┬─────────┘
+         │                    │                    │
+         ▼                    ▼                    ▼
+   End-Entity Certs    Code Sign Certs      User/Device Certs
+   (1-2 years)         (3 years)            (1 year)
+
+Key Design Principles:
+  • Root CA offline (air-gapped), only used to sign subordinate CAs
+  • Issuing CAs online, handle day-to-day certificate issuance
+  • Separate CAs for different certificate types (security isolation)
+  • Root CA private key in HSM, never exported
+  • CRL/OCSP for revocation checking</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="lifecycle">Certificate Lifecycle</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 180" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="180" fill="#0f1117"/>
+              
+              <!-- Request -->
+              <rect x="30" y="50" width="110" height="80" rx="6" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="85" y="80" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">REQUEST</text>
+              <text x="85" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Generate CSR</text>
+              <text x="85" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Submit to CA</text>
+              
+              <!-- Issue -->
+              <rect x="170" y="50" width="110" height="80" rx="6" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="225" y="80" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">ISSUE</text>
+              <text x="225" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">CA validates</text>
+              <text x="225" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Signs certificate</text>
+              
+              <!-- Deploy -->
+              <rect x="310" y="50" width="110" height="80" rx="6" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="365" y="80" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">DEPLOY</text>
+              <text x="365" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Install on server</text>
+              <text x="365" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Configure service</text>
+              
+              <!-- Monitor -->
+              <rect x="450" y="50" width="110" height="80" rx="6" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="505" y="80" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">MONITOR</text>
+              <text x="505" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Track expiration</text>
+              <text x="505" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Alert 30/60/90 days</text>
+              
+              <!-- Renew -->
+              <rect x="590" y="50" width="110" height="80" rx="6" fill="rgba(6, 182, 212, 0.1)" stroke="#06b6d4"/>
+              <text x="645" y="80" text-anchor="middle" fill="#06b6d4" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">RENEW</text>
+              <text x="645" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Before expiration</text>
+              <text x="645" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Automated if ACME</text>
+              
+              <!-- Revoke -->
+              <rect x="730" y="50" width="110" height="80" rx="6" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="785" y="80" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">REVOKE</text>
+              <text x="785" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Key compromise</text>
+              <text x="785" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Publish to CRL/OCSP</text>
+              
+              <!-- Arrows -->
+              <path d="M140 90 L170 90" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M280 90 L310 90" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M420 90 L450 90" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M560 90 L590 90" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray)"/>
+              
+              <defs>
+                <marker id="arrowGray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#64748b"/></marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="types">Certificate Types</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Purpose</th>
+                  <th>Validity</th>
+                  <th>Key Usage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>TLS/SSL Server</strong></td>
+                  <td>HTTPS, secure web services</td>
+                  <td>1 year (max 398 days)</td>
+                  <td>Server Authentication</td>
+                </tr>
+                <tr>
+                  <td><strong>TLS Client</strong></td>
+                  <td>mTLS, client authentication</td>
+                  <td>1-2 years</td>
+                  <td>Client Authentication</td>
+                </tr>
+                <tr>
+                  <td><strong>Code Signing</strong></td>
+                  <td>Sign executables, scripts</td>
+                  <td>1-3 years</td>
+                  <td>Code Signing</td>
+                </tr>
+                <tr>
+                  <td><strong>S/MIME</strong></td>
+                  <td>Email encryption/signing</td>
+                  <td>1-2 years</td>
+                  <td>Email Protection</td>
+                </tr>
+                <tr>
+                  <td><strong>Device/Machine</strong></td>
+                  <td>Device authentication</td>
+                  <td>1-2 years</td>
+                  <td>Client Authentication</td>
+                </tr>
+                <tr>
+                  <td><strong>Wildcard</strong></td>
+                  <td>*.domain.com coverage</td>
+                  <td>1 year</td>
+                  <td>Server Authentication</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="acme">ACME & Automation</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Let's Encrypt with Certbot</span></div>
+            <pre><code># ACME Protocol - Automatic Certificate Management
+
+# Install certbot
+apt install certbot python3-certbot-nginx
+
+# Obtain certificate (HTTP-01 challenge)
+certbot certonly --nginx -d webapp.company.com
+
+# Certificates stored in:
+# /etc/letsencrypt/live/webapp.company.com/
+#   ├── cert.pem      (server certificate)
+#   ├── chain.pem     (intermediate CA)
+#   ├── fullchain.pem (cert + chain)
+#   └── privkey.pem   (private key)
+
+# Auto-renewal (runs twice daily via systemd timer)
+certbot renew --dry-run
+
+# For internal services, use internal ACME CA:
+# - Step CA (smallstep)
+# - HashiCorp Vault PKI
+# - ADCS with ACME support (Windows Server 2022+)
+
+Benefits of ACME:
+  • Automated issuance and renewal
+  • No manual CSR generation
+  • Certificates renewed before expiration
+  • Eliminates certificate expiration outages</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">PKI & Certificate Solutions</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Microsoft AD CS</div>
+            <div class="vendor-item">DigiCert</div>
+            <div class="vendor-item">Let's Encrypt</div>
+            <div class="vendor-item">Venafi</div>
+            <div class="vendor-item">Keyfactor</div>
+            <div class="vendor-item">Sectigo</div>
+            <div class="vendor-item">HashiCorp Vault PKI</div>
+            <div class="vendor-item">AWS Private CA</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">PKI Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              PKI Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Protect Root CA:</strong> Offline, air-gapped, HSM-backed. Only brought online to sign subordinate CAs.</p>
+              <p><strong>2. Automate Certificate Management:</strong> Use ACME for public certs. Certificate lifecycle management tool for visibility.</p>
+              <p><strong>3. Monitor Expiration:</strong> Alert 90/60/30 days before expiration. Certificate outages are preventable.</p>
+              <p><strong>4. Use Short Validity:</strong> 1 year max for TLS. Shorter = less exposure if compromised. Automation enables this.</p>
+              <p><strong>5. Implement Certificate Transparency:</strong> Monitor CT logs for unauthorized certificates for your domains.</p>
+              <p><strong>6. Have Revocation Plan:</strong> Test CRL/OCSP. Know how to revoke certificates quickly if compromised.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="key-management.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Key Management</div>
+          </a>
+          <a href="encryption.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Encryption →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

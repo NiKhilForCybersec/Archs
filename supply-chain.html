@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supply Chain Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Supply Chain Security - software supply chain, vendor security, and dependency management.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">8. Application Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="sbom.html" class="sidebar-nav-link">SBOM</a></li>
+          <li class="sidebar-nav-item"><a href="supply-chain.html" class="sidebar-nav-link active">Supply Chain Security</a></li>
+          <li class="sidebar-nav-item"><a href="devsecops.html" class="sidebar-nav-link">DevSecOps</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Application Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Supply Chain Security</span>
+          </div>
+          <h1>Supply Chain Security</h1>
+          <p class="page-description">Software supply chain attacks compromise trusted components, build systems, or distribution channels. SolarWinds, Codecov, and dependency confusion attacks demonstrate the devastating impact of supply chain compromises.</p>
+        </div>
+
+        <section>
+          <h2 id="attack-vectors">Supply Chain Attack Vectors</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Compromised Dependencies</h4>
+              <p class="card-description">Malicious packages in npm, PyPI. Typosquatting, dependency confusion. You install attacker's code.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-orange);">Build System Compromise</h4>
+              <p class="card-description">SolarWinds-style attack. Legitimate build process produces backdoored software. Most dangerous.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Compromised Updates</h4>
+              <p class="card-description">Malware delivered via auto-update mechanism. Users trust updates implicitly.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Third-Party Services</h4>
+              <p class="card-description">Codecov attack. CI/CD tool exfiltrates secrets. Trusted integration becomes attacker.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="framework">SLSA Framework</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Supply Chain Levels for Software Artifacts</span></div>
+            <pre><code># SLSA (Supply-chain Levels for Software Artifacts)
+
+SLSA LEVEL 1: Documentation
+┌────────────────────────────────────────────────────┐
+│ • Build process documented                         │
+│ • Provenance generated (who, what, when)          │
+│ • Basic auditability                               │
+└────────────────────────────────────────────────────┘
+
+SLSA LEVEL 2: Build Service
+┌────────────────────────────────────────────────────┐
+│ • Hosted build service (not local)                │
+│ • Authenticated provenance                         │
+│ • Version control for source                       │
+└────────────────────────────────────────────────────┘
+
+SLSA LEVEL 3: Build Platform Security
+┌────────────────────────────────────────────────────┐
+│ • Hardened build platform                          │
+│ • Non-falsifiable provenance                       │
+│ • Isolated builds                                  │
+│ • Verified source integrity                        │
+└────────────────────────────────────────────────────┘
+
+SLSA LEVEL 4: Two-Person Review
+┌────────────────────────────────────────────────────┐
+│ • Two-party review of all changes                 │
+│ • Hermetic builds                                  │
+│ • Reproducible builds                              │
+│ • Strongest supply chain guarantee                 │
+└────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="controls">Supply Chain Controls</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Control</th>
+                  <th>What It Addresses</th>
+                  <th>Implementation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Dependency Scanning</strong></td>
+                  <td>Vulnerable/malicious packages</td>
+                  <td>Snyk, Dependabot, Socket.dev</td>
+                </tr>
+                <tr>
+                  <td><strong>Artifact Signing</strong></td>
+                  <td>Tampering, authenticity</td>
+                  <td>Sigstore, GPG, Code signing</td>
+                </tr>
+                <tr>
+                  <td><strong>Private Registries</strong></td>
+                  <td>Dependency confusion</td>
+                  <td>Artifactory, Nexus, internal npm</td>
+                </tr>
+                <tr>
+                  <td><strong>SBOM</strong></td>
+                  <td>Component visibility</td>
+                  <td>CycloneDX, SPDX generation</td>
+                </tr>
+                <tr>
+                  <td><strong>Build Isolation</strong></td>
+                  <td>Build compromise</td>
+                  <td>Ephemeral builders, hermetic builds</td>
+                </tr>
+                <tr>
+                  <td><strong>Lockfiles</strong></td>
+                  <td>Unexpected dependency changes</td>
+                  <td>package-lock.json, requirements.txt pins</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Supply Chain Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Supply Chain Security Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Verify Everything:</strong> Check signatures, hashes, provenance. Trust but verify.</p>
+              <p><strong>2. Pin Dependencies:</strong> Lockfiles prevent surprise updates. Review dependency changes.</p>
+              <p><strong>3. Use Private Registries:</strong> Proxy public packages through private registry. Blocks dependency confusion.</p>
+              <p><strong>4. Scan Continuously:</strong> New vulnerabilities emerge. Continuous SCA, not just at build time.</p>
+              <p><strong>5. Secure Build Pipeline:</strong> Harden CI/CD. Least privilege. Audit access to build systems.</p>
+              <p><strong>6. Generate SBOMs:</strong> Know what's in your software. Required for government contracts.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="sbom.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← SBOM</div>
+          </a>
+          <a href="devsecops.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">DevSecOps →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

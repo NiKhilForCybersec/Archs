@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Micro-Segmentation | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Micro-Segmentation - software-defined perimeters, host-based firewalls, and zero trust network enforcement.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">2. Network Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="firewalls.html" class="sidebar-nav-link">Next-Gen Firewalls</a></li>
+          <li class="sidebar-nav-item"><a href="dmz.html" class="sidebar-nav-link">DMZ Architecture</a></li>
+          <li class="sidebar-nav-item"><a href="segmentation.html" class="sidebar-nav-link">Network Segmentation</a></li>
+          <li class="sidebar-nav-item"><a href="micro-segmentation.html" class="sidebar-nav-link active">Micro-Segmentation</a></li>
+          <li class="sidebar-nav-item"><a href="ztna.html" class="sidebar-nav-link">ZTNA</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Network Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Micro-Segmentation</span>
+          </div>
+          <h1>Micro-Segmentation</h1>
+          <p class="page-description">Micro-segmentation creates granular security zones around individual workloads, applications, or even processes. Unlike traditional network segmentation (VLANs/firewalls), micro-segmentation is enforced at the host level, follows the workload, and enables zero trust within the data center.</p>
+        </div>
+
+        <section>
+          <h2 id="comparison">Network Segmentation vs. Micro-Segmentation</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Traditional Network Segmentation
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Enforced at network layer (VLANs, firewalls)</li>
+                  <li>Coarse-grained: entire subnets/zones</li>
+                  <li>Static: tied to IP addresses</li>
+                  <li>East-west traffic within zone is uncontrolled</li>
+                  <li>Doesn't follow workloads (cloud migration breaks it)</li>
+                  <li>Manual rule management at scale</li>
+                </ul>
+                <div class="info-box danger" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Gap:</strong> Attacker compromises one server in app tier → can freely communicate with all other servers in same VLAN.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Micro-Segmentation
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Enforced at host level (agent/hypervisor)</li>
+                  <li>Fine-grained: per-workload, per-process</li>
+                  <li>Dynamic: based on labels/tags, not IPs</li>
+                  <li>Controls east-west within the same subnet</li>
+                  <li>Follows workload to any environment</li>
+                  <li>Policy automation with application context</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Benefit:</strong> Attacker compromises one server → cannot reach any other server, even in same VLAN. Each workload is its own security zone.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="architecture">Micro-Segmentation Architecture</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 400" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="400" fill="#0f1117"/>
+              
+              <!-- Management Plane -->
+              <rect x="275" y="20" width="300" height="70" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="425" y="45" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">MANAGEMENT PLANE</text>
+              <text x="425" y="65" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Policy Engine • Visibility • Analytics</text>
+              <text x="425" y="78" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">(Illumio PCE / Guardicore / VMware NSX Manager)</text>
+              
+              <!-- Data Center / Cloud -->
+              <rect x="50" y="120" width="750" height="260" rx="8" fill="rgba(59, 130, 246, 0.05)" stroke="#3b82f6" stroke-dasharray="4"/>
+              <text x="425" y="145" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10">DATA CENTER / CLOUD ENVIRONMENT</text>
+              
+              <!-- Workload 1: Web Server -->
+              <rect x="80" y="170" width="200" height="180" rx="8" fill="#1e2430" stroke="#10b981"/>
+              <text x="180" y="195" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">WEB-SERVER-01</text>
+              <text x="180" y="212" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Label: app=web, env=prod, tier=frontend</text>
+              
+              <rect x="100" y="225" width="160" height="50" rx="4" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-dasharray="2"/>
+              <text x="180" y="245" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="8" font-weight="500">MICRO-SEG AGENT</text>
+              <text x="180" y="260" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Host firewall + flow telemetry</text>
+              
+              <text x="100" y="295" fill="#64748b" font-family="JetBrains Mono, monospace" font-size="7">ALLOW:</text>
+              <text x="100" y="308" fill="#10b981" font-family="JetBrains Mono, monospace" font-size="7">  IN: 0.0.0.0/0:443 (https)</text>
+              <text x="100" y="321" fill="#10b981" font-family="JetBrains Mono, monospace" font-size="7">  OUT: app-server:8080</text>
+              <text x="100" y="334" fill="#ef4444" font-family="JetBrains Mono, monospace" font-size="7">  DENY: ALL OTHER</text>
+              
+              <!-- Workload 2: App Server -->
+              <rect x="325" y="170" width="200" height="180" rx="8" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="425" y="195" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">APP-SERVER-01</text>
+              <text x="425" y="212" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Label: app=api, env=prod, tier=backend</text>
+              
+              <rect x="345" y="225" width="160" height="50" rx="4" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b" stroke-dasharray="2"/>
+              <text x="425" y="245" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="8" font-weight="500">MICRO-SEG AGENT</text>
+              <text x="425" y="260" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Host firewall + flow telemetry</text>
+              
+              <text x="345" y="295" fill="#64748b" font-family="JetBrains Mono, monospace" font-size="7">ALLOW:</text>
+              <text x="345" y="308" fill="#10b981" font-family="JetBrains Mono, monospace" font-size="7">  IN: web-server:8080</text>
+              <text x="345" y="321" fill="#10b981" font-family="JetBrains Mono, monospace" font-size="7">  OUT: db-server:5432</text>
+              <text x="345" y="334" fill="#ef4444" font-family="JetBrains Mono, monospace" font-size="7">  DENY: ALL OTHER</text>
+              
+              <!-- Workload 3: Database -->
+              <rect x="570" y="170" width="200" height="180" rx="8" fill="#1e2430" stroke="#ef4444"/>
+              <text x="670" y="195" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">DB-SERVER-01</text>
+              <text x="670" y="212" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Label: app=postgres, env=prod, tier=data</text>
+              
+              <rect x="590" y="225" width="160" height="50" rx="4" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444" stroke-dasharray="2"/>
+              <text x="670" y="245" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8" font-weight="500">MICRO-SEG AGENT</text>
+              <text x="670" y="260" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Host firewall + flow telemetry</text>
+              
+              <text x="590" y="295" fill="#64748b" font-family="JetBrains Mono, monospace" font-size="7">ALLOW:</text>
+              <text x="590" y="308" fill="#10b981" font-family="JetBrains Mono, monospace" font-size="7">  IN: app-server:5432</text>
+              <text x="590" y="321" fill="#10b981" font-family="JetBrains Mono, monospace" font-size="7">  OUT: backup-srv:22 (scp)</text>
+              <text x="590" y="334" fill="#ef4444" font-family="JetBrains Mono, monospace" font-size="7">  DENY: ALL OTHER</text>
+              
+              <!-- Arrows: Allowed flows -->
+              <path d="M280 250 L325 250" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrowGreen)"/>
+              <path d="M525 250 L570 250" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrowGreen)"/>
+              
+              <!-- Arrows: Blocked flow (web to db direct) -->
+              <path d="M280 320 Q425 390 570 320" stroke="#ef4444" stroke-width="1" stroke-dasharray="4" fill="none"/>
+              <text x="425" y="385" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">✗ BLOCKED: Web → DB direct</text>
+              
+              <!-- Policy push from management -->
+              <path d="M425 90 L180 170" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M425 90 L425 170" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M425 90 L670 170" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              
+              <defs>
+                <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="lateral-movement">Preventing Lateral Movement</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Attack Scenario: Lateral Movement Blocked by Micro-Segmentation</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Initial Compromise</div>
+                  <div class="flow-step-description">Attacker exploits vulnerability in web server</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Attack</span></div>
+                    <pre><code>Attacker exploits: CVE-2024-XXXX in Apache Struts
+Target: WEB-SERVER-01 (10.100.1.10)
+Result: Remote code execution achieved
+
+Attacker now has shell access to web server
+Next goal: Move laterally to database server</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Reconnaissance Attempt</div>
+                  <div class="flow-step-description">Attacker scans network from compromised host</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Attacker Actions</span></div>
+                    <pre><code># Attacker tries to scan the network
+attacker@web-server:~$ nmap -sS 10.100.1.0/24
+
+# Result with Micro-Segmentation:
+Starting Nmap scan...
+Nmap done: 256 IP addresses (0 hosts up)
+
+# Why? Micro-seg agent blocks ALL outbound except:
+#   - APP-SERVER-01:8080 (allowed by policy)
+#   - Nothing else
+
+# Attacker can't even see other hosts exist!</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Direct Database Access Attempt</div>
+                  <div class="flow-step-description">Attacker tries to connect directly to database</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Blocked Attempt</span></div>
+                    <pre><code># Attacker finds DB IP in config file
+attacker@web-server:~$ cat /etc/app/db.conf
+DB_HOST=10.100.1.30
+DB_PORT=5432
+
+# Tries direct connection
+attacker@web-server:~$ psql -h 10.100.1.30 -U admin
+
+# BLOCKED by micro-segmentation agent
+Connection refused (filtered)
+
+# Policy on WEB-SERVER-01:
+#   ALLOW OUT: APP-SERVER-01:8080 ✓
+#   ALLOW OUT: DB-SERVER-01:5432 ✗ NOT IN POLICY
+#   DENY ALL OTHER</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Lateral Movement to App Server</div>
+                  <div class="flow-step-description">Attacker tries SSH, SMB, RDP to app server</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">All Protocols Blocked</span></div>
+                    <pre><code># SSH attempt
+attacker@web-server:~$ ssh 10.100.1.20
+Connection refused
+
+# SMB attempt  
+attacker@web-server:~$ smbclient //10.100.1.20/share
+Connection refused
+
+# RDP attempt (if Windows)
+Connection refused
+
+# Only allowed connection: HTTP to port 8080
+# But app server only accepts API calls, not shells
+
+# Micro-seg policy is ALLOWLIST, not blocklist
+# If it's not explicitly allowed, it's denied</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Attack Contained</div>
+                  <div class="flow-step-description">Attacker is trapped on single compromised host</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Outcome</span></div>
+                    <pre><code>Attack Impact WITHOUT Micro-Segmentation:
+  ✗ Web server compromised
+  ✗ Lateral movement to app servers
+  ✗ Credential harvesting
+  ✗ Database access / data exfil
+  ✗ Domain controller compromise
+  Impact: CRITICAL - Full breach
+
+Attack Impact WITH Micro-Segmentation:
+  ✗ Web server compromised
+  ✓ Lateral movement BLOCKED
+  ✓ Database access BLOCKED
+  ✓ Other servers protected
+  Impact: LOW - Single host isolation
+
+Time bought for defenders: Hours to days
+Detection: Blocked connection attempts logged → SIEM alert</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="implementation">Implementation Approaches</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Approach</th>
+                  <th>How It Works</th>
+                  <th>Pros</th>
+                  <th>Cons</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Agent-Based</strong></td>
+                  <td>Software agent on each host manages iptables/WFP</td>
+                  <td>Works anywhere (cloud, on-prem, containers)</td>
+                  <td>Agent deployment overhead</td>
+                </tr>
+                <tr>
+                  <td><strong>Hypervisor-Based</strong></td>
+                  <td>Enforcement at vSwitch (VMware NSX)</td>
+                  <td>No agents needed for VMs</td>
+                  <td>VMware-only, doesn't cover physical</td>
+                </tr>
+                <tr>
+                  <td><strong>Cloud-Native</strong></td>
+                  <td>AWS Security Groups, Azure NSGs</td>
+                  <td>Native integration, no extra cost</td>
+                  <td>Cloud-specific, limited visibility</td>
+                </tr>
+                <tr>
+                  <td><strong>Network-Based</strong></td>
+                  <td>SDN fabric with micro-perimeters</td>
+                  <td>No host changes required</td>
+                  <td>Expensive, complex, vendor lock-in</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Micro-Segmentation Platforms</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Illumio</div>
+            <div class="vendor-item">Guardicore (Akamai)</div>
+            <div class="vendor-item">VMware NSX</div>
+            <div class="vendor-item">Cisco Secure Workload</div>
+            <div class="vendor-item">Zscaler Workload Segmentation</div>
+            <div class="vendor-item">ColorTokens</div>
+            <div class="vendor-item">Unisys Stealth</div>
+            <div class="vendor-item">AWS Security Groups</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Implementation Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Micro-Segmentation Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with Visibility:</strong> Deploy in monitor/visibility mode first. Understand traffic flows before enforcing policies.</p>
+              <p><strong>2. Label Everything:</strong> Consistent labeling (app, env, tier, owner) enables dynamic policy. Tags > IP addresses.</p>
+              <p><strong>3. Start with Ring-Fencing:</strong> Isolate critical assets first (databases, domain controllers). Don't try to segment everything at once.</p>
+              <p><strong>4. Use Application Dependency Mapping:</strong> Let the platform discover communication patterns before writing rules.</p>
+              <p><strong>5. Build Allowlists, Not Blocklists:</strong> Default deny, explicit allow. Never "block bad things" — only "allow known good."</p>
+              <p><strong>6. Test in Simulation Mode:</strong> Most platforms let you test policies without enforcing. Validate before blocking traffic.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="segmentation.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Network Segmentation</div>
+          </a>
+          <a href="ztna.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">ZTNA →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

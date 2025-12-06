@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Loss Prevention (DLP) | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to DLP architecture covering endpoint, network, and cloud DLP with detailed policy enforcement flows.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item">
+            <a href="index.html" class="sidebar-nav-link">Overview</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Data Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item">
+            <a href="data-classification.html" class="sidebar-nav-link">Data Classification</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="dlp.html" class="sidebar-nav-link active">Data Loss Prevention</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="encryption.html" class="sidebar-nav-link">Encryption Architecture</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="key-management.html" class="sidebar-nav-link">Key Management</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="identity-governance.html" class="sidebar-nav-link">Information Rights Management</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="encryption.html" class="sidebar-nav-link">Database Security</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="backup-recovery.html" class="sidebar-nav-link">Backup Security</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="dlp.html" class="sidebar-nav-link">Secure Data Transfer</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Related Sections</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item">
+            <a href="dlp.html" class="sidebar-nav-link">Endpoint DLP</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="casb.html" class="sidebar-nav-link">CASB</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="email-security.html" class="sidebar-nav-link">Email Security Gateway</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <a href="data-classification.html">Data Security</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Data Loss Prevention</span>
+          </div>
+          <h1>Data Loss Prevention (DLP)</h1>
+          <p class="page-description">
+            DLP solutions detect and prevent unauthorized transmission of sensitive data across endpoint, network, and cloud channels. This guide covers architecture patterns, policy enforcement flows, and migration strategies.
+          </p>
+        </div>
+
+        <!-- Overview -->
+        <section>
+          <h2 id="overview">What is DLP?</h2>
+          
+          <p>
+            Data Loss Prevention (DLP) is a set of tools and processes that ensure sensitive data is not lost, misused, or accessed by unauthorized users. DLP solutions inspect content in motion (network), at rest (storage), and in use (endpoints) to enforce data handling policies.
+          </p>
+
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Key Concept
+            </div>
+            <div class="info-box-content">
+              <p>DLP is not just about blocking data exfiltration. Modern DLP focuses on <strong>visibility first</strong> — understanding where sensitive data exists and how it flows — before implementing enforcement controls.</p>
+            </div>
+          </div>
+
+          <h3>DLP Deployment Models</h3>
+          
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-yellow);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              </div>
+              <h3 class="card-title">Endpoint DLP</h3>
+              <p class="card-description">Agent on device monitors clipboard, USB, print, screen capture, and application data transfers.</p>
+              <div class="card-meta">
+                <span class="tag yellow">Data in Use</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(59, 130, 246, 0.15); color: var(--accent-blue);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              </div>
+              <h3 class="card-title">Network DLP</h3>
+              <p class="card-description">Inline or out-of-band inspection of network traffic including email, web, and file transfers.</p>
+              <div class="card-meta">
+                <span class="tag blue">Data in Motion</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-green);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+              </div>
+              <h3 class="card-title">Cloud DLP</h3>
+              <p class="card-description">API-based and inline inspection for SaaS apps, cloud storage, and cloud email.</p>
+              <div class="card-meta">
+                <span class="tag green">Cloud Data</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+              </div>
+              <h3 class="card-title">Storage DLP</h3>
+              <p class="card-description">Discovery and classification of sensitive data at rest in file shares, databases, and repositories.</p>
+              <div class="card-meta">
+                <span class="tag" style="background: rgba(139, 92, 246, 0.15); border-color: var(--accent-purple); color: var(--accent-purple);">Data at Rest</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Traditional vs Modern -->
+        <section>
+          <h2 id="comparison">Traditional vs. Modern DLP Architecture</h2>
+          
+          <div class="comparison-split">
+            <!-- Traditional -->
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Traditional On-Premises DLP
+              </div>
+              <div class="comparison-box-content">
+                <h4>Symantec DLP / Digital Guardian / Forcepoint</h4>
+                <ul>
+                  <li>On-premises management server</li>
+                  <li>Separate endpoint, network, and storage components</li>
+                  <li>Heavy endpoint agent (performance impact)</li>
+                  <li>Network appliances for traffic inspection</li>
+                  <li>Manual policy tuning required</li>
+                  <li>Limited cloud visibility</li>
+                  <li>Complex deployment and maintenance</li>
+                </ul>
+
+                <h4 style="margin-top: var(--space-lg);">Architecture</h4>
+                <div class="code-block">
+                  <pre><code>┌─────────────────────────────────────┐
+│         Management Server           │
+│    (Policy, Detection, Reporting)   │
+└──────────────┬──────────────────────┘
+               │
+    ┌──────────┼──────────┐
+    │          │          │
+    ▼          ▼          ▼
+┌───────┐ ┌───────┐ ┌──────────┐
+│Endpoint│ │Network│ │ Storage  │
+│ Agent  │ │Applian│ │ Scanner  │
+└───────┘ └───────┘ └──────────┘
+
+⚠️ Each component requires separate 
+   deployment and maintenance</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modern -->
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Modern Unified DLP (Microsoft Purview)
+              </div>
+              <div class="comparison-box-content">
+                <h4>Cloud-Native, Unified Platform</h4>
+                <ul>
+                  <li>Cloud-based management (no on-prem servers)</li>
+                  <li>Single policy engine across all channels</li>
+                  <li>Lightweight endpoint extension</li>
+                  <li>Native cloud app integration</li>
+                  <li>AI-powered classification (trainable classifiers)</li>
+                  <li>Built-in sensitivity labels</li>
+                  <li>Integrated with M365 ecosystem</li>
+                </ul>
+
+                <h4 style="margin-top: var(--space-lg);">Architecture</h4>
+                <div class="code-block">
+                  <pre><code>┌─────────────────────────────────────┐
+│     Microsoft Purview (Cloud)       │
+│  Unified Policy • AI Classification │
+│  Sensitivity Labels • Compliance    │
+└──────────────┬──────────────────────┘
+               │ Single Policy
+    ┌──────────┼──────────┐
+    │          │          │
+    ▼          ▼          ▼
+┌───────┐ ┌───────┐ ┌──────────┐
+│Endpoint│ │Exchange│ │SharePoint│
+│ MDE    │ │ Online │ │ OneDrive │
+└───────┘ └───────┘ └──────────┘
+    │          │          │
+    └──────────┼──────────┘
+               ▼
+        ┌──────────┐
+        │  Teams   │
+        │  Defender│
+        └──────────┘
+
+✓ Single policy applies everywhere</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Endpoint DLP Flow -->
+        <section>
+          <h2 id="endpoint-dlp-flow">Endpoint DLP: Detailed Policy Enforcement Flow</h2>
+          
+          <p>
+            This flow demonstrates what happens when a user attempts to copy sensitive data to a USB drive with Microsoft Purview Endpoint DLP.
+          </p>
+
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Scenario: User Copies File with Credit Card Numbers to USB</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Action Initiated</div>
+                  <div class="flow-step-description">
+                    User right-clicks "Q4_Customer_Data.xlsx" and selects "Copy", then navigates to USB drive (E:\) and pastes.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Activity Detected</span>
+                    </div>
+                    <pre><code>Activity: FileCopiesToRemovableMedia
+Source: C:\Users\jsmith\Documents\Q4_Customer_Data.xlsx
+Target: E:\ (USB Mass Storage Device)
+User: CORP\jsmith
+Timestamp: 2024-01-15T10:23:45Z</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Endpoint DLP Engine Intercepts</div>
+                  <div class="flow-step-description">
+                    The Defender for Endpoint sensor (with DLP capability) intercepts the file operation before it completes.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Interception Hook</span>
+                    </div>
+                    <pre><code>MDE Sensor intercepts CopyFile() API call
+File held in pending state
+Content inspection triggered
+File size: 2.4 MB
+File type: Microsoft Excel (xlsx)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Content Inspection & Classification</div>
+                  <div class="flow-step-description">
+                    DLP engine scans file content for sensitive information types defined in policies.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Content Analysis</span>
+                    </div>
+                    <pre><code>Content Inspection Results:
+├── Sensitive Info Types Detected:
+│   ├── Credit Card Number: 847 instances (High confidence)
+│   ├── U.S. Social Security Number: 312 instances
+│   └── Email Address: 1,203 instances
+├── Sensitivity Label: Confidential
+├── File Classification: PII - Financial
+└── Risk Score: Critical
+
+Matching DLP Policies:
+├── "Block PCI Data to USB" - MATCHED
+├── "Audit PII External Transfer" - MATCHED
+└── "Warn on Confidential Data" - MATCHED</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Policy Action: Block with Override</div>
+                  <div class="flow-step-description">
+                    Policy configured as "Block with override" — user sees warning and must provide justification to proceed.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Policy Enforcement</span>
+                    </div>
+                    <pre><code>Policy Action: BlockWithOverride
+User Notification: Displayed
+Toast Message: "This file contains credit card data and 
+               cannot be copied to removable media per 
+               company policy."
+               
+Override Options:
+├── "I confirm this is a legitimate business need"
+├── "This is a false positive"
+└── "Cancel"
+
+User Action Required: Business justification text</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Provides Override Justification</div>
+                  <div class="flow-step-description">
+                    User selects override reason and provides business justification. This is logged for compliance.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Override Request</span>
+                    </div>
+                    <pre><code>Override Type: BusinessJustification
+Justification: "Approved by manager for client 
+               presentation - ticket INC0012345"
+User: CORP\jsmith
+Manager: CORP\mjohnson
+Timestamp: 2024-01-15T10:24:12Z</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">6</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Activity Logged & File Released</div>
+                  <div class="flow-step-description">
+                    Override accepted, file copy completes, full audit trail sent to Microsoft Purview.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Audit Log Entry</span>
+                    </div>
+                    <pre><code>Activity Logged to Microsoft Purview:
+{
+  "operation": "FileCopiesToRemovableMedia",
+  "user": "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f49e87999d809cb4979b8684da979b99">[email&#160;protected]</a>",
+  "file": "Q4_Customer_Data.xlsx",
+  "sensitiveInfoTypes": ["CreditCardNumber", "SSN"],
+  "instanceCount": 1159,
+  "policy": "Block PCI Data to USB",
+  "action": "BlockedWithOverride",
+  "overrideJustification": "Approved by manager...",
+  "deviceName": "WORKSTATION-PC01",
+  "targetDevice": "USB (SanDisk Cruzer)",
+  "riskLevel": "Critical",
+  "timestamp": "2024-01-15T10:24:15Z"
+}
+
+Alert sent to: DLP Administrators
+Report available in: Activity Explorer</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Cloud DLP Flow -->
+        <section>
+          <h2 id="cloud-dlp-flow">Cloud DLP: SharePoint/OneDrive Flow</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Scenario: External Sharing Blocked for Sensitive Document</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Attempts External Share</div>
+                  <div class="flow-step-description">
+                    User clicks "Share" on document in SharePoint and enters external email address.
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">SharePoint Calls DLP Service</div>
+                  <div class="flow-step-description">
+                    Before creating share link, SharePoint Online evaluates document against DLP policies via API.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Policy Evaluation Request</span>
+                    </div>
+                    <pre><code>POST /dlp/evaluate
+{
+  "documentId": "abc123",
+  "siteUrl": "https://corp.sharepoint.com/sites/finance",
+  "sharingScope": "External",
+  "recipientDomain": "external-vendor.com",
+  "currentLabel": "Confidential",
+  "userPrincipal": "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="89e3fae4e0fde1c9eae6fbf9a7eae6e4">[email&#160;protected]</a>"
+}</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Content Already Classified</div>
+                  <div class="flow-step-description">
+                    Document was previously scanned and labeled. Sensitivity label triggers policy match.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Classification Data</span>
+                    </div>
+                    <pre><code>Document Metadata:
+├── Sensitivity Label: "Confidential - Internal Only"
+├── Label Applied By: Auto-labeling policy
+├── Sensitive Info Types:
+│   ├── Employee ID: 45 instances
+│   └── Internal Project Code: 12 instances
+└── Retention Label: "Financial Records - 7 Years"
+
+Policy Match: "Block External Sharing of Confidential"</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Share Blocked</div>
+                  <div class="flow-step-description">
+                    Policy action is "Block" — no override option. User sees policy tip explaining why.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">User Experience</span>
+                    </div>
+                    <pre><code>SharePoint UI displays:
+┌────────────────────────────────────────┐
+│ ⚠️ Sharing Blocked                      │
+│                                        │
+│ This document is labeled "Confidential │
+│ - Internal Only" and cannot be shared  │
+│ with external recipients.              │
+│                                        │
+│ Options:                               │
+│ • Share with internal users only       │
+│ • Request label change from owner      │
+│ • Contact your administrator           │
+└────────────────────────────────────────┘</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- DLP Policy Components -->
+        <section>
+          <h2 id="policy-components">DLP Policy Components</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Component</th>
+                  <th>Description</th>
+                  <th>Examples</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Sensitive Information Types</strong></td>
+                  <td>Patterns and keywords that identify sensitive data</td>
+                  <td>Credit card numbers, SSN, passport numbers, custom regex</td>
+                </tr>
+                <tr>
+                  <td><strong>Sensitivity Labels</strong></td>
+                  <td>Classification tags applied to documents</td>
+                  <td>Public, Internal, Confidential, Highly Confidential</td>
+                </tr>
+                <tr>
+                  <td><strong>Locations</strong></td>
+                  <td>Where the policy applies</td>
+                  <td>Exchange, SharePoint, OneDrive, Endpoints, Teams</td>
+                </tr>
+                <tr>
+                  <td><strong>Conditions</strong></td>
+                  <td>When the policy triggers</td>
+                  <td>Content contains X, shared externally, volume threshold</td>
+                </tr>
+                <tr>
+                  <td><strong>Actions</strong></td>
+                  <td>What happens when policy matches</td>
+                  <td>Block, warn, encrypt, notify, audit only</td>
+                </tr>
+                <tr>
+                  <td><strong>User Notifications</strong></td>
+                  <td>Messages shown to users</td>
+                  <td>Policy tips, toast notifications, email alerts</td>
+                </tr>
+                <tr>
+                  <td><strong>Incident Reports</strong></td>
+                  <td>Where violations are logged</td>
+                  <td>Activity explorer, email to admins, SIEM integration</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Endpoint DLP Actions -->
+        <section>
+          <h2 id="endpoint-actions">Endpoint DLP: Available Actions</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Activity</th>
+                  <th>Audit</th>
+                  <th>Warn</th>
+                  <th>Block</th>
+                  <th>Block + Override</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Copy to USB/Removable Media</strong></td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td><strong>Copy to Network Share</strong></td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td><strong>Copy to Clipboard</strong></td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td><strong>Print</strong></td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td><strong>Upload to Cloud Service</strong></td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td><strong>Upload via Browser (unallowed)</strong></td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td><strong>Access by Unallowed App</strong></td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td><strong>RDP Copy</strong></td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td><strong>Bluetooth Transfer</strong></td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-partial">Limited</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-partial">Limited</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Migration Strategy -->
+        <section>
+          <h2 id="migration">DLP Migration Strategy: Legacy to Purview</h2>
+          
+          <div class="info-box tip">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Migration Principle
+            </div>
+            <div class="info-box-content">
+              <p>DLP migrations should follow a <strong>phased approach</strong>: first achieve parity in audit mode, then gradually enable enforcement. Never migrate directly to blocking without extensive testing.</p>
+            </div>
+          </div>
+
+          <div class="flow-vertical">
+            <div class="flow-vertical-step">
+              <div class="flow-step-number">1</div>
+              <div class="flow-step-content">
+                <div class="flow-step-title">Phase 1: Discovery & Assessment (4-6 weeks)</div>
+                <div class="flow-step-description">
+                  Export existing policies from legacy DLP. Map sensitive information types to Purview equivalents. Identify gaps requiring custom SITs.
+                </div>
+                <div class="code-block" style="margin-top: var(--space-md);">
+                  <div class="code-block-header">
+                    <span class="code-block-title">Policy Mapping Example</span>
+                  </div>
+                  <pre><code>Legacy Symantec Policy          → Purview Equivalent
+─────────────────────────────────────────────────────
+Credit Card Detection           → Credit Card Number (built-in)
+Custom SSN Pattern              → U.S. SSN (built-in)
+Project Codenames (regex)       → Custom SIT (create new)
+Source Code Detection           → Source Code (built-in)
+Customer PII Combo              → Custom SIT + Trainable Classifier</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="flow-vertical-step">
+              <div class="flow-step-number">2</div>
+              <div class="flow-step-content">
+                <div class="flow-step-title">Phase 2: Parallel Deployment — Audit Mode (6-8 weeks)</div>
+                <div class="flow-step-description">
+                  Deploy Purview policies in audit-only mode alongside legacy DLP. Compare detection rates and tune false positives.
+                </div>
+                <div class="code-block" style="margin-top: var(--space-md);">
+                  <div class="code-block-header">
+                    <span class="code-block-title">Comparison Metrics</span>
+                  </div>
+                  <pre><code>Weekly Comparison Report:
+─────────────────────────────────────────
+Metric                 Legacy    Purview
+─────────────────────────────────────────
+Total Incidents        1,247     1,189
+True Positives           892       934  ← Purview better
+False Positives          355       255  ← Purview better  
+Unique Files Detected  2,341     2,456
+Avg Detection Latency    45s       12s  ← Purview faster
+─────────────────────────────────────────
+Status: Ready for Phase 3 when within 5%</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="flow-vertical-step warning">
+              <div class="flow-step-number">3</div>
+              <div class="flow-step-content">
+                <div class="flow-step-title">Phase 3: Gradual Enforcement (4-6 weeks)</div>
+                <div class="flow-step-description">
+                  Enable enforcement on Purview policies starting with least-risk channels. Progress from Warn → Block with Override → Block.
+                </div>
+                <div class="code-block" style="margin-top: var(--space-md);">
+                  <div class="code-block-header">
+                    <span class="code-block-title">Enforcement Rollout</span>
+                  </div>
+                  <pre><code>Week 1-2: Enable "Warn" on Exchange Online
+Week 3-4: Enable "Warn" on SharePoint/OneDrive  
+Week 5-6: Enable "Block with Override" on Email
+Week 7-8: Enable "Block with Override" on Endpoints
+Week 9+:  Enable "Block" on critical policies
+
+Rollback Plan: Disable Purview policy, legacy still active</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="flow-vertical-step success">
+              <div class="flow-step-number">4</div>
+              <div class="flow-step-content">
+                <div class="flow-step-title">Phase 4: Decommission Legacy (2-4 weeks)</div>
+                <div class="flow-step-description">
+                  Once Purview is fully enforcing, disable legacy DLP policies. Maintain legacy in monitor-only as safety net, then fully remove.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Vendor Comparison -->
+        <section>
+          <h2 id="vendors">DLP Vendor Landscape</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Microsoft Purview</div>
+            <div class="vendor-item">Symantec DLP (Broadcom)</div>
+            <div class="vendor-item">Forcepoint DLP</div>
+            <div class="vendor-item">Digital Guardian</div>
+            <div class="vendor-item">Trellix DLP</div>
+            <div class="vendor-item">Netskope DLP</div>
+            <div class="vendor-item">Zscaler DLP</div>
+            <div class="vendor-item">Palo Alto Enterprise DLP</div>
+            <div class="vendor-item">Code42 Incydr</div>
+            <div class="vendor-item">Google Cloud DLP</div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>Microsoft Purview</th>
+                  <th>Symantec DLP</th>
+                  <th>Netskope</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Endpoint DLP</td>
+                  <td class="check-yes">✓ (via MDE)</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td>Cloud-Native</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-no">✗ (on-prem)</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td>M365 Integration</td>
+                  <td class="check-yes">Native</td>
+                  <td class="check-partial">API</td>
+                  <td class="check-partial">API</td>
+                </tr>
+                <tr>
+                  <td>AI Classification</td>
+                  <td class="check-yes">Trainable Classifiers</td>
+                  <td class="check-partial">Limited</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td>CASB Integration</td>
+                  <td class="check-yes">Defender for Cloud Apps</td>
+                  <td class="check-partial">Separate product</td>
+                  <td class="check-yes">Native</td>
+                </tr>
+                <tr>
+                  <td>Exact Data Match</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td>OCR (Image DLP)</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Best Practices -->
+        <section>
+          <h2 id="best-practices">DLP Implementation Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Key Recommendations
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with Audit Mode:</strong> Always deploy new policies in audit mode first. Analyze for 2-4 weeks before enabling enforcement.</p>
+              <p><strong>2. Focus on Crown Jewels:</strong> Don't try to protect everything. Identify your most sensitive data types and start there.</p>
+              <p><strong>3. Use Sensitivity Labels:</strong> Labels provide persistent protection that follows the document. DLP + Labels is more powerful than DLP alone.</p>
+              <p><strong>4. Tune False Positives Aggressively:</strong> High false positive rates lead to user fatigue and policy bypass attempts.</p>
+              <p><strong>5. Communicate with Users:</strong> Provide clear policy tips explaining WHY actions are blocked and how to proceed legitimately.</p>
+              <p><strong>6. Monitor Override Abuse:</strong> If users constantly override policies, either the policy is too strict or training is needed.</p>
+              <p><strong>7. Integrate with Incident Response:</strong> High-severity DLP incidents should trigger SOC workflows, not just compliance reports.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Page Navigation -->
+        <nav class="page-nav">
+          <a href="data-classification.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Data Classification</div>
+          </a>
+          <a href="encryption.html" class="page-nav-link next">
+    

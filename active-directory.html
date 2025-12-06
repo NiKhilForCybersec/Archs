@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Active Directory Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Active Directory Security - tiered administration, credential protection, attack detection, and hardening best practices.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">3. Identity & Access</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="identity-governance.html" class="sidebar-nav-link">Identity Governance</a></li>
+          <li class="sidebar-nav-item"><a href="active-directory.html" class="sidebar-nav-link active">Active Directory Security</a></li>
+          <li class="sidebar-nav-item"><a href="pam.html" class="sidebar-nav-link">Privileged Access Management</a></li>
+          <li class="sidebar-nav-item"><a href="mfa.html" class="sidebar-nav-link">Multi-Factor Authentication</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Identity & Access</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Active Directory Security</span>
+          </div>
+          <h1>Active Directory Security</h1>
+          <p class="page-description">Active Directory is the keys to the kingdom for most enterprises. Compromising AD means compromising everything. Modern AD security requires tiered administration, credential protection, attack surface reduction, and continuous monitoring for identity-based attacks.</p>
+        </div>
+
+        <section>
+          <h2 id="attacks">Common AD Attack Techniques</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Kerberoasting</h4>
+              <p class="card-description">Request service tickets for SPNs, crack offline to get service account passwords. Works against any user with an SPN.</p>
+              <p style="margin-top: var(--space-sm); font-size: 0.75rem; color: var(--text-tertiary);">MITRE: T1558.003</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-orange);">Pass-the-Hash</h4>
+              <p class="card-description">Use NTLM hash directly for authentication without knowing password. Extracted from memory (Mimikatz) or SAM.</p>
+              <p style="margin-top: var(--space-sm); font-size: 0.75rem; color: var(--text-tertiary);">MITRE: T1550.002</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">DCSync</h4>
+              <p class="card-description">Impersonate DC to request password hashes via replication. Requires Replicating Directory Changes permission.</p>
+              <p style="margin-top: var(--space-sm); font-size: 0.75rem; color: var(--text-tertiary);">MITRE: T1003.006</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">Golden Ticket</h4>
+              <p class="card-description">Forge Kerberos TGT with KRBTGT hash. Unlimited persistence—survives password resets except KRBTGT.</p>
+              <p style="margin-top: var(--space-sm); font-size: 0.75rem; color: var(--text-tertiary);">MITRE: T1558.001</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="tiering">Tiered Administration Model</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 380" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="380" fill="#0f1117"/>
+              
+              <!-- Tier 0 -->
+              <rect x="225" y="30" width="400" height="90" rx="8" fill="rgba(239, 68, 68, 0.15)" stroke="#ef4444" stroke-width="2"/>
+              <text x="425" y="55" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="700">TIER 0 - DOMAIN CONTROL</text>
+              <text x="425" y="78" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Domain Controllers • AD DS • PKI • ADFS</text>
+              <text x="425" y="95" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Domain Admins • Enterprise Admins • Schema Admins</text>
+              <text x="425" y="112" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">Compromise = Full domain compromise</text>
+              
+              <!-- Tier 1 -->
+              <rect x="175" y="140" width="500" height="90" rx="8" fill="rgba(245, 158, 11, 0.15)" stroke="#f59e0b" stroke-width="2"/>
+              <text x="425" y="165" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="700">TIER 1 - SERVER ADMINISTRATION</text>
+              <text x="425" y="188" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Member Servers • Applications • Databases • File Servers</text>
+              <text x="425" y="205" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Server Admins • Application Admins • Database Admins</text>
+              <text x="425" y="222" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="8">Compromise = Lateral movement, data access</text>
+              
+              <!-- Tier 2 -->
+              <rect x="125" y="250" width="600" height="90" rx="8" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="2"/>
+              <text x="425" y="275" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="700">TIER 2 - WORKSTATION ADMINISTRATION</text>
+              <text x="425" y="298" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Workstations • Laptops • User Devices • Printers</text>
+              <text x="425" y="315" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Helpdesk • Desktop Support • Local Admins</text>
+              <text x="425" y="332" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="8">Initial compromise point - contain here</text>
+              
+              <!-- Arrows showing NO flow up -->
+              <path d="M100 280 L100 80" stroke="#ef4444" stroke-width="2" stroke-dasharray="6" fill="none"/>
+              <text x="55" y="180" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600">NO UPWARD</text>
+              <text x="55" y="195" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600">LOGIN</text>
+              
+              <path d="M750 80 L750 280" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrowGreen)"/>
+              <text x="770" y="180" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600">ADMIN</text>
+              <text x="770" y="195" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600">DOWN</text>
+              <text x="770" y="210" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600">ONLY</text>
+              
+              <!-- Key rule -->
+              <rect x="275" y="350" width="300" height="25" rx="4" fill="#1e2430" stroke="#64748b"/>
+              <text x="425" y="367" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Tier 0 creds NEVER touch Tier 1/2 systems</text>
+              
+              <defs>
+                <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+          
+          <div class="info-box warning" style="margin-top: var(--space-lg);">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Critical Rule
+            </div>
+            <div class="info-box-content">
+              <p>Domain Admins should NEVER log into workstations or member servers. If a DA logs into a compromised workstation, their credentials are exposed in memory → attackers extract with Mimikatz → game over.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="paws">Privileged Access Workstations (PAWs)</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Traditional Admin Access
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Admin logs into their regular workstation</li>
+                  <li>Uses same machine for email, browsing, admin</li>
+                  <li>RDPs to servers from daily-use workstation</li>
+                  <li>Credentials cached on potentially compromised host</li>
+                  <li>Phishing email → workstation compromised → DA creds stolen</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                PAW Model
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Dedicated hardened workstation for admin tasks only</li>
+                  <li>No email, no browsing, no general productivity</li>
+                  <li>Admin tasks ONLY from PAW</li>
+                  <li>Separate physical or VM-isolated machine</li>
+                  <li>Even if daily workstation compromised, PAW is clean</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="detection">Detecting AD Attacks</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">KQL - Kerberoasting Detection</span></div>
+            <pre><code>// Detect potential Kerberoasting - mass TGS requests for SPNs
+SecurityEvent
+| where EventID == 4769  // Kerberos Service Ticket Operation
+| where ServiceName !endswith "$"  // Exclude machine accounts
+| where TicketEncryptionType in ("0x17", "0x18")  // RC4 encryption (weak, crackable)
+| summarize 
+    SPNCount = dcount(ServiceName),
+    SPNs = make_set(ServiceName),
+    RequestCount = count()
+    by AccountName, ClientAddress, bin(TimeGenerated, 5m)
+| where SPNCount > 10  // More than 10 unique SPNs in 5 minutes
+| project TimeGenerated, AccountName, ClientAddress, SPNCount, SPNs
+
+// Why this works:
+// Normal users request 1-2 service tickets occasionally
+// Kerberoasting requests tickets for MANY SPNs to crack offline</code></pre>
+          </div>
+          
+          <div class="code-block" style="margin-top: var(--space-lg);">
+            <div class="code-block-header"><span class="code-block-title">KQL - DCSync Detection</span></div>
+            <pre><code>// Detect DCSync attack - non-DC requesting directory replication
+SecurityEvent
+| where EventID == 4662  // Operation performed on object
+| where ObjectType contains "domainDNS"
+| where Properties contains "Replicating Directory Changes"
+| where SubjectUserName !endswith "$"  // Not a machine account
+| where SubjectUserName !in ("MSOL_*", "AAD_*")  // Exclude legit sync accounts
+| project TimeGenerated, SubjectUserName, SubjectDomainName, 
+          ObjectName, Properties, IpAddress
+
+// Why this works:
+// Only Domain Controllers should request replication
+// Non-DC accounts with this permission = compromise or misconfiguration</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="hardening">AD Hardening Checklist</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Critical AD Security Controls
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. KRBTGT Password Reset:</strong> Reset twice (with replication between), every 180 days minimum. Invalidates Golden Tickets.</p>
+              <p><strong>2. Protected Users Group:</strong> Add privileged accounts. Prevents NTLM auth, credential caching, delegation.</p>
+              <p><strong>3. LAPS (Local Admin Password Solution):</strong> Unique, rotating local admin passwords per machine. Prevents lateral movement via shared local admin.</p>
+              <p><strong>4. Credential Guard:</strong> Virtualization-based security isolates LSASS. Prevents Mimikatz-style credential theft.</p>
+              <p><strong>5. Disable NTLM Where Possible:</strong> Audit NTLM usage, migrate to Kerberos. NTLM hashes are easily passed.</p>
+              <p><strong>6. gMSA for Service Accounts:</strong> Group Managed Service Accounts have 240-char passwords, auto-rotate. Eliminates Kerberoasting risk.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="tools">AD Security Assessment Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">BloodHound</div>
+            <div class="vendor-item">PingCastle</div>
+            <div class="vendor-item">Purple Knight</div>
+            <div class="vendor-item">Microsoft Defender for Identity</div>
+            <div class="vendor-item">CrowdStrike Falcon Identity</div>
+            <div class="vendor-item">Tenable.ad</div>
+            <div class="vendor-item">Netwrix</div>
+            <div class="vendor-item">Quest Change Auditor</div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="identity-governance.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Identity Governance</div>
+          </a>
+          <a href="pam.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Privileged Access Management →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

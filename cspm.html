@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloud Security Posture Management (CSPM) | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to CSPM - continuous cloud misconfiguration detection, compliance monitoring, and security posture assessment.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">3. Cloud Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="aws-security.html" class="sidebar-nav-link">Shared Responsibility</a></li>
+          <li class="sidebar-nav-item"><a href="cspm.html" class="sidebar-nav-link active">CSPM</a></li>
+          <li class="sidebar-nav-item"><a href="cwpp.html" class="sidebar-nav-link">CWPP</a></li>
+          <li class="sidebar-nav-item"><a href="casb.html" class="sidebar-nav-link">CASB</a></li>
+          <li class="sidebar-nav-item"><a href="cnapp.html" class="sidebar-nav-link">CNAPP</a></li>
+          <li class="sidebar-nav-item"><a href="azure-security.html" class="sidebar-nav-link">Azure Security</a></li>
+          <li class="sidebar-nav-item"><a href="aws-security.html" class="sidebar-nav-link">AWS Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Cloud Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>CSPM</span>
+          </div>
+          <h1>Cloud Security Posture Management (CSPM)</h1>
+          <p class="page-description">CSPM continuously monitors cloud environments for misconfigurations, compliance violations, and security risks. It provides visibility across IaaS/PaaS services, identifies policy violations, and enables automated remediation of cloud security issues.</p>
+        </div>
+
+        <section>
+          <h2 id="problem">The Cloud Misconfiguration Problem</h2>
+          
+          <div class="info-box danger">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Why Misconfigurations Matter
+            </div>
+            <div class="info-box-content">
+              <p><strong>Gartner predicts:</strong> Through 2025, 99% of cloud security failures will be the customer's fault — primarily misconfigurations.</p>
+              <p style="margin-top: var(--space-md);"><strong>Common misconfigurations that lead to breaches:</strong></p>
+              <ul style="margin-top: var(--space-sm);">
+                <li>S3 buckets with public access enabled</li>
+                <li>Security groups allowing 0.0.0.0/0 to SSH/RDP</li>
+                <li>Storage accounts without encryption at rest</li>
+                <li>IAM policies with excessive permissions</li>
+                <li>Databases exposed to the internet</li>
+                <li>Logging and monitoring disabled</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="capabilities">CSPM Core Capabilities</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              </div>
+              <h4 class="card-title">Misconfiguration Detection</h4>
+              <p class="card-description">Continuous scanning of cloud resources against security best practices and CIS benchmarks.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-green);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              </div>
+              <h4 class="card-title">Compliance Monitoring</h4>
+              <p class="card-description">Map resources to regulatory frameworks (PCI-DSS, HIPAA, SOC 2, NIST) with compliance scoring.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              </div>
+              <h4 class="card-title">Auto-Remediation</h4>
+              <p class="card-description">Automatically fix common misconfigurations or create tickets for manual remediation.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-yellow);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+              </div>
+              <h4 class="card-title">Asset Inventory</h4>
+              <p class="card-description">Complete visibility of all cloud resources across accounts, subscriptions, and regions.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon" style="background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              </div>
+              <h4 class="card-title">Risk Prioritization</h4>
+              <p class="card-description">Contextualized risk scoring based on exposure, data sensitivity, and attack paths.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon" style="background: rgba(239, 68, 68, 0.15); color: var(--accent-red);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              </div>
+              <h4 class="card-title">Threat Detection</h4>
+              <p class="card-description">Identify suspicious activities and potential compromises through behavioral analysis.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="architecture">CSPM Architecture</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 420" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="420" fill="#0f1117"/>
+              
+              <!-- Cloud Environments -->
+              <rect x="30" y="50" width="220" height="320" rx="8" fill="rgba(59, 130, 246, 0.05)" stroke="#3b82f6" stroke-dasharray="4"/>
+              <text x="140" y="75" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">CLOUD ENVIRONMENTS</text>
+              
+              <!-- AWS -->
+              <rect x="50" y="100" width="180" height="70" rx="6" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="140" y="125" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="500">AWS</text>
+              <text x="140" y="145" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">12 Accounts • 4 Regions</text>
+              <text x="140" y="160" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">S3 • EC2 • RDS • IAM • Lambda</text>
+              
+              <!-- Azure -->
+              <rect x="50" y="185" width="180" height="70" rx="6" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="140" y="210" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="500">Azure</text>
+              <text x="140" y="230" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">8 Subscriptions • 3 Regions</text>
+              <text x="140" y="245" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">VMs • Storage • SQL • Entra • AKS</text>
+              
+              <!-- GCP -->
+              <rect x="50" y="270" width="180" height="70" rx="6" fill="#1e2430" stroke="#ef4444"/>
+              <text x="140" y="295" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="500">GCP</text>
+              <text x="140" y="315" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">3 Projects • 2 Regions</text>
+              <text x="140" y="330" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">GCE • GCS • BigQuery • GKE</text>
+              
+              <!-- CSPM Platform -->
+              <rect x="300" y="50" width="280" height="320" rx="8" fill="rgba(16, 185, 129, 0.05)" stroke="#10b981" stroke-width="2"/>
+              <text x="440" y="80" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="600">CSPM PLATFORM</text>
+              
+              <!-- Data Collection -->
+              <rect x="320" y="100" width="240" height="50" rx="6" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="440" y="125" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Data Collection Layer</text>
+              <text x="440" y="142" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">API Integration • Read-Only Access • Real-time Sync</text>
+              
+              <!-- Policy Engine -->
+              <rect x="320" y="165" width="115" height="70" rx="6" fill="#1e2430" stroke="#8b5cf6"/>
+              <text x="377" y="190" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Policy Engine</text>
+              <text x="377" y="207" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">CIS Benchmarks</text>
+              <text x="377" y="222" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Custom Rules</text>
+              
+              <!-- Compliance -->
+              <rect x="445" y="165" width="115" height="70" rx="6" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="502" y="190" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Compliance</text>
+              <text x="502" y="207" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">PCI • HIPAA</text>
+              <text x="502" y="222" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">SOC 2 • NIST</text>
+              
+              <!-- Risk Analysis -->
+              <rect x="320" y="250" width="240" height="50" rx="6" fill="#1e2430" stroke="#ef4444"/>
+              <text x="440" y="275" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Risk Analysis & Prioritization</text>
+              <text x="440" y="292" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Attack Path Analysis • Exposure Scoring • Data Sensitivity</text>
+              
+              <!-- Remediation -->
+              <rect x="320" y="315" width="240" height="40" rx="6" fill="#1e2430" stroke="#10b981"/>
+              <text x="440" y="340" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Auto-Remediation & Workflows</text>
+              
+              <!-- Outputs -->
+              <rect x="630" y="100" width="190" height="270" rx="8" fill="rgba(139, 92, 246, 0.05)" stroke="#8b5cf6" stroke-dasharray="4"/>
+              <text x="725" y="125" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">OUTPUTS</text>
+              
+              <rect x="650" y="150" width="150" height="35" rx="4" fill="#1e2430" stroke="#ef4444"/>
+              <text x="725" y="172" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Security Findings</text>
+              
+              <rect x="650" y="195" width="150" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="725" y="217" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Compliance Reports</text>
+              
+              <rect x="650" y="240" width="150" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="725" y="262" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Asset Inventory</text>
+              
+              <rect x="650" y="285" width="150" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="725" y="307" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">SIEM Integration</text>
+              
+              <rect x="650" y="330" width="150" height="30" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="725" y="350" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Ticket Creation</text>
+              
+              <!-- Arrows -->
+              <path d="M250 210 L300 210" stroke="#3b82f6" stroke-width="2" fill="none"/>
+              <path d="M580 210 L630 210" stroke="#10b981" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="detection-flow">CSPM Detection Flow: Public S3 Bucket</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Detecting and Remediating Public S3 Bucket</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Developer Creates S3 Bucket</div>
+                  <div class="flow-step-description">Developer creates bucket with public access for "testing"</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">AWS CloudTrail Event</span></div>
+                    <pre><code>EventName: CreateBucket
+BucketName: acme-customer-data-backup
+Region: us-east-1
+UserIdentity: arn:aws:iam::123456789:user/dev-jsmith
+Time: 2024-01-15T09:23:45Z
+
+EventName: PutBucketPublicAccessBlock
+PublicAccessBlockConfiguration:
+  BlockPublicAcls: false          ← Public access enabled
+  IgnorePublicAcls: false
+  BlockPublicPolicy: false
+  RestrictPublicBuckets: false</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">CSPM Detects Configuration</div>
+                  <div class="flow-step-description">CSPM scans bucket configuration via AWS APIs and detects policy violation</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">CSPM Analysis</span></div>
+                    <pre><code>Resource Scanned: s3://acme-customer-data-backup
+Account: 123456789012 (Production)
+Region: us-east-1
+
+Policy Checks:
+├── CIS AWS 2.1.5: S3 Block Public Access .......... FAIL
+├── AWS Well-Architected: Data Protection .......... FAIL  
+├── NIST 800-53 AC-3: Access Enforcement ........... FAIL
+├── PCI-DSS 7.1: Restrict Access ................... FAIL
+└── Custom: No Public Buckets in Prod .............. FAIL
+
+Additional Context:
+  - Bucket contains 47,823 objects
+  - Bucket name suggests sensitive data ("customer-data")
+  - Account tagged as "Production"
+  - No encryption enabled</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Risk Scoring & Alert</div>
+                  <div class="flow-step-description">CSPM calculates risk score based on exposure and data sensitivity</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Risk Assessment</span></div>
+                    <pre><code>═══════════════════════════════════════════════════════════
+  CSPM FINDING: HIGH SEVERITY
+  Public S3 Bucket in Production Account
+═══════════════════════════════════════════════════════════
+
+Resource: arn:aws:s3:::acme-customer-data-backup
+Finding: S3 bucket allows public access
+Severity: HIGH (9.2/10)
+
+Risk Factors:
+  [+3.0] Public access enabled (internet exposed)
+  [+2.5] Production account
+  [+2.0] Bucket name contains "customer-data"  
+  [+1.0] No encryption at rest
+  [+0.7] Large object count (47K+ objects)
+
+Attack Path:
+  Internet → S3 Bucket → Customer PII Exposure
+  
+Potential Impact:
+  - Data breach of customer information
+  - Regulatory violation (GDPR, CCPA)
+  - Reputational damage
+
+Time to Detection: 4 minutes</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Auto-Remediation Triggered</div>
+                  <div class="flow-step-description">CSPM automatically enables S3 Block Public Access</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Remediation</span></div>
+                    <pre><code>Auto-Remediation Action:
+  Policy: "Block Public S3 in Production"
+  Action: PutBucketPublicAccessBlock
+  
+API Call Executed:
+  aws s3api put-public-access-block \
+    --bucket acme-customer-data-backup \
+    --public-access-block-configuration \
+      BlockPublicAcls=true,\
+      IgnorePublicAcls=true,\
+      BlockPublicPolicy=true,\
+      RestrictPublicBuckets=true
+
+Result: SUCCESS
+Time to Remediate: 12 seconds (automated)
+
+Notifications Sent:
+  ✓ Slack: #security-alerts
+  ✓ Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2655434553544f525f0b5243474b6647454b430845494b">[email&#160;protected]</a>
+  ✓ Jira: SEC-4521 created
+  ✓ SIEM: Event forwarded to Sentinel</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">CSPM Vendor Comparison</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Microsoft Defender for Cloud</div>
+            <div class="vendor-item">Prisma Cloud (Palo Alto)</div>
+            <div class="vendor-item">Wiz</div>
+            <div class="vendor-item">Orca Security</div>
+            <div class="vendor-item">AWS Security Hub</div>
+            <div class="vendor-item">Lacework</div>
+            <div class="vendor-item">Aqua Security</div>
+            <div class="vendor-item">Tenable Cloud Security</div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>Defender for Cloud</th>
+                  <th>Prisma Cloud</th>
+                  <th>Wiz</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Multi-Cloud</td>
+                  <td class="check-yes">✓ Azure/AWS/GCP</td>
+                  <td class="check-yes">✓ Azure/AWS/GCP</td>
+                  <td class="check-yes">✓ Azure/AWS/GCP</td>
+                </tr>
+                <tr>
+                  <td>Agentless</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-partial">Partial (agent optional)</td>
+                  <td class="check-yes">✓ 100% agentless</td>
+                </tr>
+                <tr>
+                  <td>CWPP Included</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td>Attack Path Analysis</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓ (Strength)</td>
+                </tr>
+                <tr>
+                  <td>Auto-Remediation</td>
+                  <td class="check-yes">✓ Logic Apps</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-partial">Limited</td>
+                </tr>
+                <tr>
+                  <td>Compliance Frameworks</td>
+                  <td class="check-yes">✓ 35+</td>
+                  <td class="check-yes">✓ 30+</td>
+                  <td class="check-yes">✓ 25+</td>
+                </tr>
+                <tr>
+                  <td>IaC Scanning</td>
+                  <td class="check-yes">✓ (Defender for DevOps)</td>
+                  <td class="check-yes">✓ (Bridgecrew)</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">CSPM Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Implementation Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with Visibility:</strong> Connect all cloud accounts before enabling policies. You can't secure what you can't see.</p>
+              <p><strong>2. Prioritize by Risk:</strong> Don't try to fix everything at once. Focus on internet-exposed, production, and data-containing resources first.</p>
+              <p><strong>3. Enable Auto-Remediation Carefully:</strong> Start with low-risk remediations (enable logging, block public access). Test in dev first.</p>
+              <p><strong>4. Integrate with CI/CD:</strong> Shift left — scan IaC templates before deployment to prevent misconfigurations.</p>
+              <p><strong>5. Assign Ownership:</strong> Route findings to resource owners, not just security team. Use tagging to enable ownership routing.</p>
+              <p><strong>6. Track Metrics:</strong> Measure MTTD (time to detect) and MTTR (time to remediate). Track findings over time to show improvement.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="aws-security.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Shared Responsibility</div>
+          </a>
+          <a href="cwpp.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">CWPP

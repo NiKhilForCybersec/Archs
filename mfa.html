@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Factor Authentication (MFA) | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to MFA - authentication factors, methods, attack resistance, and implementation with detailed flow examples.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">4. Identity & Access</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="directory-services.html" class="sidebar-nav-link">Directory Services</a></li>
+          <li class="sidebar-nav-item"><a href="authentication-protocols.html" class="sidebar-nav-link">Authentication Protocols</a></li>
+          <li class="sidebar-nav-item"><a href="sso.html" class="sidebar-nav-link">Single Sign-On</a></li>
+          <li class="sidebar-nav-item"><a href="mfa.html" class="sidebar-nav-link active">Multi-Factor Authentication</a></li>
+          <li class="sidebar-nav-item"><a href="conditional-access.html" class="sidebar-nav-link">Conditional Access</a></li>
+          <li class="sidebar-nav-item"><a href="pam.html" class="sidebar-nav-link">Privileged Access Management</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <a href="directory-services.html">Identity & Access</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>MFA</span>
+          </div>
+          <h1>Multi-Factor Authentication (MFA)</h1>
+          <p class="page-description">MFA requires users to present two or more verification factors from different categories: something you know (password), something you have (phone/token), or something you are (biometric). MFA blocks 99.9% of account compromise attacks.</p>
+        </div>
+
+        <section>
+          <h2 id="factors">Authentication Factors</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              </div>
+              <h4 class="card-title">Something You Know</h4>
+              <p class="card-description">Passwords, PINs, security questions. Weakest factor — can be guessed, phished, or leaked in breaches.</p>
+              <p style="margin-top: var(--space-sm); font-size: 0.875rem; color: var(--text-muted);"><strong>Examples:</strong> Password, PIN, security question</p>
+            </div>
+            <div class="card">
+              <div class="card-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-green);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+              </div>
+              <h4 class="card-title">Something You Have</h4>
+              <p class="card-description">Physical device possession. Stronger because attacker needs physical access to device.</p>
+              <p style="margin-top: var(--space-sm); font-size: 0.875rem; color: var(--text-muted);"><strong>Examples:</strong> Phone, hardware key, smart card</p>
+            </div>
+            <div class="card">
+              <div class="card-icon" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5.52 19c.64-2.2 1.84-3 3.22-3h6.52c1.38 0 2.58.8 3.22 3"></path><circle cx="12" cy="10" r="3"></circle><circle cx="12" cy="12" r="10"></circle></svg>
+              </div>
+              <h4 class="card-title">Something You Are</h4>
+              <p class="card-description">Biometric characteristics unique to the user. Hard to forge but raises privacy concerns.</p>
+              <p style="margin-top: var(--space-sm); font-size: 0.875rem; color: var(--text-muted);"><strong>Examples:</strong> Fingerprint, face, iris, voice</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="methods">MFA Methods Comparison</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Phishing Resistant</th>
+                  <th>User Experience</th>
+                  <th>Deployment</th>
+                  <th>Use Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>FIDO2/Passkeys</strong></td>
+                  <td class="check-yes">✓ Yes</td>
+                  <td><span class="tag green">Excellent</span></td>
+                  <td>Moderate</td>
+                  <td>High-security, passwordless</td>
+                </tr>
+                <tr>
+                  <td><strong>Hardware Keys (YubiKey)</strong></td>
+                  <td class="check-yes">✓ Yes</td>
+                  <td><span class="tag blue">Good</span></td>
+                  <td>Complex (key mgmt)</td>
+                  <td>Privileged users, admins</td>
+                </tr>
+                <tr>
+                  <td><strong>Authenticator App (Push)</strong></td>
+                  <td class="check-partial">Partial*</td>
+                  <td><span class="tag green">Excellent</span></td>
+                  <td>Easy</td>
+                  <td>General workforce</td>
+                </tr>
+                <tr>
+                  <td><strong>Authenticator App (TOTP)</strong></td>
+                  <td class="check-no">✗ No</td>
+                  <td><span class="tag blue">Good</span></td>
+                  <td>Easy</td>
+                  <td>Fallback method</td>
+                </tr>
+                <tr>
+                  <td><strong>SMS OTP</strong></td>
+                  <td class="check-no">✗ No</td>
+                  <td><span class="tag blue">Good</span></td>
+                  <td>Very Easy</td>
+                  <td>Consumer, legacy</td>
+                </tr>
+                <tr>
+                  <td><strong>Phone Call</strong></td>
+                  <td class="check-no">✗ No</td>
+                  <td><span class="tag yellow">Fair</span></td>
+                  <td>Very Easy</td>
+                  <td>Accessibility fallback</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="info-box warning" style="margin-top: var(--space-lg);">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              *Push Notification Fatigue Attacks
+            </div>
+            <div class="info-box-content">
+              <p>Standard push notifications can be bypassed through "MFA fatigue" attacks where attackers spam push requests until user approves. <strong>Mitigations:</strong></p>
+              <p>• <strong>Number Matching:</strong> User must enter a number shown on login screen (Microsoft Authenticator, Duo)</p>
+              <p>• <strong>Additional Context:</strong> Show location, app, device in push notification</p>
+              <p>• <strong>Rate Limiting:</strong> Block account after 3 denied push requests</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="phishing-resistant">Phishing-Resistant MFA</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Phishable MFA (SMS, TOTP, Push)
+              </div>
+              <div class="comparison-box-content">
+                <p>User can be tricked into entering code on fake site:</p>
+                <div class="flow-vertical" style="margin-top: var(--space-md);">
+                  <div class="flow-vertical-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Attacker sends phishing email</div>
+                      <div class="flow-step-description">Link to fake login page (login.micros0ft.com)</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step danger">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">User enters password on fake site</div>
+                      <div class="flow-step-description">Attacker proxies to real site, triggers MFA</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step danger">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">User enters OTP / approves push</div>
+                      <div class="flow-step-description">Attacker captures and uses immediately</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Phishing-Resistant (FIDO2/Passkeys)
+              </div>
+              <div class="comparison-box-content">
+                <p>Cryptographically bound to legitimate site origin:</p>
+                <div class="flow-vertical" style="margin-top: var(--space-md);">
+                  <div class="flow-vertical-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Attacker sends phishing email</div>
+                      <div class="flow-step-description">Link to fake login page (login.micros0ft.com)</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step success">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">FIDO2 key checks origin</div>
+                      <div class="flow-step-description">Key bound to login.microsoft.com — won't sign for micros0ft.com</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step success">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Attack fails</div>
+                      <div class="flow-step-description">No credential provided — phishing blocked by design</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="fido2-flow">FIDO2/Passkey Authentication Flow</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Passwordless Sign-In with Windows Hello for Business</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Navigates to Application</div>
+                  <div class="flow-step-description">User browses to portal.office.com, redirected to Entra ID</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Authentication Request</span></div>
+                    <pre><code>GET /authorize
+Host: login.microsoftonline.com
+Relying Party ID: login.microsoft.com
+Challenge: randomBytes(32) → base64url encoded</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Performs Local Authentication</div>
+                  <div class="flow-step-description">Windows Hello prompts for biometric (face/fingerprint) or PIN</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Local Verification</span></div>
+                    <pre><code>Windows Hello Prompt:
+  "Sign in to your account"
+  [Use face recognition] [Use fingerprint] [Use PIN]
+
+User: Scans fingerprint on laptop sensor
+Local Verification: SUCCESS
+TPM unlocks private key stored in secure enclave</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">FIDO2 Assertion Generated</div>
+                  <div class="flow-step-description">Private key signs the challenge + origin — cryptographic proof</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">FIDO2 Response</span></div>
+                    <pre><code>Assertion Data:
+  Relying Party ID: login.microsoft.com  ← Origin bound
+  Challenge: [signed with private key]
+  Credential ID: [unique per-site key identifier]
+  Signature: ECDSA P-256 signature
+  
+Authenticator Flags:
+  User Present: YES (fingerprint verified)
+  User Verified: YES (biometric matched)
+  
+Counter: 47 (replay protection)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Server Validates Assertion</div>
+                  <div class="flow-step-description">Entra ID verifies signature with stored public key</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Server Verification</span></div>
+                    <pre><code>Entra ID Verification:
+  ✓ Challenge matches (replay protection)
+  ✓ Origin matches login.microsoft.com
+  ✓ Signature valid (public key verification)
+  ✓ Counter > last seen (prevents cloning)
+  ✓ User verified flag set (biometric used)
+
+Authentication Result: SUCCESS
+MFA Claim: amr = ["fido", "mfa"]
+Token Issued: Access token + ID token
+
+User Experience:
+  - No password entered
+  - Single gesture (fingerprint)
+  - Total time: ~2 seconds</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">MFA Implementation Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Require MFA for Everyone:</strong> No exceptions for executives or "trusted" users. Attackers specifically target high-value accounts.</p>
+              <p><strong>2. Prioritize Phishing-Resistant Methods:</strong> Deploy FIDO2/Passkeys for privileged users first, then expand. Hardware keys for admins.</p>
+              <p><strong>3. Enable Number Matching:</strong> If using push notifications, require number matching to prevent MFA fatigue attacks.</p>
+              <p><strong>4. Block Legacy Authentication:</strong> Disable protocols that don't support MFA (IMAP, POP3, SMTP Auth, legacy Office clients).</p>
+              <p><strong>5. Plan for Recovery:</strong> Establish secure MFA reset process. Require identity verification before resetting MFA.</p>
+              <p><strong>6. Monitor MFA Events:</strong> Alert on MFA registration from new devices, multiple failed MFA attempts, and MFA bypass attempts.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="sso.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Single Sign-On</div>
+          </a>
+          <a href="conditional-access.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Conditional Access →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

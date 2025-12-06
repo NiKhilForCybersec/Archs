@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Management | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Security Risk Management - risk assessment, risk frameworks, threat modeling, and risk treatment strategies.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">11. Governance & Compliance</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="compliance-frameworks.html" class="sidebar-nav-link">Compliance Frameworks</a></li>
+          <li class="sidebar-nav-item"><a href="risk-management.html" class="sidebar-nav-link active">Risk Management</a></li>
+          <li class="sidebar-nav-item"><a href="vendor-risk.html" class="sidebar-nav-link">Vendor Risk Management</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Governance & Compliance</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Risk Management</span>
+          </div>
+          <h1>Risk Management</h1>
+          <p class="page-description">Security risk management is the systematic process of identifying, assessing, and treating risks to organizational assets. Effective risk management enables informed decision-making, optimal resource allocation, and alignment between security investments and business objectives.</p>
+        </div>
+
+        <section>
+          <h2 id="formula">Risk Formula</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 180" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="180" fill="#0f1117"/>
+              
+              <text x="425" y="40" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="18" font-weight="700">RISK = THREAT × VULNERABILITY × IMPACT</text>
+              
+              <!-- Threat -->
+              <rect x="80" y="70" width="180" height="90" rx="8" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="170" y="100" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">THREAT</text>
+              <text x="170" y="125" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Who wants to harm you?</text>
+              <text x="170" y="145" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Nation states, criminals, insiders</text>
+              
+              <!-- Vulnerability -->
+              <rect x="335" y="70" width="180" height="90" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="425" y="100" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">VULNERABILITY</text>
+              <text x="425" y="125" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">What weaknesses exist?</text>
+              <text x="425" y="145" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Unpatched systems, misconfigs</text>
+              
+              <!-- Impact -->
+              <rect x="590" y="70" width="180" height="90" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="680" y="100" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">IMPACT</text>
+              <text x="680" y="125" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">What's the damage?</text>
+              <text x="680" y="145" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Financial, reputation, operational</text>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="process">Risk Assessment Process</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Risk Assessment Lifecycle</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Asset Identification</div>
+                  <div class="flow-step-description">What are we protecting?</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Asset Inventory</span></div>
+                    <pre><code>Asset Categories:
+  • Data: Customer PII, financial records, IP, credentials
+  • Systems: Servers, databases, applications, endpoints
+  • People: Employees, contractors, customers
+  • Facilities: Data centers, offices, remote locations
+  • Reputation: Brand value, customer trust
+
+Asset Valuation:
+  • Business criticality (1-5)
+  • Data sensitivity classification
+  • Regulatory requirements
+  • Revenue dependency</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Threat Identification</div>
+                  <div class="flow-step-description">Who/what could cause harm?</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Threat Sources</span></div>
+                    <pre><code>External Threats:
+  • Nation-state actors (APT groups)
+  • Organized cybercrime (ransomware gangs)
+  • Hacktivists
+  • Competitors (corporate espionage)
+
+Internal Threats:
+  • Malicious insiders
+  • Negligent employees
+  • Compromised accounts
+
+Environmental:
+  • Natural disasters
+  • Power failures
+  • Supply chain disruption</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Vulnerability Assessment</div>
+                  <div class="flow-step-description">Where are we exposed?</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Vulnerability Sources</span></div>
+                    <pre><code>Technical:
+  • Unpatched software (CVEs)
+  • Misconfigurations
+  • Weak authentication
+  • Insecure code
+
+Process:
+  • Lack of security training
+  • No incident response plan
+  • Poor change management
+  • Inadequate logging
+
+People:
+  • Susceptibility to phishing
+  • Weak password practices
+  • Shadow IT usage</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Risk Analysis</div>
+                  <div class="flow-step-description">Calculate likelihood × impact</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Risk Matrix</span></div>
+                    <pre><code>                        IMPACT
+              Low(1)   Med(2)   High(3)  Crit(4)
+           ┌────────┬────────┬────────┬────────┐
+ L   High  │   4    │   8    │  12    │  16    │ ← Critical
+ I    (4)  │ Medium │  High  │  High  │Critical│
+ K   ──────┼────────┼────────┼────────┼────────┤
+ E   Med   │   3    │   6    │   9    │  12    │
+ L    (3)  │  Low   │ Medium │  High  │  High  │
+ I   ──────┼────────┼────────┼────────┼────────┤
+ H   Low   │   2    │   4    │   6    │   8    │
+ O    (2)  │  Low   │ Medium │ Medium │  High  │
+ O   ──────┼────────┼────────┼────────┼────────┤
+ D   Rare  │   1    │   2    │   3    │   4    │
+      (1)  │  Low   │  Low   │  Low   │ Medium │
+           └────────┴────────┴────────┴────────┘</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Risk Treatment</div>
+                  <div class="flow-step-description">Decide how to address each risk</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Treatment Options</span></div>
+                    <pre><code>MITIGATE: Implement controls to reduce risk
+  Example: Deploy EDR to reduce malware risk
+  
+TRANSFER: Shift risk to third party
+  Example: Cyber insurance for ransomware costs
+  
+ACCEPT: Acknowledge and monitor risk
+  Example: Accept low-impact legacy system risk
+  
+AVOID: Eliminate the risk entirely
+  Example: Don't store data you don't need</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="register">Risk Register</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Sample Risk Register Entry</span></div>
+            <pre><code>┌─────────────────────────────────────────────────────────────────────────────┐
+│ RISK ID: R-2024-042                                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Title: Ransomware attack on production systems                              │
+│ Category: Cybersecurity                                                     │
+│ Owner: CISO                                                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Description:                                                                │
+│ Threat actors could deploy ransomware via phishing or exploited             │
+│ vulnerabilities, encrypting production systems and demanding payment.       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ INHERENT RISK (before controls):                                            │
+│   Likelihood: High (4)    Impact: Critical (4)    Score: 16 (Critical)     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Current Controls:                                                           │
+│   • EDR deployed on all endpoints (90% coverage)                           │
+│   • Email security gateway with sandboxing                                  │
+│   • Daily backups with immutable copies                                     │
+│   • Security awareness training (annual)                                    │
+│   • Network segmentation (partial)                                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ RESIDUAL RISK (after controls):                                             │
+│   Likelihood: Medium (3)  Impact: High (3)        Score: 9 (High)          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Treatment Plan:                                                             │
+│   1. Complete EDR rollout to 100% (Q1)                                     │
+│   2. Implement quarterly phishing simulations (Q1)                          │
+│   3. Complete network micro-segmentation (Q2)                               │
+│   4. Obtain cyber insurance ($5M coverage) (Q1)                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Target Residual Risk: Medium (6)                                            │
+│ Last Review: 2024-01-15    Next Review: 2024-04-15                         │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="frameworks">Risk Frameworks</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">NIST RMF</h4>
+              <p class="card-description">Risk Management Framework. 7-step process: Prepare, Categorize, Select, Implement, Assess, Authorize, Monitor. US federal standard.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">ISO 31000</h4>
+              <p class="card-description">International risk management standard. Principles, framework, and process for managing any type of risk. Industry agnostic.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">FAIR</h4>
+              <p class="card-description">Factor Analysis of Information Risk. Quantitative model for measuring cyber risk in financial terms. Enables ROI calculations.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">OCTAVE</h4>
+              <p class="card-description">Operationally Critical Threat, Asset, and Vulnerability Evaluation. Self-directed risk assessment. Good for organizations new to risk management.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Risk Management Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Risk Management Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Executive Sponsorship:</strong> Risk management must have board/C-suite visibility. Security is a business issue, not just IT.</p>
+              <p><strong>2. Quantify Where Possible:</strong> Use FAIR or similar to express risk in dollars. Enables comparison with business investments.</p>
+              <p><strong>3. Continuous Process:</strong> Risk assessment is not annual checkbox. Continuous monitoring, regular reviews, event-triggered reassessment.</p>
+              <p><strong>4. Document Everything:</strong> Risk register, treatment decisions, acceptance rationale. Creates accountability and audit trail.</p>
+              <p><strong>5. Align to Business:</strong> Risk appetite defined by business leadership. Security implements controls to achieve risk tolerance.</p>
+              <p><strong>6. Third-Party Risk:</strong> Vendors and partners extend your attack surface. Include supply chain in risk assessments.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="compliance-frameworks.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Compliance Frameworks</div>
+          </a>
+          <a href="vendor-risk.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Vendor Risk Management →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

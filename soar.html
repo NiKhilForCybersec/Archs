@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOAR | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to SOAR - Security Orchestration, Automation and Response with playbook examples and integration patterns.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="soc-operations.html" class="sidebar-nav-link">SOC Overview</a></li>
+          <li class="sidebar-nav-item"><a href="siem.html" class="sidebar-nav-link">SIEM</a></li>
+          <li class="sidebar-nav-item"><a href="soar.html" class="sidebar-nav-link active">SOAR</a></li>
+          <li class="sidebar-nav-item"><a href="incident-response.html" class="sidebar-nav-link">Incident Response</a></li>
+          <li class="sidebar-nav-item"><a href="threat-hunting.html" class="sidebar-nav-link">Threat Hunting</a></li>
+          <li class="sidebar-nav-item"><a href="threat-intel.html" class="sidebar-nav-link">Threat Intelligence</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>SOAR</span>
+          </div>
+          <h1>SOAR (Security Orchestration, Automation & Response)</h1>
+          <p class="page-description">SOAR platforms enable security teams to define incident analysis and response procedures in digital workflows that can be executed consistently, either fully automated or with human approval gates. SOAR connects your security tools into unified response playbooks.</p>
+        </div>
+
+        <section>
+          <h2 id="components">SOAR Components</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              </div>
+              <h4 class="card-title">Orchestration</h4>
+              <p class="card-description">Connect security tools via APIs. Query SIEM, enrich with threat intel, take actions in EDR, update ticketing — all in one workflow.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-green);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              </div>
+              <h4 class="card-title">Automation</h4>
+              <p class="card-description">Execute repetitive tasks without human intervention. Auto-enrich IOCs, auto-block malicious IPs, auto-disable compromised accounts.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              </div>
+              <h4 class="card-title">Playbooks</h4>
+              <p class="card-description">Codified incident response procedures. Visual workflows define steps, decision points, and actions for each alert type.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-yellow);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+              </div>
+              <h4 class="card-title">Case Management</h4>
+              <p class="card-description">Track incidents from detection to resolution. Evidence collection, timeline, collaboration, and post-incident documentation.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="comparison">Manual vs. SOAR Response</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Manual Response (No SOAR)
+              </div>
+              <div class="comparison-box-content">
+                <p><strong>Phishing Alert Received:</strong></p>
+                <ul>
+                  <li>Analyst opens SIEM alert, copies IOCs</li>
+                  <li>Opens VirusTotal, pastes hash, waits</li>
+                  <li>Opens threat intel platform, searches sender</li>
+                  <li>Opens email gateway, searches for similar emails</li>
+                  <li>Opens EDR, searches for file execution</li>
+                  <li>Opens ticketing, creates incident</li>
+                  <li>Opens email gateway, creates block rule</li>
+                  <li>Documents everything in ticket</li>
+                </ul>
+                <div class="info-box danger" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Time: 25-45 minutes per alert</strong><br>Inconsistent execution, analyst fatigue, copy-paste errors</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                SOAR-Automated Response
+              </div>
+              <div class="comparison-box-content">
+                <p><strong>Phishing Playbook Triggered:</strong></p>
+                <ul>
+                  <li>SIEM alert triggers SOAR playbook</li>
+                  <li>Auto-extracts IOCs (sender, URLs, hashes)</li>
+                  <li>Parallel enrichment: VT, TI, email gateway</li>
+                  <li>Auto-searches EDR for file execution</li>
+                  <li>Auto-creates enriched ticket with timeline</li>
+                  <li>Auto-blocks sender domain if malicious</li>
+                  <li>Analyst reviews enriched case for approval</li>
+                  <li>One-click containment if needed</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Time: 2-5 minutes per alert</strong><br>Consistent execution, analyst focuses on decisions not data collection</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="architecture">SOAR Architecture</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 400" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="400" fill="#0f1117"/>
+              
+              <!-- Alert Sources -->
+              <rect x="30" y="50" width="150" height="300" rx="8" fill="rgba(239, 68, 68, 0.05)" stroke="#ef4444" stroke-dasharray="4"/>
+              <text x="105" y="75" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">ALERT SOURCES</text>
+              
+              <rect x="45" y="95" width="120" height="35" rx="4" fill="#1e2430" stroke="#ef4444"/>
+              <text x="105" y="117" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">SIEM</text>
+              
+              <rect x="45" y="140" width="120" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="105" y="162" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">EDR/XDR</text>
+              
+              <rect x="45" y="185" width="120" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="105" y="207" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Email Security</text>
+              
+              <rect x="45" y="230" width="120" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="105" y="252" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Cloud Security</text>
+              
+              <rect x="45" y="275" width="120" height="35" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="105" y="297" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Identity (UEBA)</text>
+              
+              <!-- SOAR Platform -->
+              <rect x="230" y="50" width="360" height="300" rx="8" fill="rgba(16, 185, 129, 0.05)" stroke="#10b981" stroke-width="2"/>
+              <text x="410" y="80" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="600">SOAR PLATFORM</text>
+              
+              <!-- Playbook Engine -->
+              <rect x="250" y="100" width="150" height="110" rx="6" fill="#1e2430" stroke="#8b5cf6"/>
+              <text x="325" y="125" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Playbook Engine</text>
+              <text x="325" y="150" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Visual Workflow Builder</text>
+              <text x="325" y="167" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Conditional Logic</text>
+              <text x="325" y="184" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Human Approval Gates</text>
+              <text x="325" y="201" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Parallel Execution</text>
+              
+              <!-- Integration Hub -->
+              <rect x="420" y="100" width="150" height="110" rx="6" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="495" y="125" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Integration Hub</text>
+              <text x="495" y="150" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">300+ Integrations</text>
+              <text x="495" y="167" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">REST API Connectors</text>
+              <text x="495" y="184" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Custom Scripts</text>
+              <text x="495" y="201" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Webhooks</text>
+              
+              <!-- Case Management -->
+              <rect x="250" y="225" width="150" height="80" rx="6" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="325" y="255" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Case Management</text>
+              <text x="325" y="277" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Incident Tracking</text>
+              <text x="325" y="294" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Evidence Collection</text>
+              
+              <!-- Metrics -->
+              <rect x="420" y="225" width="150" height="80" rx="6" fill="#1e2430" stroke="#06b6d4"/>
+              <text x="495" y="255" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Analytics</text>
+              <text x="495" y="277" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">MTTD / MTTR</text>
+              <text x="495" y="294" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Playbook Metrics</text>
+              
+              <!-- Response Actions -->
+              <rect x="640" y="50" width="180" height="300" rx="8" fill="rgba(59, 130, 246, 0.05)" stroke="#3b82f6" stroke-dasharray="4"/>
+              <text x="730" y="75" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">RESPONSE ACTIONS</text>
+              
+              <rect x="655" y="95" width="150" height="30" rx="4" fill="#1e2430" stroke="#10b981"/>
+              <text x="730" y="115" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="9">Isolate Endpoint</text>
+              
+              <rect x="655" y="135" width="150" height="30" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="730" y="155" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Block IP/Domain</text>
+              
+              <rect x="655" y="175" width="150" height="30" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="730" y="195" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Disable User</text>
+              
+              <rect x="655" y="215" width="150" height="30" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="730" y="235" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Quarantine Email</text>
+              
+              <rect x="655" y="255" width="150" height="30" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="730" y="275" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Create Ticket</text>
+              
+              <rect x="655" y="295" width="150" height="30" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="730" y="315" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Send Notification</text>
+              
+              <!-- Arrows -->
+              <path d="M180 200 L230 200" stroke="#ef4444" stroke-width="2" fill="none"/>
+              <path d="M590 200 L640 200" stroke="#3b82f6" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="playbook">Example Playbook: Phishing Response</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Automated Phishing Investigation Playbook</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Trigger: Email Security Alert</div>
+                  <div class="flow-step-description">User reports phishing via "Report Phish" button or email gateway detects suspicious message</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Alert Received</span></div>
+                    <pre><code>Alert Source: Microsoft Defender for Office 365
+Alert Type: PhishingMessage
+Confidence: High
+
+Reported Email:
+  Subject: "Urgent: Your account will be suspended"
+  Sender: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="700315130502190409301d19130240031f16045d030500001f02045e131f1d">[email&#160;protected]</a>
+  Recipient: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="016b726c68756941626e6f756e726e2f626e6c">[email&#160;protected]</a>
+  Received: 2024-01-15 09:23:45 UTC
+  
+Attachments: invoice.html
+URLs: https://micr0soft-verify.com/login</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Auto-Extract IOCs</div>
+                  <div class="flow-step-description">SOAR parses email and extracts all indicators of compromise</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">IOC Extraction</span></div>
+                    <pre><code>Extracted Indicators:
+├── Sender Domain: micr0soft-support.com
+├── Reply-To: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bfc9dacdd6d9c6ffd2ded6d392ccdadccacdda91c7c6c5">[email&#160;protected]</a>  
+├── URLs:
+│   ├── https://micr0soft-verify.com/login
+│   └── https://cdn.malware-host.net/payload.js
+├── Attachment Hash: 
+│   └── SHA256: a1b2c3d4e5f6...
+├── IP Addresses:
+│   └── 185.234.72.19 (email origin)
+└── Sending Infrastructure:
+    └── SPF: FAIL, DKIM: FAIL, DMARC: FAIL</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Parallel Enrichment (Automated)</div>
+                  <div class="flow-step-description">SOAR queries multiple threat intel sources simultaneously</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Enrichment Results</span></div>
+                    <pre><code>VirusTotal (URL):
+  https://micr0soft-verify.com/login
+  Detection: 47/89 engines flagged as PHISHING
+  First Seen: 2 days ago
+  
+VirusTotal (Hash):
+  SHA256: a1b2c3d4e5f6...
+  Detection: 38/72 engines flagged as TROJAN
+  Family: HTML/Phishing.Agent
+  
+Domain WHOIS:
+  micr0soft-support.com
+  Registered: 3 days ago
+  Registrar: NameCheap (privacy protected)
+  
+IP Reputation (185.234.72.19):
+  Location: Romania
+  ASN: Bulletproof Hosting Provider
+  Threat Intel: Known phishing infrastructure
+  
+URLscan.io:
+  Screenshot captured: Fake Microsoft login page
+  Credential harvesting form detected</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Scope Assessment</div>
+                  <div class="flow-step-description">SOAR searches for other recipients and checks for user interaction</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Impact Analysis</span></div>
+                    <pre><code>Email Gateway Search:
+  Query: sender:*@micr0soft-support.com OR 
+         url:*micr0soft-verify.com*
+  
+  Recipients Found: 47 users
+  Delivered: 42
+  Quarantined: 5
+  
+EDR Search (URL access):
+  Query: NetworkEvents 
+         | where RemoteUrl contains "micr0soft-verify"
+  
+  Users who clicked: 3
+    - jsmith (reported)
+    - mwilson (clicked, no credentials entered)
+    - klee (clicked, CREDENTIALS ENTERED ⚠️)
+
+Proxy Logs:
+  Confirmed klee accessed site for 4 minutes
+  POST request detected (credential submission likely)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Human Approval Gate</div>
+                  <div class="flow-step-description">Analyst reviews enriched case and approves containment actions</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Approval Request</span></div>
+                    <pre><code>═══════════════════════════════════════════════════════════
+  CASE: PHISH-2024-0892 - Credential Harvesting Campaign
+  Severity: HIGH (credential compromise confirmed)
+═══════════════════════════════════════════════════════════
+
+SUMMARY:
+  47 users targeted, 3 clicked, 1 compromised (klee)
+  Confirmed phishing with credential harvesting
+  
+RECOMMENDED ACTIONS (Awaiting Approval):
+  
+  [ APPROVE ] [ REJECT ] [ MODIFY ]
+  
+  1. Force password reset for <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="503b3c353510333f3e243f233f7e333f3d">[email&#160;protected]</a>
+  2. Revoke all active sessions for klee
+  3. Block sender domain at email gateway
+  4. Block malicious URLs at proxy
+  5. Delete emails from 42 remaining mailboxes
+  6. Notify 47 affected users
+
+Analyst: Click APPROVE to execute all actions
+         Click MODIFY to select specific actions</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">6</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Automated Containment</div>
+                  <div class="flow-step-description">Upon approval, SOAR executes all containment actions</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Execution Log</span></div>
+                    <pre><code>Actions Executed (approved by analyst T1 at 09:47:23):
+
+✓ [09:47:24] Entra ID: Password reset forced for klee
+✓ [09:47:25] Entra ID: All sessions revoked for klee
+✓ [09:47:26] Defender 365: Sender domain blocked
+✓ [09:47:27] Zscaler: URL blocked at proxy
+✓ [09:47:28] Defender 365: 42 emails deleted (soft delete)
+✓ [09:47:45] Email: Notification sent to 47 users
+✓ [09:47:46] Teams: Alert posted to #security-incidents
+✓ [09:47:47] ServiceNow: Ticket INC0089234 created
+
+Containment Time: 24 seconds (automated)
+Total Case Time: 4 minutes 12 seconds
+
+Case Status: CONTAINED - Pending Follow-up
+Next Steps: Security awareness training for klee</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">SOAR Vendor Comparison</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Microsoft Sentinel (Logic Apps)</div>
+            <div class="vendor-item">Palo Alto XSOAR</div>
+            <div class="vendor-item">Splunk SOAR</div>
+            <div class="vendor-item">Tines</div>
+            <div class="vendor-item">Torq</div>
+            <div class="vendor-item">Swimlane</div>
+            <div class="vendor-item">Google Chronicle SOAR</div>
+            <div class="vendor-item">IBM QRadar SOAR</div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>XSOAR</th>
+                  <th>Splunk SOAR</th>
+                  <th>Tines</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Integrations</td>
+                  <td class="check-yes">✓ 900+</td>
+                  <td class="check-yes">✓ 350+</td>
+                  <td class="check-yes">✓ 300+ (any API)</td>
+                </tr>
+                <tr>
+                  <td>No-Code Builder</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓ (drag-drop)</td>
+                </tr>
+                <tr>
+                  <td>Case Management</td>
+                  <td class="check-yes">✓ Built-in</td>
+                  <td class="check-yes">✓ Built-in</td>
+                  <td class="check-partial">Via integrations</td>
+                </tr>
+                <tr>
+                  <td>Threat Intel Mgmt</td>
+                  <td class="check-yes">✓ TIM module</td>
+                  <td class="check-partial">Via integrations</td>
+                  <td class="check-partial">Via integrations</td>
+                </tr>
+                <tr>
+                  <td>SIEM Integration</td>
+                  <td class="check-yes">✓ Any</td>
+                  <td class="check-yes">✓ Native Splunk</td>
+                  <td class="check-yes">✓ Any</td>
+                </tr>
+                <tr>
+                  <td>Pricing Model</td>
+                  <td>Per endpoint</td>
+                  <td>Per action</td>
+                  <td>Per user (unlimited actions)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">SOAR Implementation Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with High-Volume, Low-Complexity:</strong> Automate phishing triage, IOC enrichment, and user-reported incidents first. These have clear ROI.</p>
+              <p><strong>2. Use Human Approval Gates:</strong> Don't fully automate destructive actions (disable user, isolate host) initially. Build trust with semi-automation.</p>
+              <p><strong>3. Document Existing Processes First:</strong> Playbooks should codify what analysts already do. Don't redesign IR during SOAR implementation.</p>
+              <p><strong>4. Measure Time Saved:</strong> Track MTTR before and after. Quantify analyst hours saved per playbook execution.</p>
+              <p><strong>5. Iterate on Playbooks:</strong> Start simple, add branches and edge cases over time. A working basic playbook beats a perfect complex one.</p>
+              <p><strong>6. Maintain Integrations:</strong> API changes break playbooks. Assign ownership for integration health monitoring.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="

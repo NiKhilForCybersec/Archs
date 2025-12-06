@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zero Trust Network Access (ZTNA) | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to ZTNA - application-specific access replacing VPN with identity-centric, least-privilege connectivity.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">2. Network Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="firewalls.html" class="sidebar-nav-link">Next-Gen Firewalls</a></li>
+          <li class="sidebar-nav-item"><a href="dmz.html" class="sidebar-nav-link">DMZ Architecture</a></li>
+          <li class="sidebar-nav-item"><a href="segmentation.html" class="sidebar-nav-link">Network Segmentation</a></li>
+          <li class="sidebar-nav-item"><a href="micro-segmentation.html" class="sidebar-nav-link">Micro-Segmentation</a></li>
+          <li class="sidebar-nav-item"><a href="ztna.html" class="sidebar-nav-link active">ZTNA</a></li>
+          <li class="sidebar-nav-item"><a href="dns-security.html" class="sidebar-nav-link">DNS Security</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Related</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="vpn.html" class="sidebar-nav-link">Traditional VPN</a></li>
+          <li class="sidebar-nav-item"><a href="sase.html" class="sidebar-nav-link">SASE</a></li>
+          <li class="sidebar-nav-item"><a href="conditional-access.html" class="sidebar-nav-link">Conditional Access</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Network Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>ZTNA</span>
+          </div>
+          <h1>Zero Trust Network Access (ZTNA)</h1>
+          <p class="page-description">ZTNA provides secure, identity-based access to specific applications rather than entire network segments. It implements the "never trust, always verify" principle by authenticating users and validating device health before granting least-privilege access to individual applications.</p>
+        </div>
+
+        <section>
+          <h2 id="comparison">VPN vs. ZTNA</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Traditional VPN
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Network-level access (full LAN connectivity)</li>
+                  <li>Connect once → access everything</li>
+                  <li>Implicit trust after authentication</li>
+                  <li>Visible network perimeter (VPN gateway IP)</li>
+                  <li>Complex split-tunneling decisions</li>
+                  <li>Lateral movement possible after compromise</li>
+                  <li>Hair-pinning traffic through datacenter</li>
+                  <li>Limited device posture checking</li>
+                </ul>
+
+                <div class="flow-vertical" style="margin-top: var(--space-lg);">
+                  <div class="flow-vertical-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">User connects to VPN</div>
+                      <div class="flow-step-description">IPsec/SSL tunnel to VPN gateway</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step danger">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Full network access granted</div>
+                      <div class="flow-step-description">User can reach ALL internal resources (10.0.0.0/8)</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step danger">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Attacker pivots laterally</div>
+                      <div class="flow-step-description">Compromised laptop → scans internal network → finds DC</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Zero Trust Network Access
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Application-level access (specific apps only)</li>
+                  <li>Authenticate per-application</li>
+                  <li>Continuous verification (re-evaluate risk)</li>
+                  <li>Dark cloud (apps invisible to internet)</li>
+                  <li>No network-level access needed</li>
+                  <li>Lateral movement prevented by design</li>
+                  <li>Direct-to-app (cloud-delivered)</li>
+                  <li>Deep device posture assessment</li>
+                </ul>
+
+                <div class="flow-vertical" style="margin-top: var(--space-lg);">
+                  <div class="flow-vertical-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">User requests specific app</div>
+                      <div class="flow-step-description">SAP ERP via ZTNA connector</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step success">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Identity + device verified</div>
+                      <div class="flow-step-description">MFA + compliant device + user risk = low</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step success">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Access ONLY to SAP</div>
+                      <div class="flow-step-description">No network access, can't see/reach other systems</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="architecture">ZTNA Architecture</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 420" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="420" fill="#0f1117"/>
+              
+              <!-- User/Device -->
+              <rect x="30" y="150" width="140" height="120" rx="8" fill="rgba(59, 130, 246, 0.05)" stroke="#3b82f6" stroke-dasharray="4"/>
+              <text x="100" y="175" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">USER + DEVICE</text>
+              
+              <rect x="45" y="195" width="110" height="25" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="100" y="212" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">ZTNA Agent</text>
+              
+              <rect x="45" y="230" width="110" height="25" rx="4" fill="#1e2430" stroke="#10b981"/>
+              <text x="100" y="247" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="8">Device Posture ✓</text>
+              
+              <!-- ZTNA Cloud -->
+              <rect x="220" y="50" width="380" height="320" rx="8" fill="rgba(139, 92, 246, 0.05)" stroke="#8b5cf6" stroke-width="2"/>
+              <text x="410" y="80" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="600">ZTNA SERVICE (CLOUD)</text>
+              
+              <!-- Policy Engine -->
+              <rect x="250" y="110" width="160" height="80" rx="6" fill="#1e2430" stroke="#f59e0b"/>
+              <text x="330" y="135" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Policy Engine</text>
+              <text x="330" y="155" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Identity Verification</text>
+              <text x="330" y="170" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Device Posture Check</text>
+              <text x="330" y="185" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Risk Assessment</text>
+              
+              <!-- IdP Integration -->
+              <rect x="430" y="110" width="150" height="80" rx="6" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="505" y="135" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Identity Provider</text>
+              <text x="505" y="155" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Entra ID / Okta</text>
+              <text x="505" y="170" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">SAML / OIDC</text>
+              <text x="505" y="185" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">MFA</text>
+              
+              <!-- Service Edge -->
+              <rect x="250" y="210" width="320" height="70" rx="6" fill="#1e2430" stroke="#10b981"/>
+              <text x="410" y="235" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="500">Service Edge / PoPs</text>
+              <text x="410" y="255" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Global edge network — nearest PoP to user</text>
+              <text x="410" y="270" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="8">TLS termination • Policy enforcement • Micro-tunnels</text>
+              
+              <!-- App Connectors -->
+              <rect x="250" y="300" width="320" height="55" rx="6" fill="#1e2430" stroke="#06b6d4"/>
+              <text x="410" y="322" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">Application Connectors</text>
+              <text x="410" y="342" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Outbound-only connections to cloud • No inbound firewall rules</text>
+              
+              <!-- Private Apps -->
+              <rect x="650" y="100" width="170" height="220" rx="8" fill="rgba(16, 185, 129, 0.05)" stroke="#10b981" stroke-dasharray="4"/>
+              <text x="735" y="125" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">PRIVATE APPS</text>
+              <text x="735" y="145" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">(Invisible to Internet)</text>
+              
+              <rect x="670" y="165" width="130" height="30" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="735" y="185" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">SAP ERP</text>
+              
+              <rect x="670" y="205" width="130" height="30" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="735" y="225" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Internal Wiki</text>
+              
+              <rect x="670" y="245" width="130" height="30" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="735" y="265" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Jenkins CI/CD</text>
+              
+              <rect x="670" y="285" width="130" height="30" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="735" y="305" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Database Admin</text>
+              
+              <!-- Arrows -->
+              <path d="M170 210 L220 210" stroke="#3b82f6" stroke-width="2" fill="none"/>
+              <text x="195" y="200" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">TLS</text>
+              
+              <path d="M600 245 L650 245" stroke="#10b981" stroke-width="2" fill="none"/>
+              <text x="625" y="235" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">µTunnel</text>
+            </svg>
+          </div>
+
+          <div class="info-box info" style="margin-top: var(--space-lg);">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Key Architecture Concepts
+            </div>
+            <div class="info-box-content">
+              <p><strong>Dark Cloud:</strong> Applications are not exposed to the internet. No public IPs, no open firewall ports. Attackers can't scan/discover them.</p>
+              <p><strong>Inside-Out Connectivity:</strong> Connectors make outbound connections to the ZTNA cloud. No inbound firewall rules required.</p>
+              <p><strong>Micro-Tunnels:</strong> Each user-to-app session is a separate encrypted tunnel. No lateral movement between apps.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="access-flow">ZTNA Access Flow: Zscaler ZPA Example</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">User Accessing Internal SAP System via ZTNA</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Launches Application</div>
+                  <div class="flow-step-description">User clicks on SAP bookmark or enters internal URL sap.corp.internal</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Client Request</span></div>
+                    <pre><code>Application: SAP ERP (sap.corp.internal)
+User: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8be1f8e6e2ffe3cbe8e4e5ffe4f8e4a5e8e4e6">[email&#160;protected]</a>
+Device: LAPTOP-JS001 (Windows 11 Enterprise)
+Location: Home Office (Residential IP)
+ZPA Client: v23.1.45 (running)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Device Posture Assessment</div>
+                  <div class="flow-step-description">ZTNA client evaluates device security state before requesting access</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Posture Check</span></div>
+                    <pre><code>Device Posture Evaluation:
+├── OS Version: Windows 11 22H2 ✓
+├── Disk Encryption: BitLocker ENABLED ✓
+├── Firewall: Windows Firewall ON ✓
+├── Antivirus: Defender ATP ACTIVE ✓
+│   └── Signatures: Updated 2h ago ✓
+├── Domain Joined: Yes (CONTOSO.COM) ✓
+├── Certificate: Valid machine cert ✓
+└── Patch Level: KB5034441 installed ✓
+
+Posture Score: 95/100 (COMPLIANT)
+Posture Profile Match: "Corporate-Managed-High"</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Identity Authentication</div>
+                  <div class="flow-step-description">User authenticates via SAML to corporate IdP (Entra ID)</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Authentication</span></div>
+                    <pre><code>SAML Authentication Request:
+  IdP: login.microsoftonline.com
+  SP: Zscaler ZPA
+  
+User Authentication:
+  Method: Windows Hello for Business (Passwordless)
+  MFA Claim: ✓ (Biometric)
+  
+SAML Response:
+  Subject: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="452f36282c312d05262a2b312a362a6b262a28">[email&#160;protected]</a>
+  Attributes:
+    - groups: ["SAP-Users", "Finance", "US-Employees"]
+    - department: Finance
+    - title: Financial Analyst
+  Session: Valid for 8 hours</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Policy Evaluation</div>
+                  <div class="flow-step-description">ZTNA broker evaluates access policy for this user + device + app combination</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Policy Match</span></div>
+                    <pre><code>Access Policy Evaluation:
+┌────────────────────────────────────────────────────────┐
+│ Policy: "SAP Access - Finance Users"                   │
+├────────────────────────────────────────────────────────┤
+│ Conditions:                                            │
+│   User Groups: SAP-Users ✓ MATCH                       │
+│   Application: SAP ERP ✓ MATCH                         │
+│   Device Posture: Corporate-Managed-High ✓ MATCH       │
+│   Client Type: ZPA Client ✓                            │
+├────────────────────────────────────────────────────────┤
+│ Access: ALLOW                                          │
+│ App Connector Group: "Datacenter-SAP-Connectors"       │
+│ Timeout: 8 hours                                       │
+│ Idle Timeout: 30 minutes                               │
+└────────────────────────────────────────────────────────┘
+
+Decision: GRANT ACCESS to sap.corp.internal</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Micro-Tunnel Establishment</div>
+                  <div class="flow-step-description">Broker instructs client and connector to establish direct micro-tunnel</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Tunnel Setup</span></div>
+                    <pre><code>Tunnel Establishment:
+
+Client Side:
+  ZPA Client → Nearest Service Edge (Seattle PoP)
+  Protocol: DTLS 1.2
+  Encryption: AES-256-GCM
+  Source: User Device
+  
+Connector Side:
+  App Connector → Same Service Edge
+  Protocol: TLS 1.3 (persistent connection)
+  Connector: zpa-connector-dc01.corp.internal
+  
+Broker Stitches Connections:
+  Client Tunnel ←→ Service Edge ←→ Connector Tunnel
+  
+Result: 
+  End-to-end encrypted micro-tunnel
+  User Device → SAP (and ONLY SAP)
+  Latency: 23ms (direct path)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">6</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Application Access Granted</div>
+                  <div class="flow-step-description">User connects to SAP. No network-level access to any other system.</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Access Log</span></div>
+                    <pre><code>Access Granted:
+  User: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="afc5dcc2c6dbc7efccc0c1dbc0dcc081ccc0c2">[email&#160;protected]</a>
+  Application: SAP ERP
+  Internal FQDN: sap.corp.internal
+  Internal IP: 10.50.1.25 (via connector)
+  
+User CAN access:
+  ✓ sap.corp.internal:443 (HTTPS)
+  ✓ sap.corp.internal:3200 (SAP GUI)
+  
+User CANNOT access:
+  ✗ 10.50.1.0/24 (other servers)
+  ✗ 10.0.0.0/8 (any other network)
+  ✗ dc01.corp.internal (domain controller)
+  ✗ Any lateral movement
+  
+Session Monitoring:
+  - Continuous posture re-evaluation
+  - Traffic inspection available
+  - Session recording optional</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">ZTNA Vendor Comparison</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Zscaler ZPA</div>
+            <div class="vendor-item">Palo Alto Prisma Access</div>
+            <div class="vendor-item">Cloudflare Access</div>
+            <div class="vendor-item">Netskope Private Access</div>
+            <div class="vendor-item">Microsoft Entra Private Access</div>
+            <div class="vendor-item">Cisco Secure Access</div>
+            <div class="vendor-item">Fortinet ZTNA</div>
+            <div class="vendor-item">Akamai EAA</div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>Zscaler ZPA</th>
+                  <th>Cloudflare Access</th>
+                  <th>Microsoft Entra</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Architecture</td>
+                  <td>Cloud-native broker</td>
+                  <td>Edge-based</td>
+                  <td>Cloud + connector</td>
+                </tr>
+                <tr>
+                  <td>Global PoPs</td>
+                  <td>150+</td>
+                  <td>300+ (Cloudflare network)</td>
+                  <td>60+ Azure regions</td>
+                </tr>
+                <tr>
+                  <td>Browser Access</td>
+                  <td class="check-yes">✓ Browser Isolation</td>
+                  <td class="check-yes">✓ Native</td>
+                  <td class="check-yes">✓ App Proxy</td>
+                </tr>
+                <tr>
+                  <td>Agent-based</td>
+                  <td class="check-yes">✓ ZPA Client</td>
+                  <td class="check-yes">✓ WARP</td>
+                  <td class="check-yes">✓ Global Secure Access</td>
+                </tr>
+                <tr>
+                  <td>Device Posture</td>
+                  <td class="check-yes">✓ Deep</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓ Intune integration</td>
+                </tr>
+                <tr>
+                  <td>IdP Integration</td>
+                  <td class="check-yes">✓ Any SAML/OIDC</td>
+                  <td class="check-yes">✓ Any SAML/OIDC</td>
+                  <td class="check-yes">✓ Native Entra</td>
+                </tr>
+                <tr>
+                  <td>SASE Bundle</td>
+                  <td class="check-yes">✓ ZIA + ZPA</td>
+                  <td class="check-yes">✓ Cloudflare One</td>
+                  <td class="check-partial">Separate products</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">ZTNA Implementation Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with High-Value Apps:</strong> Begin with crown jewel applications (ERP, HR systems, admin consoles). Don't try to migrate everything at once.</p>
+              <p><strong>2. Define Device Posture Baseline:</strong> Determine minimum security requirements (encryption, AV, patch level) before deployment. Be prepared to handle exceptions.</p>
+              <p><strong>3. Integrate with Existing IdP:</strong> Leverage your existing identity provider (Entra, Okta, Ping) for consistent MFA and SSO experience.</p>
+              <p><strong>4. Deploy Connectors Redundantly:</strong> At least 2 connectors per application segment for high availability. Place connectors close to applications.</p>
+              <p><strong>5. Plan for Hybrid:</strong> Most organizations will run ZTNA alongside VPN during transition. Plan coexistence strategy.</p>
+              <p><strong>6. Monitor and Optimize:</strong> Track latency, user experience, and policy hits. Optimize connector placement and policy specificity over time.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="micro-segmentation.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <di

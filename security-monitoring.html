@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Monitoring | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Security Monitoring - detection engineering, alert management, and monitoring strategies.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">6. Detection & Response</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="siem.html" class="sidebar-nav-link">SIEM</a></li>
+          <li class="sidebar-nav-item"><a href="security-monitoring.html" class="sidebar-nav-link active">Security Monitoring</a></li>
+          <li class="sidebar-nav-item"><a href="incident-response.html" class="sidebar-nav-link">Incident Response</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Detection & Response</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Monitoring</span>
+          </div>
+          <h1>Security Monitoring</h1>
+          <p class="page-description">Security monitoring is the continuous observation of systems, networks, and user behavior to detect threats. Effective monitoring balances comprehensive coverage with actionable alerts, avoiding both blind spots and alert fatigue.</p>
+        </div>
+
+        <section>
+          <h2 id="strategy">Monitoring Strategy</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Detection Engineering Approach</span></div>
+            <pre><code># Detection Engineering Framework
+
+1. IDENTIFY THREATS (What are we looking for?)
+   ┌────────────────────────────────────────────────────┐
+   │ • MITRE ATT&CK techniques relevant to your org   │
+   │ • Threat intelligence (industry, geography)       │
+   │ • Historical incidents and near-misses            │
+   │ • Compliance requirements                          │
+   └────────────────────────────────────────────────────┘
+                            │
+2. MAP TO DATA SOURCES (What data do we need?)
+   ┌────────────────────────────────────────────────────┐
+   │ • Endpoint: Process, file, network, registry     │
+   │ • Network: Flow, DNS, proxy, firewall            │
+   │ • Identity: Authentication, authorization         │
+   │ • Cloud: API, control plane, data plane          │
+   │ • Application: Web, database, custom apps         │
+   └────────────────────────────────────────────────────┘
+                            │
+3. CREATE DETECTIONS (How do we find it?)
+   ┌────────────────────────────────────────────────────┐
+   │ • Signature-based (known IOCs)                    │
+   │ • Behavioral (anomaly, baseline deviation)        │
+   │ • Threshold-based (brute force, volume)           │
+   │ • Correlation (multiple events = incident)        │
+   └────────────────────────────────────────────────────┘
+                            │
+4. TUNE AND VALIDATE (Does it work?)
+   ┌────────────────────────────────────────────────────┐
+   │ • Test with atomic red team / purple team         │
+   │ • Measure false positive rate                     │
+   │ • Tune thresholds and exclusions                  │
+   │ • Document and version control                     │
+   └────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="data-sources">Key Data Sources</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data Source</th>
+                  <th>Detects</th>
+                  <th>Key Fields</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Windows Event Logs</strong></td>
+                  <td>Logon, process execution, privilege use</td>
+                  <td>4624, 4625, 4688, 4672</td>
+                </tr>
+                <tr>
+                  <td><strong>EDR Telemetry</strong></td>
+                  <td>Process tree, file ops, network</td>
+                  <td>Parent/child, command line, hashes</td>
+                </tr>
+                <tr>
+                  <td><strong>Proxy/SWG Logs</strong></td>
+                  <td>C2, exfiltration, malware downloads</td>
+                  <td>URL, user, bytes, response code</td>
+                </tr>
+                <tr>
+                  <td><strong>DNS Logs</strong></td>
+                  <td>DGA, DNS tunneling, C2</td>
+                  <td>Query, response, client IP</td>
+                </tr>
+                <tr>
+                  <td><strong>Cloud Audit Logs</strong></td>
+                  <td>API abuse, privilege escalation</td>
+                  <td>Principal, action, resource, time</td>
+                </tr>
+                <tr>
+                  <td><strong>Email Gateway</strong></td>
+                  <td>Phishing, BEC, malware</td>
+                  <td>Sender, recipient, attachments, URLs</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="alert-management">Alert Management</h2>
+          
+          <div class="info-box warning">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Alert Fatigue is Real
+            </div>
+            <div class="info-box-content">
+              <p><strong>Problem:</strong> SOC teams ignore alerts when overwhelmed. Critical alerts get lost in noise.</p>
+              <p><strong>Solution:</strong> Quality over quantity. Every alert should be actionable. If it's not investigated, delete it.</p>
+              <p><strong>Target:</strong> Less than 50 alerts per analyst per day. Higher = tune harder.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Monitoring Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Security Monitoring Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with High-Value:</strong> Crown jewels first. Monitor what matters most before expanding.</p>
+              <p><strong>2. Tune Relentlessly:</strong> False positives kill SOC productivity. Tune weekly, track metrics.</p>
+              <p><strong>3. Use ATT&CK Framework:</strong> Map detections to MITRE. Identify coverage gaps systematically.</p>
+              <p><strong>4. Test Detections:</strong> Purple team exercises. If red team bypasses, detection needs work.</p>
+              <p><strong>5. Version Control Detections:</strong> Detection rules are code. Git, code review, CI/CD.</p>
+              <p><strong>6. Measure Coverage:</strong> What % of ATT&CK techniques can you detect? Track and improve.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="siem.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← SIEM</div>
+          </a>
+          <a href="incident-response.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Incident Response →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

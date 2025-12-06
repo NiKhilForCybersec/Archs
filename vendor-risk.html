@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Risk Management | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Vendor Risk Management - third-party risk assessment, due diligence, contract security, and ongoing monitoring.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">11. Governance & Compliance</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="risk-management.html" class="sidebar-nav-link">Risk Management</a></li>
+          <li class="sidebar-nav-item"><a href="vendor-risk.html" class="sidebar-nav-link active">Vendor Risk Management</a></li>
+          <li class="sidebar-nav-item"><a href="compliance-frameworks.html" class="sidebar-nav-link">Compliance Frameworks</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Governance & Compliance</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Vendor Risk Management</span>
+          </div>
+          <h1>Vendor Risk Management</h1>
+          <p class="page-description">Your security is only as strong as your weakest vendor. Third-party risk management (TPRM) assesses, monitors, and mitigates risks from suppliers, SaaS providers, and business partners who have access to your data or systems.</p>
+        </div>
+
+        <section>
+          <h2 id="lifecycle">Vendor Risk Lifecycle</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 180" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="180" fill="#0f1117"/>
+              
+              <!-- Identify -->
+              <rect x="30" y="50" width="130" height="80" rx="6" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="95" y="80" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">IDENTIFY</text>
+              <text x="95" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Inventory vendors</text>
+              <text x="95" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Classify by risk tier</text>
+              
+              <!-- Assess -->
+              <rect x="190" y="50" width="130" height="80" rx="6" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="255" y="80" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">ASSESS</text>
+              <text x="255" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Security questionnaire</text>
+              <text x="255" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Review certifications</text>
+              
+              <!-- Contract -->
+              <rect x="350" y="50" width="130" height="80" rx="6" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="415" y="80" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">CONTRACT</text>
+              <text x="415" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Security requirements</text>
+              <text x="415" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">DPA, SLAs, audit rights</text>
+              
+              <!-- Monitor -->
+              <rect x="510" y="50" width="130" height="80" rx="6" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="575" y="80" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">MONITOR</text>
+              <text x="575" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Ongoing assessment</text>
+              <text x="575" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Breach notifications</text>
+              
+              <!-- Offboard -->
+              <rect x="670" y="50" width="130" height="80" rx="6" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="735" y="80" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">OFFBOARD</text>
+              <text x="735" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Data return/deletion</text>
+              <text x="735" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Access revocation</text>
+              
+              <!-- Arrows -->
+              <path d="M160 90 L190 90" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M320 90 L350 90" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M480 90 L510 90" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M640 90 L670 90" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray)"/>
+              
+              <defs>
+                <marker id="arrowGray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#64748b"/></marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="tiering">Vendor Risk Tiering</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tier</th>
+                  <th>Criteria</th>
+                  <th>Assessment</th>
+                  <th>Review Frequency</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="color: var(--accent-red);"><strong>Critical</strong></td>
+                  <td>Access to sensitive data, business critical, high breach impact</td>
+                  <td>Full assessment, SOC 2 Type II, pen test report, on-site audit</td>
+                  <td>Annual + continuous monitoring</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--accent-orange);"><strong>High</strong></td>
+                  <td>Access to confidential data, important but not critical</td>
+                  <td>Full questionnaire, SOC 2, ISO 27001 cert</td>
+                  <td>Annual</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--accent-yellow);"><strong>Medium</strong></td>
+                  <td>Limited data access, internal use tools</td>
+                  <td>Standard questionnaire, self-attestation</td>
+                  <td>Every 2 years</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--accent-green);"><strong>Low</strong></td>
+                  <td>No data access, commodity services</td>
+                  <td>Basic due diligence, website review</td>
+                  <td>As needed</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="assessment">Security Assessment</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Vendor Security Questionnaire Topics</span></div>
+            <pre><code># Key Assessment Areas (based on SIG Lite/Full)
+
+1. INFORMATION SECURITY PROGRAM
+   □ Dedicated security team/CISO?
+   □ Security policies documented and reviewed?
+   □ Security awareness training?
+   □ Incident response plan and testing?
+
+2. ACCESS CONTROL
+   □ Role-based access control?
+   □ MFA for all access?
+   □ Privileged access management?
+   □ Access reviews frequency?
+
+3. DATA PROTECTION
+   □ Data encryption at rest and in transit?
+   □ Data classification scheme?
+   □ DLP controls?
+   □ Data retention and deletion policies?
+
+4. NETWORK SECURITY
+   □ Firewall and segmentation?
+   □ Intrusion detection/prevention?
+   □ Vulnerability scanning frequency?
+   □ Penetration testing frequency?
+
+5. BUSINESS CONTINUITY
+   □ Disaster recovery plan?
+   □ Backup and recovery testing?
+   □ RTO/RPO commitments?
+
+6. COMPLIANCE & CERTIFICATIONS
+   □ SOC 2 Type II (request report)
+   □ ISO 27001 certified?
+   □ Industry-specific (PCI, HIPAA, etc.)?
+
+7. SUBPROCESSORS
+   □ List of subprocessors?
+   □ How are they assessed?
+   □ Notification of changes?</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="contract">Contract Security Requirements</h2>
+          
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Essential Contract Clauses
+            </div>
+            <div class="info-box-content">
+              <p><strong>Data Processing Agreement (DPA):</strong> Required for GDPR. Defines how vendor handles personal data.</p>
+              <p><strong>Security Requirements:</strong> Minimum security controls, encryption standards, access controls.</p>
+              <p><strong>Breach Notification:</strong> Notify within 24-72 hours. Provide root cause and remediation.</p>
+              <p><strong>Right to Audit:</strong> Ability to audit vendor security or receive audit reports.</p>
+              <p><strong>Subprocessor Approval:</strong> Notification and approval rights for new subprocessors.</p>
+              <p><strong>Data Return/Deletion:</strong> Upon termination, return or certify deletion of data.</p>
+              <p><strong>Cyber Insurance:</strong> Minimum coverage requirements.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Vendor Risk Platforms</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">OneTrust VRM</div>
+            <div class="vendor-item">SecurityScorecard</div>
+            <div class="vendor-item">BitSight</div>
+            <div class="vendor-item">Prevalent</div>
+            <div class="vendor-item">ProcessUnity</div>
+            <div class="vendor-item">RiskRecon (Mastercard)</div>
+            <div class="vendor-item">UpGuard</div>
+            <div class="vendor-item">Whistic</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Vendor Risk Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Vendor Risk Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Know Your Vendors:</strong> Maintain complete inventory. Shadow IT means unknown vendors with unknown risk.</p>
+              <p><strong>2. Risk-Based Approach:</strong> Focus resources on critical/high vendors. Not all vendors need full assessment.</p>
+              <p><strong>3. Leverage Certifications:</strong> SOC 2 Type II reduces questionnaire burden. Trust but verify.</p>
+              <p><strong>4. Continuous Monitoring:</strong> Annual assessments miss mid-year breaches. Use rating services for real-time visibility.</p>
+              <p><strong>5. Involve Legal:</strong> Contract clauses are your protection. Security requirements must be enforceable.</p>
+              <p><strong>6. Plan for Vendor Breach:</strong> When (not if) a vendor is breached, know your response plan.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="risk-management.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Risk Management</div>
+          </a>
+          <a href="compliance-frameworks.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Compliance Frameworks →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

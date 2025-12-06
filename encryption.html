@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encryption | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Encryption - symmetric vs asymmetric, TLS, encryption at rest, key management, and cryptographic best practices.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">6. Data Protection</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="dlp.html" class="sidebar-nav-link">Data Loss Prevention</a></li>
+          <li class="sidebar-nav-item"><a href="encryption.html" class="sidebar-nav-link active">Encryption</a></li>
+          <li class="sidebar-nav-item"><a href="key-management.html" class="sidebar-nav-link">Key Management</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Data Protection</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Encryption</span>
+          </div>
+          <h1>Encryption</h1>
+          <p class="page-description">Encryption transforms readable data into unreadable ciphertext, protecting confidentiality at rest, in transit, and in use. Understanding encryption types, algorithms, and implementation is fundamental to data protection.</p>
+        </div>
+
+        <section>
+          <h2 id="types">Encryption Types</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Symmetric Encryption
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Same key encrypts and decrypts</li>
+                  <li>Fast, efficient for large data</li>
+                  <li>Challenge: Secure key distribution</li>
+                  <li>Algorithms: AES-256, ChaCha20</li>
+                  <li>Use: Data at rest, bulk encryption</li>
+                </ul>
+                <div class="code-block" style="margin-top: var(--space-md);">
+                  <pre><code>Plaintext + Key → Ciphertext
+Ciphertext + Same Key → Plaintext
+
+Key size: 128, 192, or 256 bits
+Speed: ~1 GB/sec on modern CPUs</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+                Asymmetric Encryption
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Public key encrypts, private key decrypts</li>
+                  <li>Slower, used for small data/key exchange</li>
+                  <li>Solves key distribution problem</li>
+                  <li>Algorithms: RSA-2048+, ECDSA, Ed25519</li>
+                  <li>Use: TLS handshake, digital signatures</li>
+                </ul>
+                <div class="code-block" style="margin-top: var(--space-md);">
+                  <pre><code>Plaintext + Public Key → Ciphertext
+Ciphertext + Private Key → Plaintext
+
+RSA key: 2048-4096 bits
+Speed: ~1000x slower than symmetric</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="tls">TLS Encryption (In Transit)</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">TLS 1.3 Handshake</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Client Hello</div>
+                  <div class="flow-step-description">Client initiates connection</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Client → Server</span></div>
+                    <pre><code>ClientHello:
+  - TLS Version: 1.3
+  - Supported Cipher Suites:
+    - TLS_AES_256_GCM_SHA384
+    - TLS_CHACHA20_POLY1305_SHA256
+  - Key Share: ECDHE public key (Curve25519)
+  - SNI: api.company.com</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Server Hello + Certificate</div>
+                  <div class="flow-step-description">Server responds with certificate and key share</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Server → Client</span></div>
+                    <pre><code>ServerHello:
+  - Selected Cipher: TLS_AES_256_GCM_SHA384
+  - Key Share: Server ECDHE public key
+  
+Certificate:
+  - Server certificate (signed by CA)
+  - Certificate chain to root CA
+  
+CertificateVerify:
+  - Signature proving server owns private key</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Encrypted Communication</div>
+                  <div class="flow-step-description">Both sides derive session keys</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Session Established</span></div>
+                    <pre><code>Key Derivation:
+  Client ECDHE Private + Server ECDHE Public = Shared Secret
+  Shared Secret → HKDF → Session Keys
+
+Result:
+  - Client write key (client → server encryption)
+  - Server write key (server → client encryption)
+  - Forward secrecy: Compromise of server's long-term 
+    private key doesn't decrypt past sessions
+
+TLS 1.3 Handshake: 1 round trip (vs 2 in TLS 1.2)</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="at-rest">Encryption at Rest</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 280" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="280" fill="#0f1117"/>
+              
+              <!-- Full Disk -->
+              <rect x="30" y="40" width="180" height="200" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="120" y="70" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">FULL DISK</text>
+              <text x="120" y="90" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">BitLocker / FileVault / LUKS</text>
+              
+              <text x="50" y="120" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ Protects stolen devices</text>
+              <text x="50" y="138" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ Transparent to apps</text>
+              <text x="50" y="156" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ Hardware acceleration</text>
+              <text x="50" y="180" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">✗ No protection when running</text>
+              <text x="50" y="198" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">✗ Admin can access all data</text>
+              
+              <!-- Database -->
+              <rect x="235" y="40" width="180" height="200" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="325" y="70" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">DATABASE TDE</text>
+              <text x="325" y="90" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">SQL TDE / Oracle TDE</text>
+              
+              <text x="255" y="120" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ Encrypts data files</text>
+              <text x="255" y="138" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ Transparent to queries</text>
+              <text x="255" y="156" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ Backup encryption</text>
+              <text x="255" y="180" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">✗ DBA sees plaintext</text>
+              <text x="255" y="198" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">✗ No column-level control</text>
+              
+              <!-- Column/Field -->
+              <rect x="440" y="40" width="180" height="200" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="530" y="70" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">COLUMN/FIELD</text>
+              <text x="530" y="90" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Always Encrypted / App-level</text>
+              
+              <text x="460" y="120" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ Granular protection</text>
+              <text x="460" y="138" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ DBA can't see data</text>
+              <text x="460" y="156" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ Key per column possible</text>
+              <text x="460" y="180" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">✗ App changes required</text>
+              <text x="460" y="198" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">✗ Can't query encrypted data</text>
+              
+              <!-- Client-Side -->
+              <rect x="645" y="40" width="180" height="200" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="735" y="70" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">CLIENT-SIDE</text>
+              <text x="735" y="90" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">S3 CSE / App Encryption</text>
+              
+              <text x="665" y="120" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ Cloud provider blind</text>
+              <text x="665" y="138" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ You control keys</text>
+              <text x="665" y="156" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">✓ End-to-end protection</text>
+              <text x="665" y="180" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">✗ Key management burden</text>
+              <text x="665" y="198" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">✗ Can't use cloud features</text>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="algorithms">Recommended Algorithms</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Use Case</th>
+                  <th>Recommended</th>
+                  <th>Avoid</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Symmetric Encryption</strong></td>
+                  <td>AES-256-GCM, ChaCha20-Poly1305</td>
+                  <td>DES, 3DES, RC4, AES-ECB</td>
+                </tr>
+                <tr>
+                  <td><strong>Asymmetric Encryption</strong></td>
+                  <td>RSA-2048+, ECDSA P-256+, Ed25519</td>
+                  <td>RSA-1024, DSA</td>
+                </tr>
+                <tr>
+                  <td><strong>Key Exchange</strong></td>
+                  <td>ECDHE (Curve25519, P-256)</td>
+                  <td>Static DH, RSA key exchange</td>
+                </tr>
+                <tr>
+                  <td><strong>Hashing</strong></td>
+                  <td>SHA-256, SHA-384, SHA-3</td>
+                  <td>MD5, SHA-1</td>
+                </tr>
+                <tr>
+                  <td><strong>Password Hashing</strong></td>
+                  <td>Argon2id, bcrypt, scrypt</td>
+                  <td>MD5, SHA-1, plain SHA-256</td>
+                </tr>
+                <tr>
+                  <td><strong>TLS Version</strong></td>
+                  <td>TLS 1.3, TLS 1.2 (with strong ciphers)</td>
+                  <td>TLS 1.0, TLS 1.1, SSL 3.0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="cloud">Cloud Encryption Options</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">AWS S3 Encryption Options</span></div>
+            <pre><code># SSE-S3: AWS manages keys (simplest)
+aws s3 cp file.txt s3://bucket/ --sse AES256
+
+# SSE-KMS: You control key in AWS KMS
+aws s3 cp file.txt s3://bucket/ --sse aws:kms --sse-kms-key-id alias/my-key
+
+# SSE-C: You provide the key (AWS doesn't store it)
+aws s3 cp file.txt s3://bucket/ --sse-c --sse-c-key fileb://my-key.bin
+
+# Client-Side Encryption: Encrypt before upload
+# AWS never sees plaintext or key
+
+Comparison:
+┌─────────────────┬──────────────┬─────────────────┬────────────────┐
+│                 │ SSE-S3       │ SSE-KMS         │ Client-Side    │
+├─────────────────┼──────────────┼─────────────────┼────────────────┤
+│ Key Management  │ AWS          │ You (via KMS)   │ You (entirely) │
+│ Audit Trail     │ None         │ CloudTrail      │ Your logs      │
+│ Rotation        │ AWS auto     │ You control     │ You control    │
+│ AWS Access      │ Yes          │ Yes (with key)  │ No             │
+│ Compliance      │ Basic        │ Strong          │ Strongest      │
+└─────────────────┴──────────────┴─────────────────┴────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Encryption Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Encryption Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Encrypt Everything in Transit:</strong> TLS 1.2+ minimum, prefer TLS 1.3. No exceptions for internal traffic.</p>
+              <p><strong>2. Encrypt Sensitive Data at Rest:</strong> PII, credentials, financial data. Use column-level for high-value fields.</p>
+              <p><strong>3. Use Authenticated Encryption:</strong> AES-GCM, ChaCha20-Poly1305. Ensures integrity + confidentiality.</p>
+              <p><strong>4. Never Roll Your Own Crypto:</strong> Use established libraries (OpenSSL, libsodium, AWS Encryption SDK).</p>
+              <p><strong>5. Protect Your Keys:</strong> HSMs for highest security, KMS for cloud. Keys are more valuable than data.</p>
+              <p><strong>6. Plan for Key Rotation:</strong> Design systems to support key rotation from day one. Re-encryption strategy.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="dlp.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Data Loss Prevention</div>
+          </a>
+          <a href="key-management.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Key Management →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

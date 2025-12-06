@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDR - Endpoint Detection & Response | SecArch Reference</title>
+  <meta name="description" content="Deep dive into Endpoint Detection and Response (EDR) architecture - traditional AV vs modern EDR with detailed telemetry flows.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation (same as index.html) -->
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item">
+            <a href="index.html" class="sidebar-nav-link">Overview</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">5. Endpoint Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item">
+            <a href="edr.html" class="sidebar-nav-link">Antivirus Evolution</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="edr.html" class="sidebar-nav-link active">EDR</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="xdr.html" class="sidebar-nav-link">XDR</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="mobile-security.html" class="sidebar-nav-link">MDM/UEM</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="edr.html" class="sidebar-nav-link">Application Control</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="conditional-access.html" class="sidebar-nav-link">Device Compliance</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="browser-security.html" class="sidebar-nav-link">Browser Isolation</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="dlp.html" class="sidebar-nav-link">Endpoint DLP</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Related Sections</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item">
+            <a href="xdr.html" class="sidebar-nav-link">XDR (Extended Detection)</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="siem.html" class="sidebar-nav-link">SIEM Architecture</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="soar.html" class="sidebar-nav-link">SOAR</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="threat-intel.html" class="sidebar-nav-link">Threat Intelligence</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <a href="edr.html">Endpoint Security</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>EDR</span>
+          </div>
+          <h1>Endpoint Detection & Response (EDR)</h1>
+          <p class="page-description">
+            EDR solutions provide continuous monitoring and response capabilities for endpoints, collecting detailed telemetry about process execution, network connections, file modifications, and more to detect and respond to threats that bypass traditional prevention controls.
+          </p>
+        </div>
+
+        <!-- Overview -->
+        <section>
+          <h2 id="overview">What is EDR?</h2>
+          <p>
+            Endpoint Detection and Response (EDR) is a category of security tools that continuously monitors endpoints to detect, investigate, and respond to cyber threats. Unlike traditional antivirus that focuses on prevention through signatures, EDR assumes that some threats will bypass preventive controls and focuses on detection, investigation, and response capabilities.
+          </p>
+
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Key Concept
+            </div>
+            <div class="info-box-content">
+              <p>EDR operates on the principle of <strong>"assume breach"</strong> — rather than trying only to prevent all attacks, it focuses on detecting attacks that get through and enabling rapid response to contain damage.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Traditional vs Modern Comparison -->
+        <section>
+          <h2 id="comparison">Traditional AV vs. Modern EDR</h2>
+          
+          <div class="comparison-split">
+            <!-- Traditional Way -->
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Traditional Approach (The Problem)
+              </div>
+              <div class="comparison-box-content">
+                <h4>Signature-Based Antivirus</h4>
+                <ul>
+                  <li>Relies on known malware signatures</li>
+                  <li>Daily signature updates from vendor</li>
+                  <li>On-access and scheduled file scanning</li>
+                  <li>Simple alert: "Malware detected" or "Malware blocked"</li>
+                  <li>No visibility into process behavior</li>
+                  <li>No forensic data collection</li>
+                  <li>Manual investigation required</li>
+                </ul>
+
+                <h4 style="margin-top: var(--space-lg);">Detection Flow</h4>
+                <div class="flow-vertical">
+                  <div class="flow-vertical-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">File Downloaded</div>
+                      <div class="flow-step-description">User downloads malware.exe from email attachment</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Signature Check</div>
+                      <div class="flow-step-description">AV calculates hash, compares against signature database</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step danger">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Zero-Day Miss</div>
+                      <div class="flow-step-description">New malware variant — hash not in database — ALLOWED TO RUN</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step danger">
+                    <div class="flow-step-number">4</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Malware Executes</div>
+                      <div class="flow-step-description">No behavioral monitoring — malicious actions proceed undetected</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modern Way -->
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Modern Approach (The Solution)
+              </div>
+              <div class="comparison-box-content">
+                <h4>EDR with Behavioral Analysis</h4>
+                <ul>
+                  <li>Continuous telemetry collection from all endpoints</li>
+                  <li>Behavioral analysis and machine learning</li>
+                  <li>Process trees, command lines, network connections</li>
+                  <li>Rich context: who, what, when, where, how</li>
+                  <li>Automated response capabilities</li>
+                  <li>Full forensic timeline</li>
+                  <li>MITRE ATT&CK mapping</li>
+                </ul>
+
+                <h4 style="margin-top: var(--space-lg);">Detection Flow</h4>
+                <div class="flow-vertical">
+                  <div class="flow-vertical-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">File Downloaded</div>
+                      <div class="flow-step-description">User downloads malware.exe — sensor records file write</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Process Execution Monitored</div>
+                      <div class="flow-step-description">cmd.exe → powershell.exe -enc [base64] recorded with full command line</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step warning">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Behavioral Detection</div>
+                      <div class="flow-step-description">ML model flags: encoded PowerShell + network beacon + registry persistence</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step success">
+                    <div class="flow-step-number">4</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Automated Response</div>
+                      <div class="flow-step-description">Process killed, host isolated, alert with full context sent to SOC</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Risks Section -->
+        <section>
+          <h2 id="risks">Risks Without EDR</h2>
+          
+          <div class="info-box danger">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Critical Vulnerabilities
+            </div>
+            <div class="info-box-content">
+              <p><strong>Zero-Day Attacks:</strong> New malware variants with no existing signatures bypass traditional AV entirely. Studies show 60-70% of malware is zero-day at time of attack.</p>
+              <p><strong>Fileless Malware:</strong> Attacks living entirely in memory (PowerShell, WMI, .NET) leave no files for AV to scan. Traditional AV is blind to these techniques.</p>
+              <p><strong>Living-off-the-Land:</strong> Attackers using legitimate system tools (certutil, mshta, regsvr32) aren't flagged because the binaries are trusted.</p>
+              <p><strong>No Forensic Data:</strong> When a breach occurs, there's no telemetry to understand what happened, how, or what was accessed.</p>
+              <p><strong>Slow Response:</strong> Manual investigation can take days or weeks, allowing attackers to maintain persistence and exfiltrate data.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- EDR Architecture -->
+        <section>
+          <h2 id="architecture">EDR Architecture</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+              <!-- Background -->
+              <rect width="800" height="500" fill="#0f1117"/>
+              
+              <!-- Endpoint Zone -->
+              <rect x="30" y="30" width="280" height="440" rx="8" fill="rgba(59, 130, 246, 0.05)" stroke="#3b82f6" stroke-dasharray="4"/>
+              <text x="170" y="55" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">ENDPOINTS</text>
+              
+              <!-- Endpoint 1 -->
+              <rect x="50" y="80" width="100" height="80" rx="6" fill="#1e2430" stroke="#2a3142" stroke-width="2"/>
+              <text x="100" y="110" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11">Workstation</text>
+              <text x="100" y="130" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Windows 11</text>
+              <rect x="70" y="140" width="60" height="12" rx="2" fill="#3b82f6"/>
+              <text x="100" y="149" text-anchor="middle" fill="white" font-family="IBM Plex Sans, sans-serif" font-size="8">EDR Sensor</text>
+              
+              <!-- Endpoint 2 -->
+              <rect x="190" y="80" width="100" height="80" rx="6" fill="#1e2430" stroke="#2a3142" stroke-width="2"/>
+              <text x="240" y="110" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11">Server</text>
+              <text x="240" y="130" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Windows Server</text>
+              <rect x="210" y="140" width="60" height="12" rx="2" fill="#3b82f6"/>
+              <text x="240" y="149" text-anchor="middle" fill="white" font-family="IBM Plex Sans, sans-serif" font-size="8">EDR Sensor</text>
+              
+              <!-- Endpoint 3 -->
+              <rect x="50" y="180" width="100" height="80" rx="6" fill="#1e2430" stroke="#2a3142" stroke-width="2"/>
+              <text x="100" y="210" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11">Laptop</text>
+              <text x="100" y="230" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">macOS</text>
+              <rect x="70" y="240" width="60" height="12" rx="2" fill="#3b82f6"/>
+              <text x="100" y="249" text-anchor="middle" fill="white" font-family="IBM Plex Sans, sans-serif" font-size="8">EDR Sensor</text>
+              
+              <!-- Endpoint 4 -->
+              <rect x="190" y="180" width="100" height="80" rx="6" fill="#1e2430" stroke="#2a3142" stroke-width="2"/>
+              <text x="240" y="210" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11">Linux Server</text>
+              <text x="240" y="230" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Ubuntu 22.04</text>
+              <rect x="210" y="240" width="60" height="12" rx="2" fill="#3b82f6"/>
+              <text x="240" y="249" text-anchor="middle" fill="white" font-family="IBM Plex Sans, sans-serif" font-size="8">EDR Sensor</text>
+              
+              <!-- Telemetry Types Box -->
+              <rect x="50" y="290" width="240" height="160" rx="6" fill="#151921" stroke="#2a3142" stroke-width="1"/>
+              <text x="170" y="315" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">TELEMETRY COLLECTED</text>
+              <text x="70" y="340" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="10">• Process creation/termination</text>
+              <text x="70" y="358" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="10">• Command line arguments</text>
+              <text x="70" y="376" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="10">• File read/write/delete</text>
+              <text x="70" y="394" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="10">• Network connections</text>
+              <text x="70" y="412" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="10">• Registry modifications</text>
+              <text x="70" y="430" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="10">• DLL/module loads</text>
+              
+              <!-- Arrow to Cloud -->
+              <path d="M310 200 L370 200" stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+              <text x="340" y="190" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">TLS 1.3</text>
+              
+              <!-- Cloud Zone -->
+              <rect x="380" y="30" width="390" height="440" rx="8" fill="rgba(16, 185, 129, 0.05)" stroke="#10b981" stroke-dasharray="4"/>
+              <text x="575" y="55" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">EDR CLOUD PLATFORM</text>
+              
+              <!-- Data Ingestion -->
+              <rect x="400" y="80" width="140" height="60" rx="6" fill="#1e2430" stroke="#10b981" stroke-width="2"/>
+              <text x="470" y="105" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600">Data Ingestion</text>
+              <text x="470" y="125" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Stream Processing</text>
+              
+              <!-- Threat Intelligence -->
+              <rect x="560" y="80" width="140" height="60" rx="6" fill="#1e2430" stroke="#f59e0b" stroke-width="2"/>
+              <text x="630" y="105" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600">Threat Intel</text>
+              <text x="630" y="125" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">IOCs, TTPs, Feeds</text>
+              
+              <!-- ML Engine -->
+              <rect x="400" y="160" width="140" height="70" rx="6" fill="#1e2430" stroke="#8b5cf6" stroke-width="2"/>
+              <text x="470" y="185" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600">ML/AI Engine</text>
+              <text x="470" y="205" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Behavioral Analysis</text>
+              <text x="470" y="220" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Anomaly Detection</text>
+              
+              <!-- Detection Engine -->
+              <rect x="560" y="160" width="140" height="70" rx="6" fill="#1e2430" stroke="#ef4444" stroke-width="2"/>
+              <text x="630" y="185" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600">Detection Engine</text>
+              <text x="630" y="205" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">IOA Rules</text>
+              <text x="630" y="220" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">MITRE ATT&CK</text>
+              
+              <!-- Data Lake -->
+              <rect x="400" y="250" width="300" height="50" rx="6" fill="#1e2430" stroke="#06b6d4" stroke-width="2"/>
+              <text x="550" y="275" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600">Telemetry Data Lake</text>
+              <text x="550" y="290" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">90-day retention • Full search • Timeline reconstruction</text>
+              
+              <!-- Response Actions -->
+              <rect x="400" y="320" width="140" height="70" rx="6" fill="#1e2430" stroke="#10b981" stroke-width="2"/>
+              <text x="470" y="345" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600">Response Actions</text>
+              <text x="470" y="365" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Kill Process</text>
+              <text x="470" y="380" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">• Isolate Host</text>
+              
+              <!-- Console -->
+              <rect x="560" y="320" width="140" height="70" rx="6" fill="#1e2430" stroke="#3b82f6" stroke-width="2"/>
+              <text x="630" y="345" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600">Analyst Console</text>
+              <text x="630" y="365" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Investigation UI</text>
+              <text x="630" y="380" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Threat Hunting</text>
+              
+              <!-- SIEM Integration -->
+              <rect x="480" y="410" width="140" height="50" rx="6" fill="#1e2430" stroke="#64748b" stroke-width="2"/>
+              <text x="550" y="435" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600">SIEM / SOAR</text>
+              <text x="550" y="450" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">API Integration</text>
+              
+              <!-- Connection lines -->
+              <line x1="470" y1="140" x2="470" y2="160" stroke="#3d4556" stroke-width="1"/>
+              <line x1="630" y1="140" x2="630" y2="160" stroke="#3d4556" stroke-width="1"/>
+              <line x1="540" y1="195" x2="560" y2="195" stroke="#3d4556" stroke-width="1"/>
+              <line x1="470" y1="230" x2="470" y2="250" stroke="#3d4556" stroke-width="1"/>
+              <line x1="630" y1="230" x2="630" y2="250" stroke="#3d4556" stroke-width="1"/>
+              <line x1="470" y1="300" x2="470" y2="320" stroke="#3d4556" stroke-width="1"/>
+              <line x1="630" y1="300" x2="630" y2="320" stroke="#3d4556" stroke-width="1"/>
+              <line x1="550" y1="300" x2="550" y2="410" stroke="#3d4556" stroke-width="1"/>
+              
+              <!-- Arrow marker definition -->
+              <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <!-- Detailed Detection Flow -->
+        <section>
+          <h2 id="detection-flow">Detailed Detection Flow: CrowdStrike Falcon Example</h2>
+          
+          <p>
+            This section walks through a complete detection flow showing how modern EDR detects and responds to a sophisticated attack that would bypass traditional AV.
+          </p>
+
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Attack Scenario: Fileless PowerShell Attack</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Initial Access — User Opens Malicious Document</div>
+                  <div class="flow-step-description">
+                    User receives phishing email with Word document. Opens document and enables macros.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Telemetry Captured</span>
+                    </div>
+                    <pre><code>ProcessCreate:
+  ParentProcess: explorer.exe
+  Process: WINWORD.EXE
+  CommandLine: "C:\Program Files\...\WINWORD.EXE" /n "invoice.docm"
+  User: CORP\jsmith
+  Timestamp: 2024-01-15T14:32:15.123Z</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Execution — Macro Spawns PowerShell</div>
+                  <div class="flow-step-description">
+                    VBA macro executes encoded PowerShell command. This is a highly suspicious behavior: Office application spawning PowerShell.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Telemetry Captured</span>
+                    </div>
+                    <pre><code>ProcessCreate:
+  ParentProcess: WINWORD.EXE  ← Office spawning shell = SUSPICIOUS
+  Process: powershell.exe
+  CommandLine: powershell.exe -nop -w hidden -enc JABjAGwAaQBlAG4AdAA...
+  IntegrityLevel: Medium
+  
+Detection Trigger: 
+  Rule: "Suspicious Process Spawn from Office Application"
+  MITRE: T1059.001 (PowerShell)
+  Severity: HIGH</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Command & Control — Network Beacon</div>
+                  <div class="flow-step-description">
+                    PowerShell establishes connection to C2 server. EDR captures network connection with full context.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Telemetry Captured</span>
+                    </div>
+                    <pre><code>NetworkConnect:
+  Process: powershell.exe (PID: 4532)
+  RemoteIP: 185.234.72.19
+  RemotePort: 443
+  Protocol: TCP/TLS
+  Domain: cdn-static[.]net  ← Not in Alexa top 1M
+  
+Threat Intel Match:
+  IP 185.234.72.19 → Known Cobalt Strike C2
+  Confidence: 95%
+  
+Detection Trigger:
+  Rule: "Connection to Known C2 Infrastructure"
+  MITRE: T1071.001 (Web Protocols)
+  Severity: CRITICAL</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Persistence — Registry Run Key</div>
+                  <div class="flow-step-description">
+                    Malware establishes persistence via registry. Traditional AV would not see this as the binary is legitimate PowerShell.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Telemetry Captured</span>
+                    </div>
+                    <pre><code>RegistryModification:
+  Process: powershell.exe
+  Key: HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+  Value: "WindowsUpdate"
+  Data: "powershell.exe -w hidden -enc JABjAGwAaQBlAG4AdAA..."
+  
+Detection Trigger:
+  Rule: "Encoded PowerShell in Registry Persistence"
+  MITRE: T1547.001 (Registry Run Keys)
+  Severity: HIGH</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Automated Response — Containment</div>
+                  <div class="flow-step-description">
+                    EDR automatically contains the threat based on policy. Total time from execution to containment: 12 seconds.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Response Actions Taken</span>
+                    </div>
+                    <pre><code>AutomatedResponse:
+  Action 1: Kill Process
+    Target: powershell.exe (PID: 4532)
+    Result: SUCCESS
+    
+  Action 2: Network Isolation
+    Target: WORKSTATION-PC01
+    Result: SUCCESS (only EDR cloud traffic allowed)
+    
+  Action 3: Remove Persistence
+    Target: HKCU\...\Run\WindowsUpdate
+    Result: SUCCESS
+    
+  Action 4: Alert SOC
+    Severity: CRITICAL
+    Incident ID: INC-2024-0115-001
+    
+Timeline:
+  14:32:15 - Document opened
+  14:32:18 - PowerShell spawned
+  14:32:19 - C2 connection detected
+  14:32:27 - Automated containment complete
+  
+Total Response Time: 12 seconds</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Key Telemetry Types -->
+        <section>
+          <h2 id="telemetry">Key Telemetry Types</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Telemetry Type</th>
+                  <th>Data Collected</th>
+                  <th>Detection Use Cases</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Process Events</strong></td>
+                  <td>Process name, PID, parent process, command line, user, timestamps, hashes</td>
+                  <td>Suspicious process chains, LOLBins abuse, encoded commands</td>
+                </tr>
+                <tr>
+                  <td><strong>File Events</strong></td>
+                  <td>File path, operation (create/modify/delete), hash, entropy</td>
+                  <td>Ransomware behavior, malware drops, data staging</td>
+                </tr>
+                <tr>
+                  <td><strong>Network Events</strong></td>
+                  <td>Source/dest IP, ports, protocol, DNS queries, bytes transferred</td>
+                  <td>C2 communication, lateral movement, data exfiltration</td>
+                </tr>
+                <tr>
+                  <td><strong>Registry Events</strong></td>
+                  <td>Key path, value name, data, operation type</td>
+                  <td>Persistence mechanisms, defense evasion, configuration changes</td>
+                </tr>
+                <tr>
+                  <td><strong>Authentication Events</strong></td>
+                  <td>Logon type, source, account, success/failure</td>
+                  <td>Credential theft, lateral movement, brute force</td>
+                </tr>
+                <tr>
+                  <td><strong>Module/DLL Loads</strong></td>
+                  <td>Module path, hash, loading process</td>
+                  <td>DLL injection, sideloading, reflective loading</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- MITRE ATT&CK Mapping -->
+        <section>
+          <h2 id="mitre">MITRE ATT&CK Coverage</h2>
+          
+          <p>
+            Modern EDR solutions map detections to the MITRE ATT&CK framework, providing standardized language for describing adversary behaviors.
+          </p>
+
+          <div class="info-box tip">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Pro Tip
+            </div>
+            <div class="info-box-content">
+              <p>When evaluating EDR solutions, request their MITRE ATT&CK coverage matrix. Focus on techniques relevant to your threat model rather than total coverage percentage.</p>
+            </div>
+          </div>
+
+          <div class="collapsible expanded">
+            <div class="collapsible-header">
+              <span class="collapsible-title">Common ATT&CK Techniques Detected by EDR</span>
+              <svg class="collapsible-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </div>
+            <div class="collapsible-content">
+              <div class="collapsible-inner">
+                <div class="table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Tactic</th>
+                        <th>Technique</th>
+                        <th>ID</th>
+                        <th>EDR Detection Method</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Execution</td>
+                        <td>PowerShell</td>
+                        <td>T1059.001</td>
+                        <td>Command line logging, encoded command detection</td>
+                      </tr>
+                      <tr>
+                        <td>Execution</td>
+                        <td>Windows Management Instrumentation</td>
+                        <td>T1047</td>
+                        <td>WMI process creation monitoring</td>
+                      </tr>
+                      <tr>
+                        <td>Persistence</td>
+                        <td>Registry Run Keys</td>
+                        <td>T1547.001</td>
+                        <td>Registry modification tracking</td>
+                      </tr>
+                      <tr>
+                        <td>Persistence</td>
+                        <td>Scheduled Task</td>
+                        <td>T1053.005</td>
+                        <td>schtasks.exe monitoring, task XML analysis</td>
+                      </tr>
+                      <tr>
+                        <td>Defense Evasion</td>
+                        <td>Process Injection</td>
+                        <td>T1055</td>
+                        <td>Cross-process memory operations</td>
+                      </tr>
+                      <tr>
+                        <td>Credential Access</td>
+                        <td>LSASS Memory</td>
+                        <td>T1003.001</td>
+                        <td>LSASS access monitoring, credential dump detection</td>
+                      </tr>
+                      <tr>
+                        <td>Lateral Movement</td>
+                        <td>Remote Services</td>
+                        <td>T1021</td>
+                        <td>Network authentication correlation</td>
+                      </tr>
+                      <tr>
+                        <td>Command & Control</td>
+                        <td>Application Layer Protocol</td>
+                        <td>T1071</td>
+                        <td>Network traffic analysis, beaconing detection</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Vendor Comparison -->
+        <section>
+          <h2 id="vendors">Major EDR Vendors</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">CrowdStrike Falcon</div>
+            <div class="vendor-item">Microsoft Defender for Endpoint</div>
+            <div class="vendor-item">SentinelOne Singularity</div>
+            <div class="vendor-item">Palo Alto Cortex XDR</div>
+            <div class="vendor-item">VMware Carbon Black</div>
+            <div class="vendor-item">Trend Micro Vision One</div>
+            <div class="vendor-item">Cybereason</div>
+            <div class="vendor-item">Trellix EDR</div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>CrowdStrike</th>
+                  <th>Microsoft MDE</th>
+                  <th>SentinelOne</th>
+                  <th>Cortex XDR</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Cloud-Native Architecture</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td>On-Prem Option</td>
+                  <td class="check-no">✗</td>
+                  <td class="check-partial">Partial</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td>Kernel-Level Visibility</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td>Automated Remediation</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td>Native XDR Integration</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓ (M365)</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td>Managed Hunting Service</td>
+                  <td class="check-yes">Falcon OverWatch</td>
+                  <td class="check-yes">Defender Experts</td>
+                  <td class="check-yes">Vigilance</td>
+                  <td class="check-yes">Unit 42</td>
+                </tr>
+                <tr>
+                  <td>macOS / Linux Support</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Best Practices -->
+        <section>
+          <h2 id="best-practices">Implementation Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Deployment Recommendations
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Coverage First:</strong> Deploy to 100% of endpoints before fine-tuning. Gaps in coverage are the biggest risk.</p>
+              <p><strong>2. Start in Detect Mode:</strong> Run prevention policies in detect-only mode initially to baseline normal behavior and reduce false positives.</p>
+              <p><strong>3. Integrate with SIEM:</strong> Forward all detections to your SIEM for correlation with other security data sources.</p>
+              <p><strong>4. Enable Automated Response Gradually:</strong> Start with low-risk automated actions (alerts, process termination) before enabling network isolation.</p>
+              <p><strong>5. Develop Response Playbooks:</strong> Create documented procedures for common detection types before incidents occur.</p>
+              <p><strong>6. Threat Hunting Program:</strong> Use EDR telemetry proactively to hunt for threats, not just react to alerts.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Page Navigation -->
+        <nav class="page-nav">
+          <a href="edr.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Antivirus Evolution</div>
+          </a>
+          <a href="xdr.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">XDR (Extended Detection & Response) →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

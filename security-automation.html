@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Automation | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Security Automation - Infrastructure as Code, security orchestration, automated remediation, and CI/CD security.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="soar.html" class="sidebar-nav-link">SOAR</a></li>
+          <li class="sidebar-nav-item"><a href="security-automation.html" class="sidebar-nav-link active">Security Automation</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Automation</span>
+          </div>
+          <h1>Security Automation</h1>
+          <p class="page-description">Security automation reduces manual toil, improves consistency, and enables teams to scale security operations. From Infrastructure as Code to automated incident response, automation is essential for modern security programs.</p>
+        </div>
+
+        <section>
+          <h2 id="pyramid">Automation Pyramid</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Security Automation Maturity</span></div>
+            <pre><code># Security Automation Maturity Levels
+
+                    ┌─────────────────────┐
+                    │  AUTONOMOUS         │  Level 5
+                    │  Self-healing       │  AI-driven decisions
+                    │  AI-assisted        │  Minimal human input
+                    └──────────┬──────────┘
+                               │
+              ┌────────────────┴────────────────┐
+              │  ORCHESTRATED                   │  Level 4
+              │  Cross-tool automation          │  SOAR platforms
+              │  Complex workflows              │  End-to-end playbooks
+              └────────────────┬────────────────┘
+                               │
+         ┌─────────────────────┴─────────────────────┐
+         │  AUTOMATED                                │  Level 3
+         │  Single-tool automation                   │  Scripted responses
+         │  Scheduled tasks                          │  Auto-remediation
+         └─────────────────────┬─────────────────────┘
+                               │
+    ┌──────────────────────────┴──────────────────────────┐
+    │  SEMI-AUTOMATED                                     │  Level 2
+    │  Human-triggered scripts                            │  Templates
+    │  Runbooks with some automation                      │  One-click actions
+    └──────────────────────────┬──────────────────────────┘
+                               │
+┌──────────────────────────────┴──────────────────────────────┐
+│  MANUAL                                                     │  Level 1
+│  Point-and-click operations                                 │  Copy/paste
+│  Tribal knowledge                                           │  Ad-hoc responses
+└─────────────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="use-cases">Automation Use Cases</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Manual Process</th>
+                  <th>Automated Solution</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>User Offboarding</strong></td>
+                  <td>HR notifies IT, manual account disable</td>
+                  <td>HR system triggers API to disable all accounts</td>
+                </tr>
+                <tr>
+                  <td><strong>Phishing Response</strong></td>
+                  <td>Analyst reviews, manually blocks</td>
+                  <td>Auto-extract IOCs, block in email gateway</td>
+                </tr>
+                <tr>
+                  <td><strong>Vulnerability Patching</strong></td>
+                  <td>Review CVEs, create tickets</td>
+                  <td>Auto-triage by risk, auto-patch low-risk</td>
+                </tr>
+                <tr>
+                  <td><strong>Cloud Misconfiguration</strong></td>
+                  <td>Weekly scan, manual fix</td>
+                  <td>Real-time detect, auto-remediate common issues</td>
+                </tr>
+                <tr>
+                  <td><strong>Threat Intel</strong></td>
+                  <td>Manual IOC ingestion</td>
+                  <td>Feed auto-ingestion to SIEM/EDR</td>
+                </tr>
+                <tr>
+                  <td><strong>Access Reviews</strong></td>
+                  <td>Spreadsheet-based quarterly review</td>
+                  <td>Automated campaigns with manager approval</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="iac">Infrastructure as Code Security</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Terraform Security Example</span></div>
+            <pre><code># Secure S3 Bucket with IaC
+
+resource "aws_s3_bucket" "secure_bucket" {
+  bucket = "company-secure-data"
+}
+
+# Block all public access
+resource "aws_s3_bucket_public_access_block" "secure_bucket" {
+  bucket = aws_s3_bucket.secure_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+# Enable encryption
+resource "aws_s3_bucket_server_side_encryption_configuration" "secure_bucket" {
+  bucket = aws_s3_bucket.secure_bucket.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "aws:kms"
+      kms_master_key_id = aws_kms_key.s3_key.arn
+    }
+  }
+}
+
+# Enable versioning
+resource "aws_s3_bucket_versioning" "secure_bucket" {
+  bucket = aws_s3_bucket.secure_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+# Enable logging
+resource "aws_s3_bucket_logging" "secure_bucket" {
+  bucket = aws_s3_bucket.secure_bucket.id
+
+  target_bucket = aws_s3_bucket.log_bucket.id
+  target_prefix = "s3-access-logs/"
+}
+
+# IaC Security Scanning in CI/CD:
+# - Checkov, tfsec, Terrascan
+# - Block deployments with high-severity findings</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="tools">Automation Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Ansible</div>
+            <div class="vendor-item">Terraform</div>
+            <div class="vendor-item">Python/Boto3</div>
+            <div class="vendor-item">PowerShell</div>
+            <div class="vendor-item">Palo Alto XSOAR</div>
+            <div class="vendor-item">Splunk SOAR</div>
+            <div class="vendor-item">Tines</div>
+            <div class="vendor-item">n8n</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Automation Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Security Automation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start Small:</strong> Automate one high-volume, low-risk task first. Build confidence before complex workflows.</p>
+              <p><strong>2. Human-in-the-Loop:</strong> For high-impact actions (block user, isolate host), require approval initially.</p>
+              <p><strong>3. Idempotent Operations:</strong> Running automation twice should produce same result. Prevent cascading failures.</p>
+              <p><strong>4. Comprehensive Logging:</strong> Every automated action must be logged. Audit trail is essential.</p>
+              <p><strong>5. Test in Staging:</strong> Automation bugs in production cause outages. Test thoroughly.</p>
+              <p><strong>6. Version Control:</strong> Treat automation code like application code. Git, code review, CI/CD.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="soar.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← SOAR</div>
+          </a>
+          <a href="incident-response.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Incident Response →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure SDLC | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Secure Software Development Lifecycle - embedding security throughout development phases.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">8. Application Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="application-security.html" class="sidebar-nav-link">Application Security</a></li>
+          <li class="sidebar-nav-item"><a href="secure-sdlc.html" class="sidebar-nav-link active">Secure SDLC</a></li>
+          <li class="sidebar-nav-item"><a href="devsecops.html" class="sidebar-nav-link">DevSecOps</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Application Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Secure SDLC</span>
+          </div>
+          <h1>Secure Software Development Lifecycle (SSDLC)</h1>
+          <p class="page-description">Secure SDLC integrates security activities into every phase of software development—from requirements through deployment. Finding vulnerabilities early is dramatically cheaper than fixing them in production.</p>
+        </div>
+
+        <section>
+          <h2 id="phases">Security Activities by Phase</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Secure SDLC Phases</span></div>
+            <pre><code># Security Activities Throughout Development
+
+┌─────────────────────────────────────────────────────────────────┐
+│ REQUIREMENTS                                                    │
+│ • Security requirements gathering                               │
+│ • Abuse case / misuse case development                         │
+│ • Data classification                                          │
+│ • Compliance requirements identification                        │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────────┐
+│ DESIGN                                                          │
+│ • Threat modeling (STRIDE, PASTA)                              │
+│ • Security architecture review                                  │
+│ • Attack surface analysis                                       │
+│ • Secure design patterns selection                             │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────────┐
+│ DEVELOPMENT                                                     │
+│ • Secure coding training                                        │
+│ • IDE security plugins                                         │
+│ • Code review with security focus                              │
+│ • SAST in development environment                              │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────────┐
+│ TESTING                                                         │
+│ • SAST/DAST/IAST execution                                     │
+│ • SCA (dependency scanning)                                     │
+│ • Security-focused QA                                          │
+│ • Penetration testing                                          │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────────┐
+│ DEPLOYMENT                                                      │
+│ • Security configuration review                                 │
+│ • Infrastructure hardening                                      │
+│ • Secrets management                                           │
+│ • Final security sign-off                                      │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────────┐
+│ OPERATIONS                                                      │
+│ • Runtime protection (WAF, RASP)                               │
+│ • Security monitoring                                          │
+│ • Vulnerability management                                      │
+│ • Incident response                                            │
+└─────────────────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="threat-modeling">Threat Modeling</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>STRIDE Category</th>
+                  <th>Threat Type</th>
+                  <th>Example</th>
+                  <th>Mitigation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>S</strong>poofing</td>
+                  <td>Identity theft</td>
+                  <td>Fake user login</td>
+                  <td>Strong authentication, MFA</td>
+                </tr>
+                <tr>
+                  <td><strong>T</strong>ampering</td>
+                  <td>Data modification</td>
+                  <td>Modified API request</td>
+                  <td>Integrity checks, signing</td>
+                </tr>
+                <tr>
+                  <td><strong>R</strong>epudiation</td>
+                  <td>Denying actions</td>
+                  <td>User denies transaction</td>
+                  <td>Audit logging, non-repudiation</td>
+                </tr>
+                <tr>
+                  <td><strong>I</strong>nfo Disclosure</td>
+                  <td>Data exposure</td>
+                  <td>API returns too much data</td>
+                  <td>Encryption, access controls</td>
+                </tr>
+                <tr>
+                  <td><strong>D</strong>enial of Service</td>
+                  <td>Availability attack</td>
+                  <td>Resource exhaustion</td>
+                  <td>Rate limiting, scaling</td>
+                </tr>
+                <tr>
+                  <td><strong>E</strong>levation of Privilege</td>
+                  <td>Gaining access</td>
+                  <td>User becomes admin</td>
+                  <td>Authorization, least privilege</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="cost">Cost of Fixing Vulnerabilities</h2>
+          
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Relative Cost to Fix by Phase
+            </div>
+            <div class="info-box-content">
+              <p><strong>Requirements:</strong> 1x (baseline cost)</p>
+              <p><strong>Design:</strong> 5x</p>
+              <p><strong>Development:</strong> 10x</p>
+              <p><strong>Testing:</strong> 20x</p>
+              <p><strong>Production:</strong> 30-100x</p>
+              <p><em>Source: IBM Systems Sciences Institute, NIST</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Secure SDLC Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Secure SDLC Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Threat Model Early:</strong> Identify threats during design. Architecture changes are cheap; code changes are expensive.</p>
+              <p><strong>2. Security Champions:</strong> Embed security-minded developers in each team. Scale security expertise.</p>
+              <p><strong>3. Automate Security Testing:</strong> SAST, SCA, secret scanning in CI/CD. Make security part of the pipeline.</p>
+              <p><strong>4. Train Developers:</strong> Secure coding training is foundational. Developers write more code than security reviews.</p>
+              <p><strong>5. Define Security Gates:</strong> Clear criteria for each phase. No deployment with critical vulnerabilities.</p>
+              <p><strong>6. Measure and Improve:</strong> Track vulnerability density, mean time to fix. Improve continuously.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="application-security.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Application Security</div>
+          </a>
+          <a href="devsecops.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">DevSecOps →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

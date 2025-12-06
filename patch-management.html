@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patch Management | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Patch Management - vulnerability remediation, patch prioritization, automation, and enterprise patching strategies.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">4. Endpoint Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="edr.html" class="sidebar-nav-link">EDR</a></li>
+          <li class="sidebar-nav-item"><a href="patch-management.html" class="sidebar-nav-link active">Patch Management</a></li>
+          <li class="sidebar-nav-item"><a href="mobile-security.html" class="sidebar-nav-link">Mobile Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Endpoint Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Patch Management</span>
+          </div>
+          <h1>Patch Management</h1>
+          <p class="page-description">Unpatched systems are the #1 attack vector. Patch management is the disciplined process of acquiring, testing, and deploying patches to reduce vulnerability exposure. Speed matters—exploits often appear within days of patch release.</p>
+        </div>
+
+        <section>
+          <h2 id="lifecycle">Patch Management Lifecycle</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 180" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="180" fill="#0f1117"/>
+              
+              <!-- Discover -->
+              <rect x="30" y="50" width="110" height="80" rx="6" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="85" y="80" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">DISCOVER</text>
+              <text x="85" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Asset inventory</text>
+              <text x="85" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Vulnerability scan</text>
+              
+              <!-- Prioritize -->
+              <rect x="165" y="50" width="110" height="80" rx="6" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="220" y="80" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">PRIORITIZE</text>
+              <text x="220" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Risk scoring</text>
+              <text x="220" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Exploitability</text>
+              
+              <!-- Test -->
+              <rect x="300" y="50" width="110" height="80" rx="6" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="355" y="80" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">TEST</text>
+              <text x="355" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Lab validation</text>
+              <text x="355" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Pilot group</text>
+              
+              <!-- Deploy -->
+              <rect x="435" y="50" width="110" height="80" rx="6" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="490" y="80" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">DEPLOY</text>
+              <text x="490" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Phased rollout</text>
+              <text x="490" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Maintenance window</text>
+              
+              <!-- Verify -->
+              <rect x="570" y="50" width="110" height="80" rx="6" fill="rgba(6, 182, 212, 0.1)" stroke="#06b6d4"/>
+              <text x="625" y="80" text-anchor="middle" fill="#06b6d4" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">VERIFY</text>
+              <text x="625" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Confirm install</text>
+              <text x="625" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Rescan vulns</text>
+              
+              <!-- Report -->
+              <rect x="705" y="50" width="110" height="80" rx="6" fill="rgba(236, 72, 153, 0.1)" stroke="#ec4899"/>
+              <text x="760" y="80" text-anchor="middle" fill="#ec4899" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">REPORT</text>
+              <text x="760" y="100" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Compliance %</text>
+              <text x="760" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">SLA tracking</text>
+              
+              <!-- Arrows -->
+              <path d="M140 90 L165 90" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M275 90 L300 90" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M410 90 L435 90" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M545 90 L570 90" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              <path d="M680 90 L705 90" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowGray)"/>
+              
+              <defs>
+                <marker id="arrowGray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="prioritization">Patch Prioritization</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Risk-Based Prioritization Model</span></div>
+            <pre><code># Patch Priority = CVSS + Exploitability + Asset Criticality + Exposure
+
+Priority Factors:
+
+1. CVSS Score (Base severity)
+   Critical: 9.0-10.0  → Highest priority
+   High:     7.0-8.9   → High priority
+   Medium:   4.0-6.9   → Standard priority
+   Low:      0.1-3.9   → Low priority
+
+2. Exploitability (Is it being used?)
+   Known exploited (CISA KEV)     → +3 priority
+   Public exploit available       → +2 priority
+   Proof of concept exists        → +1 priority
+   No known exploit               → +0 priority
+
+3. Asset Criticality (What does it affect?)
+   Crown jewels (DC, ERP, PCI)    → +3 priority
+   Production servers             → +2 priority
+   Standard workstations          → +1 priority
+   Non-production/test            → +0 priority
+
+4. Exposure (Where is it?)
+   Internet-facing                → +3 priority
+   DMZ/semi-trusted               → +2 priority
+   Internal network               → +1 priority
+   Isolated/air-gapped            → +0 priority
+
+Example:
+  CVE-2024-XXXX on domain controller
+  CVSS: 9.8 (Critical)      = Priority 4
+  CISA KEV listed           = +3
+  Domain Controller         = +3
+  Internal (but critical)   = +1
+  
+  Total: 11 → EMERGENCY PATCH (24 hours)</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="slas">Patching SLAs</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Priority</th>
+                  <th>Criteria</th>
+                  <th>SLA</th>
+                  <th>Approval</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="color: var(--accent-red);"><strong>Emergency</strong></td>
+                  <td>Critical + actively exploited + internet-facing</td>
+                  <td>24 hours</td>
+                  <td>CISO (emergency change)</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--accent-orange);"><strong>Critical</strong></td>
+                  <td>CVSS 9.0+ or CISA KEV listed</td>
+                  <td>7 days</td>
+                  <td>Security team</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--accent-yellow);"><strong>High</strong></td>
+                  <td>CVSS 7.0-8.9</td>
+                  <td>14 days</td>
+                  <td>Standard change</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--accent-blue);"><strong>Medium</strong></td>
+                  <td>CVSS 4.0-6.9</td>
+                  <td>30 days</td>
+                  <td>Standard change</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--accent-green);"><strong>Low</strong></td>
+                  <td>CVSS 0.1-3.9</td>
+                  <td>90 days</td>
+                  <td>Bundled with regular updates</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="automation">Patch Automation</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Automated Patching Workflow</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Patch Tuesday (or vendor release)</div>
+                  <div class="flow-step-description">Microsoft releases monthly patches</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Trigger</span></div>
+                    <pre><code>Microsoft Patch Tuesday: 2nd Tuesday of month
+Adobe, Oracle, etc.: Various schedules
+Linux: Rolling updates (apt, yum)
+Zero-days: Out-of-band emergency releases</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Ring-Based Deployment</div>
+                  <div class="flow-step-description">Phased rollout to limit blast radius</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Deployment Rings</span></div>
+                    <pre><code>Ring 0: IT/Security test machines     (Day 1)
+         → 10 devices, immediate deploy
+         → Validate no breakage
+         
+Ring 1: IT department pilot           (Day 3)
+         → 100 devices, early adopters
+         → Monitor for issues
+         
+Ring 2: General population wave 1     (Day 7)
+         → 30% of endpoints
+         → Business validation
+         
+Ring 3: General population wave 2     (Day 10)
+         → Remaining 70%
+         → Full rollout
+
+Ring 4: Servers (maintenance window)  (Day 14)
+         → Production servers
+         → Change-controlled</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Verify and Report</div>
+                  <div class="flow-step-description">Confirm deployment, track compliance</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Compliance Check</span></div>
+                    <pre><code>WSUS/Intune/SCCM Report:
+  Total endpoints: 5,000
+  Patched:         4,850 (97%)
+  Pending reboot:  100 (2%)
+  Failed:          50 (1%)
+  
+Failed devices escalated to:
+  → IT support ticket
+  → 48-hour remediation SLA
+  → Quarantine if not resolved</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Patch Management Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Microsoft WSUS/SCCM</div>
+            <div class="vendor-item">Microsoft Intune</div>
+            <div class="vendor-item">Ivanti Patch</div>
+            <div class="vendor-item">Tanium</div>
+            <div class="vendor-item">Automox</div>
+            <div class="vendor-item">ManageEngine</div>
+            <div class="vendor-item">BigFix (HCL)</div>
+            <div class="vendor-item">Qualys Patch</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Patch Management Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Patch Management Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Know Your Assets:</strong> Can't patch what you don't know exists. Complete asset inventory is prerequisite.</p>
+              <p><strong>2. Prioritize by Risk:</strong> Not all patches are equal. Focus on exploited, critical, internet-facing first.</p>
+              <p><strong>3. Use Ring Deployment:</strong> Never push to all systems at once. Phased rollout catches issues early.</p>
+              <p><strong>4. Automate Ruthlessly:</strong> Manual patching doesn't scale. Automate workstations; change-control servers.</p>
+              <p><strong>5. Track SLA Compliance:</strong> Measure mean time to patch. Report to leadership. Tie to security KPIs.</p>
+              <p><strong>6. Plan for Exceptions:</strong> Some systems can't be patched immediately. Compensating controls, documented risk acceptance.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="edr.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← EDR</div>
+          </a>
+          <a href="mobile-security.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Mobile Security →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attack Surface Management | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Attack Surface Management (ASM) - external attack surface discovery, shadow IT, and continuous monitoring.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="vuln-management.html" class="sidebar-nav-link">Vulnerability Management</a></li>
+          <li class="sidebar-nav-item"><a href="attack-surface.html" class="sidebar-nav-link active">Attack Surface Management</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Attack Surface Management</span>
+          </div>
+          <h1>Attack Surface Management (ASM)</h1>
+          <p class="page-description">Attack Surface Management continuously discovers, inventories, and monitors external-facing assets. ASM finds the forgotten servers, shadow IT, and exposed services that attackers find first.</p>
+        </div>
+
+        <section>
+          <h2 id="problem">The Visibility Problem</h2>
+          
+          <div class="info-box warning">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Why Traditional Asset Management Fails
+            </div>
+            <div class="info-box-content">
+              <p><strong>Shadow IT:</strong> Departments spin up cloud resources without IT knowledge.</p>
+              <p><strong>M&A:</strong> Acquisitions bring unknown infrastructure.</p>
+              <p><strong>Forgotten Assets:</strong> Test servers, old campaigns, decomissioned-but-running systems.</p>
+              <p><strong>Subsidiaries:</strong> Different business units, different security postures.</p>
+              <p><strong>Cloud Sprawl:</strong> Multi-cloud, multi-account complexity.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="capabilities">ASM Capabilities</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">ASM Process Flow</span></div>
+            <pre><code># Attack Surface Management Workflow
+
+1. DISCOVERY (Outside-In View)
+   ┌────────────────────────────────────────────────────┐
+   │ Starting inputs:                                   │
+   │ • Domain names (company.com, subsidiary.com)      │
+   │ • IP ranges                                        │
+   │ • Known cloud accounts                             │
+   │                                                   │
+   │ Discovery methods:                                 │
+   │ • DNS enumeration (subdomains, records)           │
+   │ • Certificate transparency logs                    │
+   │ • WHOIS and BGP data                              │
+   │ • Cloud API enumeration                            │
+   │ • Web crawling and spidering                      │
+   └────────────────────────────────────────────────────┘
+                            │
+2. INVENTORY
+   ┌────────────────────────────────────────────────────┐
+   │ For each discovered asset:                         │
+   │ • IP address / hostname                           │
+   │ • Open ports and services                         │
+   │ • Technology stack (fingerprinting)               │
+   │ • SSL certificate details                         │
+   │ • Cloud provider and region                       │
+   │ • Ownership attribution                           │
+   └────────────────────────────────────────────────────┘
+                            │
+3. RISK ASSESSMENT
+   ┌────────────────────────────────────────────────────┐
+   │ Risk factors:                                      │
+   │ • Known vulnerabilities (CVEs)                    │
+   │ • Misconfigurations                               │
+   │ • Exposed sensitive services (RDP, SSH, DB)       │
+   │ • Expired certificates                             │
+   │ • Outdated software versions                      │
+   │ • Missing security headers                         │
+   └────────────────────────────────────────────────────┘
+                            │
+4. CONTINUOUS MONITORING
+   ┌────────────────────────────────────────────────────┐
+   │ • Daily/weekly rescans                             │
+   │ • New asset alerts                                 │
+   │ • Change detection                                 │
+   │ • Vulnerability emergence                          │
+   │ • Certificate expiration warnings                 │
+   └────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">ASM Solutions</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Censys</div>
+            <div class="vendor-item">Shodan</div>
+            <div class="vendor-item">Mandiant ASM</div>
+            <div class="vendor-item">CyCognito</div>
+            <div class="vendor-item">Expanse (Palo Alto)</div>
+            <div class="vendor-item">RiskIQ (Microsoft)</div>
+            <div class="vendor-item">Detectify</div>
+            <div class="vendor-item">SecurityScorecard</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">ASM Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              ASM Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with Known Seeds:</strong> Provide all known domains, IPs, cloud accounts. Better seeds = better discovery.</p>
+              <p><strong>2. Validate Unknown Assets:</strong> ASM will find things. Validate ownership before acting.</p>
+              <p><strong>3. Prioritize by Risk:</strong> Not all exposed assets are equal. Critical vulns on internet-facing = priority.</p>
+              <p><strong>4. Integrate with Vuln Management:</strong> ASM finds assets, vuln management assesses them. Connect the workflows.</p>
+              <p><strong>5. Monitor for Changes:</strong> New asset = investigation. Something changed = why?</p>
+              <p><strong>6. Include Subsidiaries:</strong> M&A is a major source of unknown exposure. Include all entities.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="vuln-management.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Vulnerability Management</div>
+          </a>
+          <a href="penetration-testing.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Penetration Testing →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

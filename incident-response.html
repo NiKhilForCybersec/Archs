@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Incident Response | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Incident Response - PICERL framework, playbooks, containment strategies, and post-incident activities.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="soc-operations.html" class="sidebar-nav-link">SOC Overview</a></li>
+          <li class="sidebar-nav-item"><a href="siem.html" class="sidebar-nav-link">SIEM</a></li>
+          <li class="sidebar-nav-item"><a href="soar.html" class="sidebar-nav-link">SOAR</a></li>
+          <li class="sidebar-nav-item"><a href="incident-response.html" class="sidebar-nav-link active">Incident Response</a></li>
+          <li class="sidebar-nav-item"><a href="threat-hunting.html" class="sidebar-nav-link">Threat Hunting</a></li>
+          <li class="sidebar-nav-item"><a href="threat-intel.html" class="sidebar-nav-link">Threat Intelligence</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Incident Response</span>
+          </div>
+          <h1>Incident Response</h1>
+          <p class="page-description">Incident Response (IR) is the organized approach to addressing and managing security incidents. The goal is to handle incidents in a way that limits damage, reduces recovery time and costs, and prevents future occurrences. A mature IR program combines people, process, and technology.</p>
+        </div>
+
+        <section>
+          <h2 id="framework">NIST Incident Response Lifecycle</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 200" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="200" fill="#0f1117"/>
+              
+              <!-- Preparation -->
+              <rect x="30" y="50" width="150" height="100" rx="8" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="105" y="85" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">PREPARATION</text>
+              <text x="105" y="105" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Tools • Training</text>
+              <text x="105" y="120" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Playbooks • Team</text>
+              <text x="105" y="135" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Communication Plan</text>
+              
+              <!-- Detection -->
+              <rect x="200" y="50" width="150" height="100" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="275" y="85" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">DETECTION</text>
+              <text x="275" y="105" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Identify Incident</text>
+              <text x="275" y="120" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Validate Alert</text>
+              <text x="275" y="135" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Assess Severity</text>
+              
+              <!-- Containment -->
+              <rect x="370" y="50" width="150" height="100" rx="8" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="445" y="85" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">CONTAINMENT</text>
+              <text x="445" y="105" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Stop Spread</text>
+              <text x="445" y="120" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Isolate Systems</text>
+              <text x="445" y="135" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Preserve Evidence</text>
+              
+              <!-- Eradication -->
+              <rect x="540" y="50" width="150" height="100" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="615" y="85" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">ERADICATION</text>
+              <text x="615" y="105" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Remove Threat</text>
+              <text x="615" y="120" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Patch Vulnerabilities</text>
+              <text x="615" y="135" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Rebuild Systems</text>
+              
+              <!-- Recovery -->
+              <rect x="710" y="50" width="110" height="100" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="765" y="85" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">RECOVERY</text>
+              <text x="765" y="105" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Restore Systems</text>
+              <text x="765" y="120" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Monitor</text>
+              <text x="765" y="135" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">Validate</text>
+              
+              <!-- Arrows -->
+              <path d="M180 100 L200 100" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+              <path d="M350 100 L370 100" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+              <path d="M520 100 L540 100" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+              <path d="M690 100 L710 100" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+              
+              <!-- Lessons Learned Loop -->
+              <path d="M765 150 L765 175 L105 175 L105 150" stroke="#06b6d4" stroke-width="1" stroke-dasharray="4" fill="none"/>
+              <text x="435" y="190" text-anchor="middle" fill="#06b6d4" font-family="IBM Plex Sans, sans-serif" font-size="9">Lessons Learned → Improve Preparation</text>
+              
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="severity">Incident Severity Classification</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Severity</th>
+                  <th>Definition</th>
+                  <th>Examples</th>
+                  <th>Response Time</th>
+                  <th>Escalation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="tag red">SEV-1 Critical</span></td>
+                  <td>Active breach, data exfil, business impact</td>
+                  <td>Ransomware active, DC compromised, mass data theft</td>
+                  <td>Immediate (15 min)</td>
+                  <td>CISO, Legal, Exec, IR Retainer</td>
+                </tr>
+                <tr>
+                  <td><span class="tag yellow">SEV-2 High</span></td>
+                  <td>Confirmed compromise, no active exfil</td>
+                  <td>Malware on server, credential theft, lateral movement</td>
+                  <td>1 hour</td>
+                  <td>Security Manager, IT Director</td>
+                </tr>
+                <tr>
+                  <td><span class="tag blue">SEV-3 Medium</span></td>
+                  <td>Suspicious activity, potential threat</td>
+                  <td>Phishing success (no execution), suspicious login</td>
+                  <td>4 hours</td>
+                  <td>SOC Lead</td>
+                </tr>
+                <tr>
+                  <td><span class="tag green">SEV-4 Low</span></td>
+                  <td>Minor issue, policy violation</td>
+                  <td>Malware blocked, failed attack, policy alert</td>
+                  <td>24 hours</td>
+                  <td>SOC Analyst</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="ransomware-ir">Incident Response Example: Ransomware Attack</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">SEV-1 Response: Active Ransomware Incident</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Detection: Ransomware Alert Triggered</div>
+                  <div class="flow-step-description">EDR detects mass file encryption, alerts SOC at 02:47 AM</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Initial Alert</span></div>
+                    <pre><code>Alert Source: CrowdStrike Falcon
+Alert Type: RansomwareActivity
+Severity: CRITICAL
+Time: 2024-01-15 02:47:23 UTC
+
+Affected Host: FILESRV01.contoso.com
+Process: svchost.exe (injected)
+Behavior: 
+  - 847 files encrypted in 2 minutes
+  - Extension: .locked
+  - Ransom note: README_RESTORE.txt
+  
+Initial Scope:
+  - 1 server confirmed
+  - Lateral movement indicators detected
+  - C2 communication to 185.234.72.19</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Immediate Containment (First 15 Minutes)</div>
+                  <div class="flow-step-description">On-call analyst executes containment playbook</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Containment Actions</span></div>
+                    <pre><code>T+0:00 - Alert received, analyst paged
+T+0:03 - Analyst acknowledges, reviews alert
+T+0:05 - Severity confirmed: SEV-1 declared
+
+IMMEDIATE ACTIONS:
+T+0:06 - EDR: Isolate FILESRV01 from network ✓
+T+0:07 - Firewall: Block C2 IP 185.234.72.19 ✓
+T+0:08 - AD: Disable service accounts on FILESRV01 ✓
+T+0:10 - Network: Isolate server VLAN at switch ✓
+
+ESCALATION:
+T+0:12 - SOC Manager notified
+T+0:15 - CISO notified (bridge opened)
+T+0:18 - IR retainer engaged (CrowdStrike Services)
+T+0:20 - Legal counsel notified
+
+Status: Bleeding stopped, scope unknown</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Scoping & Investigation (Hours 1-4)</div>
+                  <div class="flow-step-description">Determine full extent of compromise</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Scoping Queries</span></div>
+                    <pre><code>EDR Hunt Query (Lateral Movement):
+  DeviceNetworkEvents
+  | where RemoteIP == "185.234.72.19"
+  | distinct DeviceName
+
+  Results: 3 additional hosts contacted C2
+    - FILESRV01 (patient zero)
+    - FILESRV02 (encrypted)
+    - WKS-ADMIN01 (initial access point)
+    - DC01 (attempted, blocked by EDR)
+
+SIEM Query (Initial Access):
+  Identified: Phishing email 6 hours prior
+  User: admin-jsmith (IT admin)
+  Action: Opened malicious Excel, enabled macros
+
+Credential Analysis:
+  Compromised: admin-jsmith (Domain Admin)
+  Method: Mimikatz credential dump
+  Scope: Potential access to all domain resources
+
+CONFIRMED SCOPE:
+  - 2 file servers encrypted (FILESRV01, FILESRV02)
+  - 1 admin workstation compromised (initial access)
+  - 1 Domain Admin account compromised
+  - Domain Controller accessed but not encrypted</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Eradication (Hours 4-24)</div>
+                  <div class="flow-step-description">Remove attacker presence and close vulnerabilities</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Eradication Steps</span></div>
+                    <pre><code>CREDENTIAL RESET:
+  ✓ Reset admin-jsmith password
+  ✓ Reset all Domain Admin passwords
+  ✓ Reset KRBTGT password (twice, 10hr apart)
+  ✓ Revoke all active sessions
+  ✓ Rotate service account passwords
+
+MALWARE REMOVAL:
+  ✓ WKS-ADMIN01: Reimaged from known-good
+  ✓ FILESRV01: Isolated for forensics
+  ✓ FILESRV02: Isolated for forensics
+  
+VULNERABILITY REMEDIATION:
+  ✓ Macro execution disabled org-wide
+  ✓ Admin accounts removed from email
+  ✓ MFA enforced for all privileged access
+  ✓ EDR prevention mode enabled (was detect-only)
+
+NETWORK HARDENING:
+  ✓ SMB traffic restricted between workstations
+  ✓ RDP restricted to PAM jump servers only
+  ✓ Lateral movement rules deployed to all hosts</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Recovery (Days 2-5)</div>
+                  <div class="flow-step-description">Restore systems and validate security</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Recovery Actions</span></div>
+                    <pre><code>DATA RECOVERY:
+  FILESRV01: Restored from backup (RPO: 4 hours)
+    - Backup date: 2024-01-14 22:00 UTC
+    - Data loss: ~5 hours of changes
+    - Validation: Checksums verified
+    
+  FILESRV02: Restored from backup (RPO: 4 hours)
+    - Same backup window
+    - Full restore completed
+
+SYSTEM REBUILD:
+  - New servers deployed with hardened images
+  - EDR agents installed and verified
+  - Network monitoring enhanced
+  - All systems scanned before reconnection
+
+VALIDATION:
+  ✓ No C2 callbacks detected (72hr monitoring)
+  ✓ No new encryption activity
+  ✓ All IOCs blocklisted
+  ✓ Threat hunt completed (clean)
+
+BUSINESS RECOVERY:
+  - Day 2: Critical file shares restored
+  - Day 3: All file shares restored
+  - Day 5: Normal operations resumed
+  
+TOTAL DOWNTIME: 52 hours</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">6</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Post-Incident (Week 2)</div>
+                  <div class="flow-step-description">Lessons learned and improvement actions</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Post-Incident Review</span></div>
+                    <pre><code>TIMELINE SUMMARY:
+  Initial Access: Phishing email (T-6 hours)
+  Execution: Macro → Cobalt Strike (T-6 hours)
+  Privilege Escalation: Mimikatz (T-4 hours)
+  Lateral Movement: PsExec to file servers (T-2 hours)
+  Impact: Ransomware deployment (T+0)
+  Detection: EDR alert (T+3 minutes)
+  Containment: Network isolation (T+10 minutes)
+
+WHAT WORKED:
+  ✓ EDR detected ransomware immediately
+  ✓ Containment playbook executed quickly
+  ✓ Backups were intact and tested
+  ✓ IR retainer engaged promptly
+
+GAPS IDENTIFIED:
+  ✗ EDR was in detect-only (not prevent)
+  ✗ Admin accounts had email access
+  ✗ No MFA on privileged accounts
+  ✗ Macros enabled by default
+  ✗ 6-hour dwell time before ransomware
+
+REMEDIATION ACTIONS (30/60/90 day plan):
+  30 days: EDR to prevent mode, MFA for admins
+  60 days: PAM deployment, macro hardening
+  90 days: Network segmentation, tabletop exercise</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="playbooks">Common IR Playbooks</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Ransomware</h4>
+              <p class="card-description">Immediate isolation, scope assessment, backup validation, credential reset, forensic preservation, recovery from backup.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-yellow);">Phishing</h4>
+              <p class="card-description">Email quarantine, recipient identification, credential reset if clicked, mailbox search, sender block, user notification.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Malware</h4>
+              <p class="card-description">Host isolation, sample collection, IOC extraction, scope hunt, remediation, system rebuild if needed.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">Credential Compromise</h4>
+              <p class="card-description">Password reset, session revocation, MFA reset, access log review, scope of access, monitoring for reuse.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">Data Breach</h4>
+              <p class="card-description">Scope data exposure, legal notification, regulatory assessment, evidence preservation, PR/communications, remediation.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-cyan);">Insider Threat</h4>
+              <p class="card-description">Access revocation, DLP review, legal/HR coordination, forensic imaging, interview coordination, evidence chain.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">IR Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Incident Response Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Have a Plan Before You Need It:</strong> Documented IR plan, tested playbooks, trained team, and established communication channels.</p>
+              <p><strong>2. Containment Before Investigation:</strong> Stop the bleeding first. You can investigate a contained threat; you can't investigate while it's spreading.</p>
+              <p><strong>3. Preserve Evidence:</strong> Don't reimage before forensic collection. Memory dumps, disk images, and logs are critical for root cause analysis.</p>
+              <p><strong>4. Communicate Clearly:</strong> Regular status updates to stakeholders. Define who communicates externally (legal, PR).</p>
+              <p><strong>5. Know When to Escalate:</strong> Clear severity definitions and escalation paths. Don't let ego delay getting help.</p>
+              <p><strong>6. Document Everything:</strong> Timestamps, actions taken, decisions made. This protects the organization and enables improvement.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="soar.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← SOAR</div>
+          </a>
+          <a href="threat-hunting.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Threat Hunting →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

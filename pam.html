@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privileged Access Management (PAM) | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to PAM architecture - credential vaulting, session management, and just-in-time access with detailed CyberArk flow.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item">
+            <a href="index.html" class="sidebar-nav-link">Overview</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">4. Identity & Access</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item">
+            <a href="directory-services.html" class="sidebar-nav-link">Directory Services</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="authentication-protocols.html" class="sidebar-nav-link">Authentication Protocols</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="sso.html" class="sidebar-nav-link">Single Sign-On</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="mfa.html" class="sidebar-nav-link">Multi-Factor Authentication</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="conditional-access.html" class="sidebar-nav-link">Conditional Access</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="pam.html" class="sidebar-nav-link active">Privileged Access Management</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="service-accounts.html" class="sidebar-nav-link">Service Principals</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="identity-governance.html" class="sidebar-nav-link">Identity Governance</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Related Sections</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item">
+            <a href="secrets-management.html" class="sidebar-nav-link">Secrets Management</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="pam.html" class="sidebar-nav-link">Bastion Hosts</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="vendor-risk.html" class="sidebar-nav-link">Vendor Access Flow</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="pam.html" class="sidebar-nav-link">Break-Glass Access</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <a href="directory-services.html">Identity & Access</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Privileged Access Management</span>
+          </div>
+          <h1>Privileged Access Management (PAM)</h1>
+          <p class="page-description">
+            PAM solutions secure, manage, and monitor privileged accounts and access to critical systems. Modern PAM provides credential vaulting, session recording, just-in-time access, and automatic password rotation to reduce the risk of credential theft and misuse.
+          </p>
+        </div>
+
+        <!-- Overview -->
+        <section>
+          <h2 id="overview">Why PAM Matters</h2>
+          <p>
+            Privileged accounts (domain admins, root, service accounts, cloud IAM roles) are the keys to the kingdom. Attackers specifically target these credentials because they provide unrestricted access to systems, data, and the ability to cover their tracks. PAM addresses this by eliminating standing privileges, securing credential storage, and providing complete audit trails of privileged activity.
+          </p>
+
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Key Statistics
+            </div>
+            <div class="info-box-content">
+              <p><strong>74%</strong> of data breaches involve privileged credential abuse (Verizon DBIR 2023)</p>
+              <p><strong>80%</strong> of security breaches involve compromised credentials (Forrester)</p>
+              <p>Average <strong>$4.4M</strong> cost per breach involving stolen/compromised credentials (IBM Cost of a Data Breach 2023)</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Traditional vs Modern -->
+        <section>
+          <h2 id="comparison">Traditional vs. Modern PAM</h2>
+          
+          <div class="comparison-split">
+            <!-- Traditional Way -->
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Traditional Approach (The Problem)
+              </div>
+              <div class="comparison-box-content">
+                <h4>Shared Admin Accounts</h4>
+                <ul>
+                  <li>Single "admin" account shared by entire team</li>
+                  <li>Password written on sticky note or in spreadsheet</li>
+                  <li>Password never rotated (or rotated annually)</li>
+                  <li>Same password used across multiple systems</li>
+                  <li>No audit trail of who did what</li>
+                  <li>No session recording</li>
+                  <li>24/7 standing access to all systems</li>
+                </ul>
+
+                <h4 style="margin-top: var(--space-lg);">Typical Attack Path</h4>
+                <div class="flow-vertical">
+                  <div class="flow-vertical-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Initial Compromise</div>
+                      <div class="flow-step-description">Attacker phishes helpdesk user, gains initial foothold</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step danger">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Credential Theft</div>
+                      <div class="flow-step-description">Runs Mimikatz, finds "admin" password hash in memory</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step danger">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Lateral Movement</div>
+                      <div class="flow-step-description">Same admin password works on 50 servers (no rotation)</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step danger">
+                    <div class="flow-step-number">4</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Domain Compromise</div>
+                      <div class="flow-step-description">Reaches domain controller, becomes Domain Admin. Game over.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modern Way -->
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Modern Approach (The Solution)
+              </div>
+              <div class="comparison-box-content">
+                <h4>Vaulted Privileged Access</h4>
+                <ul>
+                  <li>Credentials stored in encrypted vault (HSM-backed)</li>
+                  <li>Individual accountability — personal accounts for all users</li>
+                  <li>Automatic password rotation (after each use or daily)</li>
+                  <li>Just-in-time access — request elevated access when needed</li>
+                  <li>Approval workflows for sensitive systems</li>
+                  <li>Full session recording (video + keystroke)</li>
+                  <li>Time-limited access windows</li>
+                </ul>
+
+                <h4 style="margin-top: var(--space-lg);">Attack Mitigation</h4>
+                <div class="flow-vertical">
+                  <div class="flow-vertical-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Initial Compromise</div>
+                      <div class="flow-step-description">Attacker phishes helpdesk user, gains initial foothold</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step warning">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">No Credentials to Steal</div>
+                      <div class="flow-step-description">Mimikatz finds no privileged credentials — all vaulted</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step success">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">PAM Blocks Lateral Movement</div>
+                      <div class="flow-step-description">No standing admin access. JIT request triggers alert.</div>
+                    </div>
+                  </div>
+                  <div class="flow-vertical-step success">
+                    <div class="flow-step-number">4</div>
+                    <div class="flow-step-content">
+                      <div class="flow-step-title">Attack Contained</div>
+                      <div class="flow-step-description">Attacker limited to initial user's permissions. Detected & ejected.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PAM Architecture -->
+        <section>
+          <h2 id="architecture">PAM Architecture Components</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
+              <!-- Background -->
+              <rect width="900" height="520" fill="#0f1117"/>
+              
+              <!-- Users Zone -->
+              <rect x="30" y="30" width="200" height="180" rx="8" fill="rgba(59, 130, 246, 0.05)" stroke="#3b82f6" stroke-dasharray="4"/>
+              <text x="130" y="55" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">PRIVILEGED USERS</text>
+              
+              <rect x="50" y="75" width="70" height="50" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="85" y="100" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">IT Admin</text>
+              <text x="85" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">MFA Required</text>
+              
+              <rect x="140" y="75" width="70" height="50" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="175" y="100" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">DBA</text>
+              <text x="175" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">MFA Required</text>
+              
+              <rect x="50" y="140" width="70" height="50" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="85" y="165" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Security</text>
+              <text x="85" y="180" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">MFA Required</text>
+              
+              <rect x="140" y="140" width="70" height="50" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="175" y="165" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Vendor</text>
+              <text x="175" y="180" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="8">Limited Access</text>
+              
+              <!-- PAM Platform -->
+              <rect x="280" y="30" width="340" height="460" rx="8" fill="rgba(16, 185, 129, 0.05)" stroke="#10b981" stroke-dasharray="4"/>
+              <text x="450" y="55" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">PAM PLATFORM (CyberArk / BeyondTrust)</text>
+              
+              <!-- Vault -->
+              <rect x="310" y="80" width="280" height="100" rx="6" fill="#1e2430" stroke="#10b981" stroke-width="2"/>
+              <text x="450" y="105" text-anchor="middle" fill="#f1f5f9" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">🔐 Credential Vault</text>
+              <text x="450" y="125" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">AES-256 Encrypted • HSM Key Protection</text>
+              
+              <rect x="330" y="140" width="80" height="30" rx="4" fill="#151921" stroke="#2a3142"/>
+              <text x="370" y="158" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Domain Admins</text>
+              
+              <rect x="420" y="140" width="80" height="30" rx="4" fill="#151921" stroke="#2a3142"/>
+              <text x="460" y="158" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Local Admins</text>
+              
+              <rect x="510" y="140" width="60" height="30" rx="4" fill="#151921" stroke="#2a3142"/>
+              <text x="540" y="158" text-anchor="middle" fill="#94a3b8" font-family="IBM Plex Sans, sans-serif" font-size="8">Root/SSH</text>
+              
+              <!-- Session Manager -->
+              <rect x="310" y="200" width="130" height="80" rx="6" fill="#1e2430" stroke="#8b5cf6" stroke-width="1"/>
+              <text x="375" y="225" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600">Session Manager</text>
+              <text x="375" y="245" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">PSM / Proxy</text>
+              <text x="375" y="260" text-anchor="middle" fill="#8b5cf6" font-family="IBM Plex Sans, sans-serif" font-size="8">Session Recording</text>
+              <text x="375" y="272" text-anchor="middle" fill="#8b5cf6" font-family="IBM Plex Sans, sans-serif" font-size="8">Keystroke Logging</text>
+              
+              <!-- JIT Access -->
+              <rect x="460" y="200" width="130" height="80" rx="6" fill="#1e2430" stroke="#f59e0b" stroke-width="1"/>
+              <text x="525" y="225" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600">JIT Access</text>
+              <text x="525" y="245" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Request Workflow</text>
+              <text x="525" y="260" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="8">Time-Limited</text>
+              <text x="525" y="272" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="8">Approval Required</text>
+              
+              <!-- Password Rotation -->
+              <rect x="310" y="300" width="130" height="70" rx="6" fill="#1e2430" stroke="#06b6d4" stroke-width="1"/>
+              <text x="375" y="325" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600">Auto-Rotation</text>
+              <text x="375" y="345" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">CPM Component</text>
+              <text x="375" y="360" text-anchor="middle" fill="#06b6d4" font-family="IBM Plex Sans, sans-serif" font-size="8">Post-Use / Scheduled</text>
+              
+              <!-- Discovery -->
+              <rect x="460" y="300" width="130" height="70" rx="6" fill="#1e2430" stroke="#ef4444" stroke-width="1"/>
+              <text x="525" y="325" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600">Account Discovery</text>
+              <text x="525" y="345" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Find Privileged Accts</text>
+              <text x="525" y="360" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">Onboard to Vault</text>
+              
+              <!-- Analytics -->
+              <rect x="310" y="390" width="280" height="80" rx="6" fill="#1e2430" stroke="#3b82f6" stroke-width="1"/>
+              <text x="450" y="415" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600">Privileged Threat Analytics (PTA)</text>
+              <text x="450" y="435" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="9">UEBA • Anomaly Detection • Risk Scoring</text>
+              <text x="450" y="455" text-anchor="middle" fill="#3b82f6" font-family="IBM Plex Sans, sans-serif" font-size="8">Integration: SIEM / SOAR / Identity Protection</text>
+              
+              <!-- Target Systems -->
+              <rect x="670" y="30" width="200" height="460" rx="8" fill="rgba(239, 68, 68, 0.05)" stroke="#ef4444" stroke-dasharray="4"/>
+              <text x="770" y="55" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">TARGET SYSTEMS</text>
+              
+              <rect x="690" y="80" width="160" height="50" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="770" y="102" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10">Domain Controllers</text>
+              <text x="770" y="118" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">CRITICAL</text>
+              
+              <rect x="690" y="145" width="160" height="50" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="770" y="167" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10">Database Servers</text>
+              <text x="770" y="183" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="8">HIGH</text>
+              
+              <rect x="690" y="210" width="160" height="50" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="770" y="232" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10">Linux/Unix Servers</text>
+              <text x="770" y="248" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="8">HIGH</text>
+              
+              <rect x="690" y="275" width="160" height="50" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="770" y="297" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10">Network Devices</text>
+              <text x="770" y="313" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="8">HIGH</text>
+              
+              <rect x="690" y="340" width="160" height="50" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="770" y="362" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10">Cloud IAM / Console</text>
+              <text x="770" y="378" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">CRITICAL</text>
+              
+              <rect x="690" y="405" width="160" height="50" rx="4" fill="#1e2430" stroke="#2a3142"/>
+              <text x="770" y="427" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="10">Security Tools</text>
+              <text x="770" y="443" text-anchor="middle" fill="#ef4444" font-family="IBM Plex Sans, sans-serif" font-size="8">CRITICAL</text>
+              
+              <!-- Connection Arrows -->
+              <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+                </marker>
+              </defs>
+              
+              <!-- User to PAM -->
+              <path d="M230 130 L280 130" stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+              <text x="255" y="120" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">MFA</text>
+              
+              <!-- PAM to Targets -->
+              <path d="M620 240 L690 240" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+              <text x="655" y="230" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Proxied</text>
+            </svg>
+          </div>
+        </section>
+
+        <!-- Detailed CyberArk Flow -->
+        <section>
+          <h2 id="cyberark-flow">Detailed Access Flow: CyberArk PSM</h2>
+          
+          <p>
+            This flow demonstrates how a privileged session is established through CyberArk's Privileged Session Manager (PSM) to access a domain controller.
+          </p>
+
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Admin → CyberArk PSM → Domain Controller</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Authentication — PVWA Login</div>
+                  <div class="flow-step-description">
+                    Admin navigates to CyberArk Password Vault Web Access (PVWA) portal and authenticates with MFA.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Authentication Flow</span>
+                    </div>
+                    <pre><code>User: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9ef4edf3f7eaf6defdf1eceeb0fdf1f3">[email&#160;protected]</a>
+Portal: https://pam.corp.com/PasswordVault
+
+Authentication:
+  Method 1: Active Directory (LDAP)
+  Method 2: RADIUS → Duo MFA Push
+  
+Session Token: JWT signed by Vault
+User Groups: ["IT-Admins", "DC-Operators"]
+Safe Access: ["Windows-DomainAdmins", "Windows-Servers"]</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Account Selection — Request Access</div>
+                  <div class="flow-step-description">
+                    User browses available accounts and selects target system. Platform determines if approval is required.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Access Request</span>
+                    </div>
+                    <pre><code>Target Account:
+  Username: corp\svc-dc-admin
+  Platform: Windows Domain Controller
+  Safe: Windows-DomainAdmins
+  
+Target System:
+  Hostname: DC01.corp.com
+  IP: 10.0.1.10
+  Connection: RDP (Port 3389)
+
+Access Policy Check:
+  ✓ User in allowed group (DC-Operators)
+  ✓ Within allowed time window (Business Hours)
+  ⚠ Dual Control Required: YES
+  
+Workflow Triggered: Request sent to Security Team for approval</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Approval Workflow (If Required)</div>
+                  <div class="flow-step-description">
+                    For high-risk systems like domain controllers, dual-control approval is required before access is granted.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Dual Control Approval</span>
+                    </div>
+                    <pre><code>Request ID: REQ-2024-01-15-0042
+Requestor: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dab0a9b7b3aeb29ab9b5a8aaf4b9b5b7">[email&#160;protected]</a>
+Reason: "Monthly AD health check per CHG-1234"
+
+Approval Required From: Security-PAM-Approvers
+Approver: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fc8f999f9d98919592bc9f938e8cd29f9391">[email&#160;protected]</a>
+Response: APPROVED
+Approval Time: 2024-01-15T10:32:15Z
+
+Access Window Granted:
+  Start: 2024-01-15T10:32:15Z
+  Duration: 2 hours
+  Auto-Terminate: 2024-01-15T12:32:15Z</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Credential Retrieval — Vault Checkout</div>
+                  <div class="flow-step-description">
+                    PSM retrieves the credential from the vault. User never sees the actual password.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Vault Operation</span>
+                    </div>
+                    <pre><code>Vault Request:
+  Operation: GetPassword
+  Safe: Windows-DomainAdmins
+  Object: Operating System-WinDomain-DC01-corp\svc-dc-admin
+  
+Vault Response:
+  Password: [REDACTED - 32 char complex]
+  Last Changed: 2024-01-14T00:00:00Z
+  Exclusive: YES (locked to this session)
+  
+Audit Log:
+  Event: Password Retrieved
+  User: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d0baa3bdb9a4b890b3bfa2a0feb3bfbd">[email&#160;protected]</a>
+  Reason: PSM Session to DC01.corp.com
+  Ticket: CHG-1234</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Session Establishment — PSM Proxy</div>
+                  <div class="flow-step-description">
+                    User's RDP client connects to PSM server, which then establishes connection to target on user's behalf.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">PSM Connection</span>
+                    </div>
+                    <pre><code>Connection Path:
+  User Workstation → PSM Server → Domain Controller
+  
+Leg 1 (User → PSM):
+  Protocol: RDP
+  Source: 192.168.1.100 (jsmith-PC)
+  Destination: 10.0.10.50:3389 (PSM01)
+  Credentials: User's own AD account (jsmith)
+  
+Leg 2 (PSM → Target):
+  Protocol: RDP
+  Source: 10.0.10.50 (PSM01)
+  Destination: 10.0.1.10:3389 (DC01)
+  Credentials: Vaulted account (corp\svc-dc-admin)
+  
+Session ID: PSM-2024-01-15-1042-DC01
+Recording: ENABLED (Video + Keystroke + Commands)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">6</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Active Session — Recording & Monitoring</div>
+                  <div class="flow-step-description">
+                    User works on target system while PSM records entire session for audit and compliance.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Session Activity</span>
+                    </div>
+                    <pre><code>Session Monitoring:
+  Video Recording: psm_20240115_1042_dc01.avi
+  Keystroke Log: psm_20240115_1042_dc01.log
+  Window Titles: Captured
+  Command Audit: PowerShell transcription enabled
+  
+Real-Time Alerts (PTA):
+  ✓ No suspicious commands detected
+  ✓ No off-hours access
+  ✓ No unusual data access patterns
+  
+Sample Commands Captured:
+  10:35:22 - Get-ADUser -Filter * | Measure-Object
+  10:38:45 - Get-ADReplicationPartnerMetadata -Target DC01
+  10:42:11 - dcdiag /v /c /d /e</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">7</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Session Termination — Password Rotation</div>
+                  <div class="flow-step-description">
+                    When session ends, CPM automatically rotates the password ensuring one-time-use credentials.
+                  </div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header">
+                      <span class="code-block-title">Post-Session Actions</span>
+                    </div>
+                    <pre><code>Session Ended: 2024-01-15T11:15:33Z
+Duration: 43 minutes
+Termination: User logout (normal)
+
+Password Rotation (CPM):
+  Account: corp\svc-dc-admin
+  Trigger: Post-session rotation policy
+  Old Password: [EXPIRED]
+  New Password: [Generated - 32 char complex]
+  Verification: SUCCESS (tested login)
+  
+Recording Finalized:
+  File: psm_20240115_1042_dc01.avi
+  Duration: 43:22
+  Size: 128 MB
+  Retention: 90 days
+  Searchable: YES (OCR/transcription indexed)</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Key Capabilities -->
+        <section>
+          <h2 id="capabilities">Core PAM Capabilities</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>Description</th>
+                  <th>Security Benefit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Credential Vaulting</strong></td>
+                  <td>Encrypted storage of privileged credentials with HSM key protection</td>
+                  <td>Eliminates credential theft from endpoints, spreadsheets, scripts</td>
+                </tr>
+                <tr>
+                  <td><strong>Session Isolation</strong></td>
+                  <td>Jump server / proxy prevents direct connections to critical systems</td>
+                  <td>Contains compromise, prevents lateral movement</td>
+                </tr>
+                <tr>
+                  <td><strong>Session Recording</strong></td>
+                  <td>Video capture, keystroke logging, command auditing</td>
+                  <td>Full accountability, forensic evidence, compliance</td>
+                </tr>
+                <tr>
+                  <td><strong>Just-In-Time Access</strong></td>
+                  <td>Temporary elevated access with automatic expiration</td>
+                  <td>Eliminates standing privileges, reduces attack surface</td>
+                </tr>
+                <tr>
+                  <td><strong>Auto Password Rotation</strong></td>
+                  <td>Automatic credential change after use or on schedule</td>
+                  <td>Invalidates stolen credentials, enforces uniqueness</td>
+                </tr>
+                <tr>
+                  <td><strong>Approval Workflows</strong></td>
+                  <td>Dual-control and manager approval for sensitive access</td>
+                  <td>Prevents unauthorized access, audit trail</td>
+                </tr>
+                <tr>
+                  <td><strong>Privileged Threat Analytics</strong></td>
+                  <td>ML-based anomaly detection on privileged activity</td>
+                  <td>Detects credential misuse, insider threats</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Vendor Comparison -->
+        <section>
+          <h2 id="vendors">PAM Vendor Comparison</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">CyberArk</div>
+            <div class="vendor-item">BeyondTrust</div>
+            <div class="vendor-item">Delinea (Thycotic + Centrify)</div>
+            <div class="vendor-item">HashiCorp Vault</div>
+            <div class="vendor-item">Microsoft Entra PIM</div>
+            <div class="vendor-item">AWS IAM Identity Center</div>
+            <div class="vendor-item">One Identity</div>
+            <div class="vendor-item">Saviynt</div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>CyberArk</th>
+                  <th>BeyondTrust</th>
+                  <th>Microsoft Entra PIM</th>
+                  <th>HashiCorp Vault</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Deployment Model</td>
+                  <td>On-prem / SaaS</td>
+                  <td>On-prem / SaaS</td>
+                  <td>Cloud-only</td>
+                  <td>On-prem / Cloud</td>
+                </tr>
+                <tr>
+                  <td>Windows Admin Accounts</td>
+                  <td class="check-yes">✓ Full</td>
+                  <td class="check-yes">✓ Full</td>
+                  <td class="check-partial">Azure only</td>
+                  <td class="check-partial">Via plugins</td>
+                </tr>
+                <tr>
+                  <td>Unix/Linux Root</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-no">✗</td>
+                  <td class="check-yes">✓</td>
+                </tr>
+                <tr>
+                  <td>Session Recording</td>
+                  <td class="check-yes">✓ PSM</td>
+                  <td class="check-yes">✓ PBPS</td>
+                  <td class="check-no">✗</td>
+                  <td class="check-no">✗</td>
+                </tr>
+                <tr>
+                  <td>Cloud IAM</td>
+                  <td class="check-yes">✓ AWS/Azure/GCP</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓ Azure Native</td>
+                  <td class="check-yes">✓ Dynamic Secrets</td>
+                </tr>
+                <tr>
+                  <td>DevOps Integration</td>
+                  <td class="check-yes">✓ Conjur</td>
+                  <td class="check-partial">Limited</td>
+                  <td class="check-partial">Azure DevOps</td>
+                  <td class="check-yes">✓ Native</td>
+                </tr>
+                <tr>
+                  <td>JIT Access</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓</td>
+                  <td class="check-yes">✓ Native</td>
+                  <td class="check-yes">✓ Leases</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Best Practices -->
+        <section>
+          <h2 id="best-practices">PAM Implementation Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              PAM Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with Tier 0 Assets:</strong> Begin with your most critical systems — domain controllers, PKI, security tools. These are the highest value targets.</p>
+              <p><strong>2. Enable Session Recording Early:</strong> Even before blocking direct access, enable monitoring to establish baseline and demonstrate value.</p>
+              <p><strong>3. Eliminate Standing Privileges:</strong> Move to JIT access model. No one should have permanent admin rights — request access when needed.</p>
+              <p><strong>4. Rotate After Every Use:</strong> One-time passwords ensure that even if credentials are somehow captured, they're immediately invalid.</p>
+              <p><strong>5. Integrate with SIEM:</strong> Forward all PAM events to your SIEM for correlation with other security data.</p>
+              <p><strong>6. Don't Forget Service Accounts:</strong> Application and service accounts often have more privilege than human accounts. Vault them too.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Page Navigation -->
+        <nav class="page-nav">
+          <a href="conditional-access.html" class="page-nav-lin

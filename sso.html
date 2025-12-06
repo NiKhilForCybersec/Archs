@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Single Sign-On (SSO) | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to SSO - SAML, OIDC/OAuth 2.0, federation, and detailed authentication flows.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">4. Identity & Access</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="directory-services.html" class="sidebar-nav-link">Directory Services</a></li>
+          <li class="sidebar-nav-item"><a href="authentication-protocols.html" class="sidebar-nav-link">Authentication Protocols</a></li>
+          <li class="sidebar-nav-item"><a href="sso.html" class="sidebar-nav-link active">Single Sign-On</a></li>
+          <li class="sidebar-nav-item"><a href="mfa.html" class="sidebar-nav-link">Multi-Factor Authentication</a></li>
+          <li class="sidebar-nav-item"><a href="conditional-access.html" class="sidebar-nav-link">Conditional Access</a></li>
+          <li class="sidebar-nav-item"><a href="pam.html" class="sidebar-nav-link">Privileged Access Management</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <a href="directory-services.html">Identity & Access</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>SSO</span>
+          </div>
+          <h1>Single Sign-On (SSO)</h1>
+          <p class="page-description">SSO allows users to authenticate once and access multiple applications without re-entering credentials. It improves user experience, reduces password fatigue, centralizes authentication policy, and enables consistent security controls like MFA across all applications.</p>
+        </div>
+
+        <section>
+          <h2 id="comparison">Without SSO vs. With SSO</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Without SSO (Siloed Auth)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Separate username/password per application</li>
+                  <li>User manages 50+ passwords</li>
+                  <li>Password reuse across apps (security risk)</li>
+                  <li>Inconsistent MFA implementation</li>
+                  <li>No central visibility of access</li>
+                  <li>Offboarding requires disabling N accounts</li>
+                </ul>
+                <div class="info-box danger" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Risk:</strong> User terminated → IT disables AD but forgets SaaS apps → ex-employee still has Salesforce access.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                With SSO (Federated Identity)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>One identity, one password, many apps</li>
+                  <li>User authenticates once to IdP</li>
+                  <li>Apps trust IdP assertion (no local password)</li>
+                  <li>Consistent MFA at IdP level</li>
+                  <li>Central audit trail of all access</li>
+                  <li>Disable IdP account → all access revoked</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Benefit:</strong> User terminated → disable Entra ID account → Salesforce, Slack, Zoom, GitHub all immediately inaccessible.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="protocols">SSO Protocols</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Protocol</th>
+                  <th>Full Name</th>
+                  <th>Use Case</th>
+                  <th>Token Format</th>
+                  <th>Transport</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>SAML 2.0</strong></td>
+                  <td>Security Assertion Markup Language</td>
+                  <td>Enterprise web apps, legacy</td>
+                  <td>XML assertion</td>
+                  <td>HTTP POST/Redirect</td>
+                </tr>
+                <tr>
+                  <td><strong>OIDC</strong></td>
+                  <td>OpenID Connect (OAuth 2.0 + identity)</td>
+                  <td>Modern web/mobile apps, APIs</td>
+                  <td>JWT (id_token)</td>
+                  <td>HTTP + JSON</td>
+                </tr>
+                <tr>
+                  <td><strong>OAuth 2.0</strong></td>
+                  <td>Open Authorization</td>
+                  <td>API authorization (not auth)</td>
+                  <td>Access token</td>
+                  <td>HTTP + JSON</td>
+                </tr>
+                <tr>
+                  <td><strong>WS-Fed</strong></td>
+                  <td>WS-Federation</td>
+                  <td>Microsoft legacy (ADFS)</td>
+                  <td>SAML token</td>
+                  <td>HTTP POST</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="info-box info" style="margin-top: var(--space-lg);">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              SAML vs. OIDC: When to Use Which
+            </div>
+            <div class="info-box-content">
+              <p><strong>Use SAML when:</strong> Integrating with enterprise SaaS (Salesforce, Workday, ServiceNow), legacy apps, or when the app only supports SAML.</p>
+              <p><strong>Use OIDC when:</strong> Building modern apps, mobile apps, SPAs, or need to call APIs. OIDC is simpler, uses JSON, and is better for developers.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="saml-flow">SAML 2.0 Authentication Flow</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">SP-Initiated SAML SSO (User Accesses Salesforce)</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Accesses Service Provider (Salesforce)</div>
+                  <div class="flow-step-description">User navigates to contoso.my.salesforce.com</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Initial Request</span></div>
+                    <pre><code>GET https://contoso.my.salesforce.com/
+User: Not authenticated (no session)
+Salesforce: "I don't know this user, redirect to IdP"</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">SP Redirects to Identity Provider</div>
+                  <div class="flow-step-description">Salesforce generates SAML AuthnRequest and redirects user to Entra ID</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">SAML AuthnRequest</span></div>
+                    <pre><code>HTTP 302 Redirect to:
+https://login.microsoftonline.com/{tenant}/saml2
+  ?SAMLRequest=base64(deflate(AuthnRequest))
+  &RelayState=https://contoso.my.salesforce.com/home
+
+AuthnRequest (decoded):
+&lt;samlp:AuthnRequest
+  ID="_abc123"
+  Version="2.0"
+  IssueInstant="2024-01-15T10:30:00Z"
+  Destination="https://login.microsoftonline.com/..."
+  AssertionConsumerServiceURL="https://contoso.my.salesforce.com/..."&gt;
+  &lt;saml:Issuer&gt;https://contoso.my.salesforce.com&lt;/saml:Issuer&gt;
+&lt;/samlp:AuthnRequest&gt;</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Authenticates at IdP</div>
+                  <div class="flow-step-description">Entra ID prompts for credentials and MFA</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Authentication</span></div>
+                    <pre><code>Entra ID Login Page:
+  User enters: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4c263f212538240c2f232238233f23622f2321">[email&#160;protected]</a>
+  Password: ********
+  MFA: Authenticator push approved ✓
+
+Entra ID validates:
+  ✓ User exists in directory
+  ✓ Password correct
+  ✓ MFA satisfied
+  ✓ Conditional Access: Allow (compliant device)
+  ✓ User assigned to Salesforce Enterprise App</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">IdP Issues SAML Response</div>
+                  <div class="flow-step-description">Entra ID creates signed SAML assertion and POSTs to Salesforce</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">SAML Response</span></div>
+                    <pre><code>HTTP POST to: https://contoso.my.salesforce.com/saml/acs
+
+SAMLResponse (simplified):
+&lt;samlp:Response&gt;
+  &lt;saml:Assertion&gt;
+    &lt;saml:Issuer&gt;https://sts.windows.net/{tenant}/&lt;/saml:Issuer&gt;
+    
+    &lt;saml:Subject&gt;
+      &lt;saml:NameID&gt;<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4e243d23273a260e2d21203a213d21602d2123">[email&#160;protected]</a>&lt;/saml:NameID&gt;
+    &lt;/saml:Subject&gt;
+    
+    &lt;saml:Conditions NotBefore="..." NotOnOrAfter="..."&gt;
+      &lt;saml:AudienceRestriction&gt;
+        &lt;saml:Audience&gt;https://contoso.my.salesforce.com&lt;/saml:Audience&gt;
+      &lt;/saml:AudienceRestriction&gt;
+    &lt;/saml:Conditions&gt;
+    
+    &lt;saml:AttributeStatement&gt;
+      &lt;saml:Attribute Name="email"&gt;<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1379607e7a677b53707c7d677c607c3d707c7e">[email&#160;protected]</a>&lt;/saml:Attribute&gt;
+      &lt;saml:Attribute Name="firstName"&gt;John&lt;/saml:Attribute&gt;
+      &lt;saml:Attribute Name="lastName"&gt;Smith&lt;/saml:Attribute&gt;
+      &lt;saml:Attribute Name="groups"&gt;Sales-Team&lt;/saml:Attribute&gt;
+    &lt;/saml:AttributeStatement&gt;
+    
+    &lt;ds:Signature&gt;...RSA-SHA256 signature...&lt;/ds:Signature&gt;
+  &lt;/saml:Assertion&gt;
+&lt;/samlp:Response&gt;</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">SP Validates Assertion & Creates Session</div>
+                  <div class="flow-step-description">Salesforce validates signature, creates local session</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Validation</span></div>
+                    <pre><code>Salesforce Validation:
+  ✓ Signature valid (using IdP public certificate)
+  ✓ Assertion not expired (NotOnOrAfter check)
+  ✓ Audience matches (https://contoso.my.salesforce.com)
+  ✓ User <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2b415846425f436b4844455f44584405484446">[email&#160;protected]</a> exists in Salesforce
+  
+Session Created:
+  User: John Smith (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1d776e707469755d7e727369726e72337e7270">[email&#160;protected]</a>)
+  Profile: Sales User
+  Permissions: Based on Salesforce profile + groups attribute
+  
+Redirect to: https://contoso.my.salesforce.com/home
+Result: User is logged in to Salesforce ✓</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="oidc-flow">OIDC Authentication Flow</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Authorization Code Flow (Web Application)</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Application Redirects to IdP</div>
+                  <div class="flow-step-description">App redirects user to Entra ID authorization endpoint</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Authorization Request</span></div>
+                    <pre><code>GET https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize
+  ?client_id=app-client-id-guid
+  &response_type=code
+  &redirect_uri=https://app.contoso.com/callback
+  &scope=openid profile email
+  &state=random-csrf-token
+  &nonce=random-replay-protection</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">User Authenticates</div>
+                  <div class="flow-step-description">User logs in at IdP (same as SAML)</div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">IdP Returns Authorization Code</div>
+                  <div class="flow-step-description">Entra ID redirects back with short-lived code</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Callback</span></div>
+                    <pre><code>GET https://app.contoso.com/callback
+  ?code=OAQABAAIAAAAm-06blBE...
+  &state=random-csrf-token
+
+App validates: state matches (CSRF protection)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">App Exchanges Code for Tokens</div>
+                  <div class="flow-step-description">Backend calls token endpoint with code + client secret</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Token Exchange</span></div>
+                    <pre><code>POST https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code
+&code=OAQABAAIAAAAm-06blBE...
+&redirect_uri=https://app.contoso.com/callback
+&client_id=app-client-id
+&client_secret=app-secret
+
+Response:
+{
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOi...",
+  "id_token": "eyJ0eXAiOiJKV1QiLCJhbGciOi...",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "refresh_token": "OAQABAAAAAAm-06blBE..."
+}</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">App Validates ID Token</div>
+                  <div class="flow-step-description">Decode JWT, verify signature, extract user info</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">ID Token (Decoded)</span></div>
+                    <pre><code>{
+  "iss": "https://login.microsoftonline.com/{tenant}/v2.0",
+  "sub": "user-object-id",
+  "aud": "app-client-id",
+  "exp": 1705320000,
+  "iat": 1705316400,
+  "nonce": "random-replay-protection",
+  "name": "John Smith",
+  "preferred_username": "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ed879e80849985ad8e828399829e82c38e8280">[email&#160;protected]</a>",
+  "email": "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7218011f1b061a32111d1c061d011d5c111d1f">[email&#160;protected]</a>",
+  "groups": ["Sales-Team", "All-Employees"]
+}
+
+Validation:
+  ✓ Signature valid (RS256, IdP public key)
+  ✓ iss matches expected issuer
+  ✓ aud matches our client_id
+  ✓ exp > current time (not expired)
+  ✓ nonce matches (replay protection)</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Identity Provider Comparison</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Microsoft Entra ID</div>
+            <div class="vendor-item">Okta</div>
+            <div class="vendor-item">Ping Identity</div>
+            <div class="vendor-item">Google Workspace</div>
+            <div class="vendor-item">OneLogin</div>
+            <div class="vendor-item">Auth0</div>
+            <div class="vendor-item">JumpCloud</div>
+            <div class="vendor-item">Duo (Cisco)</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">SSO Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              SSO Implementation Success Factors
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. SSO Everything:</strong> Every SaaS app should use SSO. Local accounts are security debt. No exceptions for "small" apps.</p>
+              <p><strong>2. Enforce MFA at IdP:</strong> If MFA is required at the IdP, all SSO apps inherit that protection automatically.</p>
+              <p><strong>3. Use Conditional Access:</strong> Block access from unmanaged devices, high-risk locations, or compromised accounts — applies to all apps.</p>
+              <p><strong>4. Disable Local Auth:</strong> After enabling SSO, disable local username/password authentication in the app if possible.</p>
+              <p><strong>5. Provision & Deprovision via SCIM:</

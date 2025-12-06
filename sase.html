@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SASE | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Secure Access Service Edge (SASE) - converged network and security as a cloud service.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">2. Network Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="ztna.html" class="sidebar-nav-link">ZTNA</a></li>
+          <li class="sidebar-nav-item"><a href="sase.html" class="sidebar-nav-link active">SASE</a></li>
+          <li class="sidebar-nav-item"><a href="vpn.html" class="sidebar-nav-link">VPN Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Network Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>SASE</span>
+          </div>
+          <h1>Secure Access Service Edge (SASE)</h1>
+          <p class="page-description">SASE converges networking (SD-WAN) and security (SSE) into a unified, cloud-delivered service. It provides secure access to applications regardless of user location, replacing traditional hub-and-spoke architectures.</p>
+        </div>
+
+        <section>
+          <h2 id="components">SASE Components</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 260" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="260" fill="#0f1117"/>
+              
+              <!-- SASE Container -->
+              <rect x="200" y="20" width="450" height="220" rx="8" fill="rgba(139, 92, 246, 0.05)" stroke="#8b5cf6" stroke-dasharray="4"/>
+              <text x="425" y="45" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="600">SASE = SD-WAN + SSE (Security Service Edge)</text>
+              
+              <!-- SD-WAN -->
+              <rect x="220" y="65" width="180" height="160" rx="6" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6"/>
+              <text x="310" y="90" text-anchor="middle" fill="#3b82f6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">SD-WAN</text>
+              <text x="310" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• WAN optimization</text>
+              <text x="310" y="135" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Application routing</text>
+              <text x="310" y="155" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Branch connectivity</text>
+              <text x="310" y="175" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• Traffic steering</text>
+              <text x="310" y="195" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• QoS policies</text>
+              
+              <!-- SSE -->
+              <rect x="450" y="65" width="180" height="160" rx="6" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="540" y="90" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">SSE</text>
+              <text x="540" y="115" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• ZTNA</text>
+              <text x="540" y="135" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• SWG</text>
+              <text x="540" y="155" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• CASB</text>
+              <text x="540" y="175" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• FWaaS</text>
+              <text x="540" y="195" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">• DLP</text>
+              
+              <!-- Users -->
+              <rect x="30" y="100" width="120" height="60" rx="6" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="90" y="125" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">Users</text>
+              <text x="90" y="145" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">Remote, Branch, HQ</text>
+              
+              <!-- Apps -->
+              <rect x="700" y="100" width="120" height="60" rx="6" fill="rgba(6, 182, 212, 0.1)" stroke="#06b6d4"/>
+              <text x="760" y="125" text-anchor="middle" fill="#06b6d4" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">Applications</text>
+              <text x="760" y="145" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">SaaS, Private, Web</text>
+              
+              <!-- Arrows -->
+              <path d="M150 130 L200 130" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray2)"/>
+              <path d="M650 130 L700 130" stroke="#64748b" stroke-width="1.5" fill="none" marker-end="url(#arrowGray2)"/>
+              
+              <defs>
+                <marker id="arrowGray2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#64748b"/></marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="sse">Security Service Edge (SSE)</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Component</th>
+                  <th>Function</th>
+                  <th>Replaces</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>ZTNA</strong></td>
+                  <td>Zero trust application access</td>
+                  <td>VPN for app access</td>
+                </tr>
+                <tr>
+                  <td><strong>SWG</strong></td>
+                  <td>Web filtering, threat protection</td>
+                  <td>On-prem proxy</td>
+                </tr>
+                <tr>
+                  <td><strong>CASB</strong></td>
+                  <td>SaaS visibility and control</td>
+                  <td>Shadow IT, DLP for SaaS</td>
+                </tr>
+                <tr>
+                  <td><strong>FWaaS</strong></td>
+                  <td>Cloud-delivered firewall</td>
+                  <td>Branch firewalls</td>
+                </tr>
+                <tr>
+                  <td><strong>DLP</strong></td>
+                  <td>Data loss prevention</td>
+                  <td>On-prem DLP appliances</td>
+                </tr>
+                <tr>
+                  <td><strong>RBI</strong></td>
+                  <td>Remote browser isolation</td>
+                  <td>Local browser security</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">SASE Vendors</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Zscaler</div>
+            <div class="vendor-item">Netskope</div>
+            <div class="vendor-item">Palo Alto Prisma SASE</div>
+            <div class="vendor-item">Cisco</div>
+            <div class="vendor-item">Fortinet</div>
+            <div class="vendor-item">Cloudflare One</div>
+            <div class="vendor-item">VMware VeloCloud</div>
+            <div class="vendor-item">Cato Networks</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">SASE Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              SASE Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start with SSE:</strong> Security is often more urgent than SD-WAN. Begin with ZTNA/SWG/CASB.</p>
+              <p><strong>2. Phase the Migration:</strong> Don't rip and replace. Migrate by location, user group, or application.</p>
+              <p><strong>3. Unified Vendor Preferred:</strong> Single vendor SASE = simpler operations. Best-of-breed = complexity.</p>
+              <p><strong>4. Plan for Latency:</strong> Cloud POPs matter. Ensure provider has presence near your users.</p>
+              <p><strong>5. Identity Integration:</strong> SASE depends on identity. Integrate with your IdP (Entra, Okta).</p>
+              <p><strong>6. Measure Performance:</strong> User experience is key. Monitor latency, throughput, app performance.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="ztna.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← ZTNA</div>
+          </a>
+          <a href="vpn.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">VPN Security →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

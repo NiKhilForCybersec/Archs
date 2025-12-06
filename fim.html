@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Integrity Monitoring | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to File Integrity Monitoring (FIM) - detecting unauthorized file changes, compliance requirements, and FIM implementation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">4. Endpoint Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="edr.html" class="sidebar-nav-link">EDR</a></li>
+          <li class="sidebar-nav-item"><a href="fim.html" class="sidebar-nav-link active">File Integrity Monitoring</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Endpoint Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>File Integrity Monitoring</span>
+          </div>
+          <h1>File Integrity Monitoring (FIM)</h1>
+          <p class="page-description">File Integrity Monitoring detects unauthorized changes to critical system files, configurations, and data. FIM is essential for detecting malware persistence, insider threats, and is required by PCI-DSS, HIPAA, and other compliance frameworks.</p>
+        </div>
+
+        <section>
+          <h2 id="how-it-works">How FIM Works</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">FIM Process Flow</span></div>
+            <pre><code># File Integrity Monitoring Process
+
+1. BASELINE CREATION
+   ┌────────────────────────────────────────────────────┐
+   │ • Calculate hash (SHA-256) of monitored files     │
+   │ • Record permissions, ownership, timestamps       │
+   │ • Store baseline in secure database               │
+   └────────────────────────────────────────────────────┘
+                            │
+                            ▼
+2. CONTINUOUS MONITORING
+   ┌────────────────────────────────────────────────────┐
+   │ • Real-time: Hook file system events (inotify)    │
+   │ • Scheduled: Periodic hash recalculation          │
+   │ • Compare current state vs baseline               │
+   └────────────────────────────────────────────────────┘
+                            │
+                            ▼
+3. CHANGE DETECTION
+   ┌────────────────────────────────────────────────────┐
+   │ File: /etc/passwd                                 │
+   │ Change Type: Content Modified                     │
+   │ Old Hash: a1b2c3d4...                            │
+   │ New Hash: e5f6g7h8...                            │
+   │ Changed By: root (PID 1234)                      │
+   │ Timestamp: 2024-12-06 14:32:15 UTC               │
+   └────────────────────────────────────────────────────┘
+                            │
+                            ▼
+4. ALERT & RESPONSE
+   ┌────────────────────────────────────────────────────┐
+   │ • Alert to SIEM                                   │
+   │ • Create incident ticket                          │
+   │ • Automated response (optional)                   │
+   │ • Update baseline if approved change              │
+   └────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="what-to-monitor">What to Monitor</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Examples (Linux)</th>
+                  <th>Examples (Windows)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>System Binaries</strong></td>
+                  <td>/bin, /sbin, /usr/bin</td>
+                  <td>C:\Windows\System32</td>
+                </tr>
+                <tr>
+                  <td><strong>Configuration Files</strong></td>
+                  <td>/etc/passwd, /etc/shadow, /etc/ssh/sshd_config</td>
+                  <td>Registry keys, GPO files</td>
+                </tr>
+                <tr>
+                  <td><strong>Boot Files</strong></td>
+                  <td>/boot/grub, /boot/vmlinuz</td>
+                  <td>BCD, bootloader</td>
+                </tr>
+                <tr>
+                  <td><strong>Application Configs</strong></td>
+                  <td>nginx.conf, httpd.conf</td>
+                  <td>IIS config, web.config</td>
+                </tr>
+                <tr>
+                  <td><strong>Startup Scripts</strong></td>
+                  <td>/etc/init.d, /etc/cron.d</td>
+                  <td>Startup folder, scheduled tasks</td>
+                </tr>
+                <tr>
+                  <td><strong>Sensitive Data</strong></td>
+                  <td>Database files, key files</td>
+                  <td>Certificates, encryption keys</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="compliance">FIM Compliance Requirements</h2>
+          
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Regulatory FIM Requirements
+            </div>
+            <div class="info-box-content">
+              <p><strong>PCI-DSS 11.5:</strong> Deploy FIM to alert on unauthorized modification of critical system files, configuration files, or content files. Compare at least weekly.</p>
+              <p><strong>HIPAA §164.312(b):</strong> Implement mechanisms to record and examine activity in systems containing ePHI.</p>
+              <p><strong>SOX Section 404:</strong> Controls to ensure integrity of financial data and systems.</p>
+              <p><strong>NIST 800-53 SI-7:</strong> Employ integrity verification tools to detect unauthorized changes.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">FIM Solutions</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">OSSEC</div>
+            <div class="vendor-item">Tripwire Enterprise</div>
+            <div class="vendor-item">AIDE</div>
+            <div class="vendor-item">Qualys FIM</div>
+            <div class="vendor-item">SolarWinds FIM</div>
+            <div class="vendor-item">CrowdStrike (built-in)</div>
+            <div class="vendor-item">Wazuh</div>
+            <div class="vendor-item">Samhain</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">FIM Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              FIM Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start Focused:</strong> Monitor critical files first. Too broad = alert fatigue. Expand gradually.</p>
+              <p><strong>2. Baseline After Patching:</strong> Update baselines after approved changes (patches, configs).</p>
+              <p><strong>3. Real-Time for Critical:</strong> Use real-time monitoring for security-critical files. Scheduled for others.</p>
+              <p><strong>4. Integrate with SIEM:</strong> FIM alerts need context. Correlate with other security events.</p>
+              <p><strong>5. Exclude Noise:</strong> Log files, temp files, cache directories create noise. Exclude appropriately.</p>
+              <p><strong>6. Change Management Integration:</strong> Link FIM to change tickets. Expected vs unexpected changes.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="edr.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← EDR</div>
+          </a>
+          <a href="dlp.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">DLP →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>
