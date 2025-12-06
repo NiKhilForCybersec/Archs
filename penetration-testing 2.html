@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Penetration Testing | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Penetration Testing - methodologies, scoping, reporting, and red team vs pen test distinctions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">7. Security Operations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="vuln-management.html" class="sidebar-nav-link">Vulnerability Management</a></li>
+          <li class="sidebar-nav-item"><a href="penetration-testing.html" class="sidebar-nav-link active">Penetration Testing</a></li>
+          <li class="sidebar-nav-item"><a href="red-team.html" class="sidebar-nav-link">Red Team Operations</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Security Operations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Penetration Testing</span>
+          </div>
+          <h1>Penetration Testing</h1>
+          <p class="page-description">Penetration testing simulates real-world attacks to identify exploitable vulnerabilities. Unlike vulnerability scanning, pen testing validates that vulnerabilities can actually be exploited and chains them to demonstrate business impact.</p>
+        </div>
+
+        <section>
+          <h2 id="types">Penetration Test Types</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Knowledge Level</th>
+                  <th>Scope</th>
+                  <th>Best For</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Black Box</strong></td>
+                  <td>No prior knowledge</td>
+                  <td>External perspective</td>
+                  <td>Realistic external attacker simulation</td>
+                </tr>
+                <tr>
+                  <td><strong>White Box</strong></td>
+                  <td>Full knowledge (code, architecture)</td>
+                  <td>Deep analysis</td>
+                  <td>Thorough security assessment</td>
+                </tr>
+                <tr>
+                  <td><strong>Gray Box</strong></td>
+                  <td>Partial knowledge (credentials, docs)</td>
+                  <td>Balanced approach</td>
+                  <td>Efficient testing with context</td>
+                </tr>
+                <tr>
+                  <td><strong>External</strong></td>
+                  <td>Internet-facing assets</td>
+                  <td>Perimeter</td>
+                  <td>Web apps, VPN, email</td>
+                </tr>
+                <tr>
+                  <td><strong>Internal</strong></td>
+                  <td>Inside network</td>
+                  <td>Assume breach</td>
+                  <td>Lateral movement, privilege escalation</td>
+                </tr>
+                <tr>
+                  <td><strong>Social Engineering</strong></td>
+                  <td>Human targets</td>
+                  <td>People/process</td>
+                  <td>Phishing, physical access</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="methodology">Penetration Testing Methodology</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">PTES Methodology Phases</span></div>
+            <pre><code># Penetration Testing Execution Standard (PTES)
+
+1. PRE-ENGAGEMENT
+   ┌────────────────────────────────────────────────────┐
+   │ • Scoping: What's in/out of scope                 │
+   │ • Rules of engagement: Testing windows, contacts  │
+   │ • Authorization: Written permission (get-out-of-  │
+   │   jail letter)                                    │
+   │ • Success criteria: What defines completion       │
+   └────────────────────────────────────────────────────┘
+                            │
+2. RECONNAISSANCE
+   ┌────────────────────────────────────────────────────┐
+   │ • Passive: OSINT, DNS, social media, job postings │
+   │ • Active: Port scanning, service enumeration      │
+   │ • Output: Target list, technology stack, attack   │
+   │   surface map                                     │
+   └────────────────────────────────────────────────────┘
+                            │
+3. VULNERABILITY ANALYSIS
+   ┌────────────────────────────────────────────────────┐
+   │ • Automated scanning: Nessus, Qualys, OpenVAS     │
+   │ • Manual testing: Business logic, authentication  │
+   │ • Research: CVEs, exploit availability            │
+   └────────────────────────────────────────────────────┘
+                            │
+4. EXPLOITATION
+   ┌────────────────────────────────────────────────────┐
+   │ • Validate vulnerabilities are exploitable        │
+   │ • Gain initial access                             │
+   │ • Document proof of exploitation                  │
+   └────────────────────────────────────────────────────┘
+                            │
+5. POST-EXPLOITATION
+   ┌────────────────────────────────────────────────────┐
+   │ • Privilege escalation                            │
+   │ • Lateral movement                                │
+   │ • Data access / exfiltration (simulated)          │
+   │ • Persistence (if in scope)                       │
+   └────────────────────────────────────────────────────┘
+                            │
+6. REPORTING
+   ┌────────────────────────────────────────────────────┐
+   │ • Executive summary: Business impact              │
+   │ • Technical findings: CVE, severity, evidence     │
+   │ • Remediation recommendations                     │
+   │ • Attack narrative: How access was achieved       │
+   └────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="comparison">Pen Test vs Vulnerability Scan vs Red Team</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Vulnerability Scan</h4>
+              <p class="card-description">Automated tool identifies known vulnerabilities. No exploitation. Broad coverage, many false positives. Run frequently (weekly/monthly).</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">Penetration Test</h4>
+              <p class="card-description">Human-driven exploitation of vulnerabilities. Validates real risk. Scoped, time-limited. Annual or after major changes.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Red Team</h4>
+              <p class="card-description">Adversary simulation with objectives (steal data, access CEO email). Tests detection and response. Longer duration, full TTPs.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="tools">Common Pen Test Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Burp Suite</div>
+            <div class="vendor-item">Metasploit</div>
+            <div class="vendor-item">Nmap</div>
+            <div class="vendor-item">Cobalt Strike</div>
+            <div class="vendor-item">BloodHound</div>
+            <div class="vendor-item">Impacket</div>
+            <div class="vendor-item">Responder</div>
+            <div class="vendor-item">CrackMapExec</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Penetration Testing Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Penetration Testing Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Get Written Authorization:</strong> Always have signed permission before testing. Protect yourself and the tester.</p>
+              <p><strong>2. Define Clear Scope:</strong> In-scope systems, out-of-scope (production DBs?), testing windows, emergency contacts.</p>
+              <p><strong>3. Test Regularly:</strong> Annual minimum. After major changes, new applications, or significant infrastructure updates.</p>
+              <p><strong>4. Remediate and Retest:</strong> Findings without fixes are wasted effort. Verify remediation with retest.</p>
+              <p><strong>5. Use Qualified Testers:</strong> OSCP, GPEN, CREST certifications indicate competence.</p>
+              <p><strong>6. Include Internal Tests:</strong> External-only misses insider threat and assume-breach scenarios.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="vuln-management.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Vulnerability Management</div>
+          </a>
+          <a href="red-team.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Red Team Operations →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

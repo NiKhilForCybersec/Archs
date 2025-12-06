@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IDS/IPS | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Intrusion Detection and Prevention Systems - signature-based, anomaly detection, and deployment architectures.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">2. Network Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="firewalls.html" class="sidebar-nav-link">Next-Gen Firewalls</a></li>
+          <li class="sidebar-nav-item"><a href="ids-ips.html" class="sidebar-nav-link active">IDS/IPS</a></li>
+          <li class="sidebar-nav-item"><a href="dmz.html" class="sidebar-nav-link">DMZ Architecture</a></li>
+          <li class="sidebar-nav-item"><a href="segmentation.html" class="sidebar-nav-link">Network Segmentation</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Network Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>IDS/IPS</span>
+          </div>
+          <h1>Intrusion Detection & Prevention Systems</h1>
+          <p class="page-description">IDS (Intrusion Detection System) monitors network traffic for malicious activity and alerts. IPS (Intrusion Prevention System) goes further by actively blocking detected threats. Modern NGFWs integrate IPS capabilities, but standalone IDS/IPS remains important for network visibility and east-west monitoring.</p>
+        </div>
+
+        <section>
+          <h2 id="comparison">IDS vs. IPS</h2>
+          
+          <div class="comparison-split">
+            <div class="comparison-box traditional">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                IDS (Detection Only)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Passive monitoring (copy of traffic)</li>
+                  <li>Detects and alerts on threats</li>
+                  <li>Does NOT block traffic</li>
+                  <li>No latency impact</li>
+                  <li>Out-of-band deployment (TAP/SPAN)</li>
+                  <li>Requires manual response or SOAR</li>
+                </ul>
+                <div class="info-box warning" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Use Case:</strong> Visibility into network without risk of blocking legitimate traffic. Good for initial deployment or monitoring-only requirements.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box modern">
+              <div class="comparison-box-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                IPS (Detection + Prevention)
+              </div>
+              <div class="comparison-box-content">
+                <ul>
+                  <li>Inline deployment (traffic passes through)</li>
+                  <li>Detects AND blocks threats in real-time</li>
+                  <li>Actively drops malicious packets</li>
+                  <li>Adds latency (microseconds to milliseconds)</li>
+                  <li>Single point of failure (needs HA)</li>
+                  <li>Automated prevention, no human delay</li>
+                </ul>
+                <div class="info-box success" style="margin-top: var(--space-md);">
+                  <div class="info-box-content">
+                    <p style="margin: 0;"><strong>Use Case:</strong> Active protection for critical network segments. Stops attacks before they reach targets.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="detection-methods">Detection Methods</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>How It Works</th>
+                  <th>Pros</th>
+                  <th>Cons</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Signature-Based</strong></td>
+                  <td>Matches traffic against known attack patterns (like antivirus)</td>
+                  <td>Low false positives, fast, proven</td>
+                  <td>Can't detect zero-days or novel attacks</td>
+                </tr>
+                <tr>
+                  <td><strong>Anomaly-Based</strong></td>
+                  <td>Learns normal behavior, alerts on deviations</td>
+                  <td>Can detect unknown threats</td>
+                  <td>Higher false positives, needs tuning</td>
+                </tr>
+                <tr>
+                  <td><strong>Protocol Analysis</strong></td>
+                  <td>Validates protocol conformance (RFC violations)</td>
+                  <td>Catches protocol-level attacks, evasion</td>
+                  <td>Complex, can break non-compliant apps</td>
+                </tr>
+                <tr>
+                  <td><strong>Behavioral/Heuristic</strong></td>
+                  <td>Identifies malicious behavior patterns</td>
+                  <td>Good against polymorphic malware</td>
+                  <td>Resource intensive, tuning required</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="deployment">Deployment Architectures</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 350" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="350" fill="#0f1117"/>
+              
+              <!-- IDS (Out-of-band) -->
+              <rect x="30" y="30" width="380" height="300" rx="8" fill="rgba(245, 158, 11, 0.05)" stroke="#f59e0b" stroke-dasharray="4"/>
+              <text x="220" y="55" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">IDS DEPLOYMENT (Out-of-Band)</text>
+              
+              <rect x="60" y="80" width="80" height="40" rx="4" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="100" y="105" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Internet</text>
+              
+              <rect x="180" y="80" width="80" height="40" rx="4" fill="#1e2430" stroke="#10b981"/>
+              <text x="220" y="105" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Firewall</text>
+              
+              <rect x="300" y="80" width="80" height="40" rx="4" fill="#1e2430" stroke="#64748b"/>
+              <text x="340" y="105" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Switch</text>
+              
+              <!-- TAP -->
+              <rect x="300" y="150" width="80" height="35" rx="4" fill="rgba(139, 92, 246, 0.2)" stroke="#8b5cf6"/>
+              <text x="340" y="172" text-anchor="middle" fill="#8b5cf6" font-family="IBM Plex Sans, sans-serif" font-size="8">TAP/SPAN</text>
+              
+              <!-- IDS Sensor -->
+              <rect x="180" y="210" width="120" height="50" rx="4" fill="rgba(245, 158, 11, 0.2)" stroke="#f59e0b"/>
+              <text x="240" y="235" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Sans, sans-serif" font-size="9" font-weight="500">IDS Sensor</text>
+              <text x="240" y="250" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">(Passive Copy)</text>
+              
+              <!-- Servers -->
+              <rect x="300" y="270" width="80" height="40" rx="4" fill="#1e2430" stroke="#64748b"/>
+              <text x="340" y="295" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Servers</text>
+              
+              <!-- IDS Flows -->
+              <path d="M140 100 L180 100" stroke="#3b82f6" stroke-width="2" fill="none"/>
+              <path d="M260 100 L300 100" stroke="#10b981" stroke-width="2" fill="none"/>
+              <path d="M340 120 L340 150" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M300 167 L240 210" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3" fill="none"/>
+              <path d="M340 185 L340 270" stroke="#64748b" stroke-width="2" fill="none"/>
+              
+              <text x="100" y="295" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Traffic copied via TAP</text>
+              <text x="100" y="310" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">IDS analyzes copy</text>
+              <text x="100" y="325" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Alerts to SIEM</text>
+              
+              
+              <!-- IPS (Inline) -->
+              <rect x="440" y="30" width="380" height="300" rx="8" fill="rgba(16, 185, 129, 0.05)" stroke="#10b981" stroke-dasharray="4"/>
+              <text x="630" y="55" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">IPS DEPLOYMENT (Inline)</text>
+              
+              <rect x="470" y="80" width="80" height="40" rx="4" fill="#1e2430" stroke="#3b82f6"/>
+              <text x="510" y="105" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Internet</text>
+              
+              <rect x="590" y="80" width="80" height="40" rx="4" fill="#1e2430" stroke="#10b981"/>
+              <text x="630" y="105" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Firewall</text>
+              
+              <!-- IPS Inline -->
+              <rect x="560" y="160" width="140" height="60" rx="4" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="2"/>
+              <text x="630" y="185" text-anchor="middle" fill="#10b981" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="500">IPS (Inline)</text>
+              <text x="630" y="203" text-anchor="middle" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="7">All traffic passes through</text>
+              
+              <rect x="710" y="80" width="80" height="40" rx="4" fill="#1e2430" stroke="#64748b"/>
+              <text x="750" y="105" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Switch</text>
+              
+              <!-- Servers -->
+              <rect x="710" y="270" width="80" height="40" rx="4" fill="#1e2430" stroke="#64748b"/>
+              <text x="750" y="295" text-anchor="middle" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="9">Servers</text>
+              
+              <!-- IPS Flows -->
+              <path d="M550 100 L590 100" stroke="#3b82f6" stroke-width="2" fill="none"/>
+              <path d="M670 100 L670 160" stroke="#10b981" stroke-width="2" fill="none"/>
+              <path d="M670 220 L750 270" stroke="#10b981" stroke-width="2" fill="none"/>
+              <path d="M750 120 L750 270" stroke="#64748b" stroke-width="2" fill="none"/>
+              
+              <text x="510" y="295" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">ALL traffic through IPS</text>
+              <text x="510" y="310" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Malicious = DROPPED</text>
+              <text x="510" y="325" fill="#64748b" font-family="IBM Plex Sans, sans-serif" font-size="8">Requires HA/failover</text>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="detection-flow">IPS Detection Example: SQL Injection Block</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">IPS Blocks SQL Injection Attack</div>
+            
+            <div class="flow-vertical">
+              <div class="flow-vertical-step danger">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Attacker Sends Malicious Request</div>
+                  <div class="flow-step-description">SQL injection attempt in HTTP request</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Malicious Request</span></div>
+                    <pre><code>POST /api/login HTTP/1.1
+Host: app.contoso.com
+Content-Type: application/x-www-form-urlencoded
+
+username=admin' OR '1'='1' --&password=anything</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step warning">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">IPS Signature Match</div>
+                  <div class="flow-step-description">Traffic matches SQL injection signature</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">IPS Analysis</span></div>
+                    <pre><code>IPS Engine Processing:
+  Protocol: HTTP
+  Method: POST
+  URI: /api/login
+  
+Signature Evaluation:
+  Signature: sql-injection-auth-bypass (SID: 1001234)
+  Pattern: /' OR '.*'='.*' --/
+  Match: username=admin' OR '1'='1' --
+  Severity: CRITICAL
+  Action: DROP
+  
+Additional Context:
+  Source IP: 185.234.72.19 (known malicious)
+  GeoIP: Russia
+  Reputation: Bad</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-vertical-step success">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Attack Blocked</div>
+                  <div class="flow-step-description">IPS drops packet, request never reaches server</div>
+                  <div class="code-block" style="margin-top: var(--space-md);">
+                    <div class="code-block-header"><span class="code-block-title">Block Action</span></div>
+                    <pre><code>IPS Action: BLOCK
+
+Packet: DROPPED (RST sent to source)
+Web Server: Never sees request ✓
+Database: Protected ✓
+
+Alert Generated:
+  Timestamp: 2024-01-15 14:32:47 UTC
+  Source: 185.234.72.19:54321
+  Destination: 10.100.1.10:443
+  Attack: SQL Injection (authentication bypass)
+  Signature: SID-1001234
+  Action: Blocked
+  MITRE: T1190 (Exploit Public-Facing Application)
+  
+SIEM Event Created → SOC Notified</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">IDS/IPS Solutions</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Snort (Open Source)</div>
+            <div class="vendor-item">Suricata (Open Source)</div>
+            <div class="vendor-item">Zeek/Bro (Open Source)</div>
+            <div class="vendor-item">Palo Alto (NGFW IPS)</div>
+            <div class="vendor-item">Cisco Firepower</div>
+            <div class="vendor-item">Fortinet FortiGate</div>
+            <div class="vendor-item">Trend Micro TippingPoint</div>
+            <div class="vendor-item">ExtraHop (NDR)</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">IDS/IPS Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              IDS/IPS Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Start in Detection Mode:</strong> Deploy IPS in IDS mode first. Tune rules, baseline false positives before enabling blocking.</p>
+              <p><strong>2. Keep Signatures Updated:</strong> New vulnerabilities daily. Automated signature updates essential. Test before deploying in blocking mode.</p>
+              <p><strong>3. SSL/TLS Inspection:</strong> 90%+ of traffic is encrypted. Without decryption, IDS/IPS is blind. Deploy SSL inspection where legally permissible.</p>
+              <p><strong>4. Monitor East-West Traffic:</strong> North-south (perimeter) isn't enough. Deploy IDS sensors for internal traffic to catch lateral movement.</p>
+              <p><strong>5. Integrate with SIEM/SOAR:</strong> Alerts are useless without action. Automate enrichment, correlation, and response.</p>
+              <p><strong>6. High Availability for IPS:</strong> Inline IPS is a chokepoint. Deploy in HA pairs with fail-open or fail-close based on risk tolerance.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="firewalls.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Next-Gen Firewalls</div>
+          </a>
+          <a href="dmz.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">DMZ Architecture →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

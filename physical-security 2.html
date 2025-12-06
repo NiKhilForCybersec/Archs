@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Physical Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Physical Security - data center security, access controls, and physical-cyber convergence.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">1. Foundations</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="principles.html" class="sidebar-nav-link">Security Principles</a></li>
+          <li class="sidebar-nav-item"><a href="physical-security.html" class="sidebar-nav-link active">Physical Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Foundations</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Physical Security</span>
+          </div>
+          <h1>Physical Security</h1>
+          <p class="page-description">Physical security protects facilities, hardware, and people from unauthorized physical access, theft, and environmental threats. In an era of sophisticated cyber attacks, physical access often provides the easiest path to compromise.</p>
+        </div>
+
+        <section>
+          <h2 id="defense-in-depth">Physical Defense in Depth</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Layered Physical Security</span></div>
+            <pre><code># Concentric Rings of Protection
+
+PERIMETER (Outer)
+┌─────────────────────────────────────────────────────────────┐
+│ • Fencing, barriers, bollards                               │
+│ • Perimeter lighting                                        │
+│ • CCTV surveillance                                         │
+│ • Security guards, patrols                                  │
+│ • Vehicle access control                                    │
+└─────────────────────────────────────────────────────────────┘
+                              │
+BUILDING (Middle)
+┌─────────────────────────────────────────────────────────────┐
+│ • Reception / visitor management                           │
+│ • Badge access control                                      │
+│ • Turnstiles, mantraps                                      │
+│ • Alarm systems                                             │
+│ • Visitor escorts                                           │
+└─────────────────────────────────────────────────────────────┘
+                              │
+SECURE AREAS (Inner)
+┌─────────────────────────────────────────────────────────────┐
+│ • Data center / server rooms                               │
+│ • Multi-factor access (badge + biometric)                  │
+│ • Video surveillance with retention                        │
+│ • Environmental controls (fire, HVAC)                      │
+│ • Equipment cages, locked racks                            │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="controls">Physical Security Controls</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Control</th>
+                  <th>Purpose</th>
+                  <th>Implementation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Access Control</strong></td>
+                  <td>Restrict entry to authorized personnel</td>
+                  <td>Badges, biometrics, PINs, mantraps</td>
+                </tr>
+                <tr>
+                  <td><strong>Surveillance</strong></td>
+                  <td>Monitor and record activity</td>
+                  <td>CCTV, motion sensors, 90-day retention</td>
+                </tr>
+                <tr>
+                  <td><strong>Environmental</strong></td>
+                  <td>Protect against fire, water, temperature</td>
+                  <td>Suppression, leak detection, HVAC monitoring</td>
+                </tr>
+                <tr>
+                  <td><strong>Visitor Management</strong></td>
+                  <td>Track and control non-employees</td>
+                  <td>Sign-in, badges, escorts, NDA</td>
+                </tr>
+                <tr>
+                  <td><strong>Asset Protection</strong></td>
+                  <td>Prevent theft and tampering</td>
+                  <td>Cable locks, equipment cages, tamper seals</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="convergence">Physical-Cyber Convergence</h2>
+          
+          <div class="info-box info">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Physical Access = Cyber Access
+            </div>
+            <div class="info-box-content">
+              <p><strong>Rogue Devices:</strong> USB drops, network taps, rogue APs planted by physical intruder.</p>
+              <p><strong>Direct Theft:</strong> Laptop theft, server removal, backup tape theft.</p>
+              <p><strong>Social Engineering:</strong> Tailgating, impersonation, pretexting for physical access.</p>
+              <p><strong>Solution:</strong> Integrate physical access logs with SIEM. Badge-in events correlated with login events.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Physical Security Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Physical Security Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Layer Your Defenses:</strong> Multiple barriers slow attackers. Each layer detected = more response time.</p>
+              <p><strong>2. Integrate with IT Security:</strong> Physical access logs to SIEM. Badge + VPN correlation.</p>
+              <p><strong>3. Train Employees:</strong> Tailgating awareness. Report suspicious persons. Clean desk policy.</p>
+              <p><strong>4. Visitor Management:</strong> No unescorted visitors in secure areas. Visitor badges distinct from employee.</p>
+              <p><strong>5. Audit Access:</strong> Regular review of who has physical access. Remove terminated employees immediately.</p>
+              <p><strong>6. Test Defenses:</strong> Physical penetration testing. Social engineering assessments.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="principles.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Security Principles</div>
+          </a>
+          <a href="security-baselines.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">Security Baselines →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

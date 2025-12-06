@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kubernetes Security | SecArch Reference</title>
+  <meta name="description" content="Comprehensive guide to Kubernetes Security - RBAC, Pod Security, Network Policies, image scanning, and cluster hardening.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>SecArch Reference</span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Search documentation...">
+          <span class="search-shortcut">⌘K</span>
+          <div id="search-results" class="search-results"></div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link">Overview</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">5. Cloud Security</div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item"><a href="container-security.html" class="sidebar-nav-link">Container Security</a></li>
+          <li class="sidebar-nav-item"><a href="kubernetes-security.html" class="sidebar-nav-link active">Kubernetes Security</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Cloud Security</span>
+            <span class="page-breadcrumb-separator">/</span>
+            <span>Kubernetes Security</span>
+          </div>
+          <h1>Kubernetes Security</h1>
+          <p class="page-description">Kubernetes introduces unique security challenges: multi-tenant clusters, dynamic workloads, east-west traffic, and a complex API surface. Securing K8s requires defense in depth across the cluster, nodes, network, and workloads.</p>
+        </div>
+
+        <section>
+          <h2 id="layers">Kubernetes Security Layers</h2>
+          
+          <div class="diagram-container">
+            <svg viewBox="0 0 850 300" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="300" fill="#0f1117"/>
+              
+              <!-- Cluster -->
+              <rect x="30" y="30" width="180" height="240" rx="8" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444"/>
+              <text x="120" y="60" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">CLUSTER</text>
+              <text x="50" y="90" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• API Server auth</text>
+              <text x="50" y="108" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• RBAC policies</text>
+              <text x="50" y="126" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Admission control</text>
+              <text x="50" y="144" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Audit logging</text>
+              <text x="50" y="162" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• etcd encryption</text>
+              <text x="50" y="180" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Control plane isolation</text>
+              
+              <!-- Node -->
+              <rect x="235" y="30" width="180" height="240" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+              <text x="325" y="60" text-anchor="middle" fill="#f59e0b" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">NODE</text>
+              <text x="255" y="90" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• OS hardening</text>
+              <text x="255" y="108" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• CIS benchmarks</text>
+              <text x="255" y="126" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• kubelet security</text>
+              <text x="255" y="144" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Node isolation</text>
+              <text x="255" y="162" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Runtime security</text>
+              <text x="255" y="180" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Read-only root FS</text>
+              
+              <!-- Network -->
+              <rect x="440" y="30" width="180" height="240" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+              <text x="530" y="60" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">NETWORK</text>
+              <text x="460" y="90" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Network Policies</text>
+              <text x="460" y="108" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Service mesh (mTLS)</text>
+              <text x="460" y="126" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Ingress security</text>
+              <text x="460" y="144" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Egress controls</text>
+              <text x="460" y="162" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• DNS policies</text>
+              <text x="460" y="180" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Namespace isolation</text>
+              
+              <!-- Workload -->
+              <rect x="645" y="30" width="180" height="240" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6"/>
+              <text x="735" y="60" text-anchor="middle" fill="#8b5cf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">WORKLOAD</text>
+              <text x="665" y="90" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Pod Security Standards</text>
+              <text x="665" y="108" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Image scanning</text>
+              <text x="665" y="126" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Signed images</text>
+              <text x="665" y="144" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Secrets management</text>
+              <text x="665" y="162" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Resource limits</text>
+              <text x="665" y="180" fill="#f1f5f9" font-family="IBM Plex Sans, sans-serif" font-size="8">• Security contexts</text>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="rbac">RBAC Configuration</h2>
+          
+          <div class="code-block">
+            <div class="code-block-header"><span class="code-block-title">Kubernetes RBAC Example</span></div>
+            <pre><code># Role: What permissions are granted
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: production
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: []  # Explicitly deny exec!
+
+---
+# RoleBinding: Who gets the permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: production
+subjects:
+- kind: ServiceAccount
+  name: monitoring-sa
+  namespace: production
+- kind: Group
+  name: developers
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+
+# RBAC Best Practices:
+# ✓ Use Roles (namespace-scoped), not ClusterRoles when possible
+# ✓ Never grant cluster-admin to applications
+# ✓ Avoid wildcards (*) in resources and verbs
+# ✓ Audit RBAC regularly with tools like rbac-lookup
+# ✓ Use dedicated ServiceAccounts per application</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="pod-security">Pod Security Standards</h2>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Profile</th>
+                  <th>Description</th>
+                  <th>Restrictions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Privileged</strong></td>
+                  <td>Unrestricted (default)</td>
+                  <td>None - allows everything</td>
+                </tr>
+                <tr>
+                  <td><strong>Baseline</strong></td>
+                  <td>Minimally restrictive</td>
+                  <td>No privileged, hostNetwork, hostPID. Blocks known escalations.</td>
+                </tr>
+                <tr>
+                  <td><strong>Restricted</strong></td>
+                  <td>Heavily restricted</td>
+                  <td>Run as non-root, drop capabilities, read-only root FS, seccomp</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="code-block" style="margin-top: var(--space-lg);">
+            <div class="code-block-header"><span class="code-block-title">Enforce Restricted Pod Security</span></div>
+            <pre><code># Apply restricted profile to namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: production
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+
+---
+# Compliant pod specification
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secure-app
+spec:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+  - name: app
+    image: myapp:v1.2.3
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - ALL
+    resources:
+      limits:
+        memory: "256Mi"
+        cpu: "500m"
+      requests:
+        memory: "128Mi"
+        cpu: "250m"</code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="network-policies">Network Policies</h2>
+          
+          <div class="flow-diagram">
+            <div class="flow-diagram-title">Default Deny with Selective Allow</div>
+            
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-block-title">Network Policy Examples</span></div>
+              <pre><code># 1. Default deny all ingress in namespace
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: production
+spec:
+  podSelector: {}  # Applies to all pods
+  policyTypes:
+  - Ingress
+  # No ingress rules = deny all
+
+---
+# 2. Allow traffic only from frontend to backend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backend-allow-frontend
+  namespace: production
+spec:
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: frontend
+    ports:
+    - protocol: TCP
+      port: 8080
+
+---
+# 3. Allow backend to database only
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: database-allow-backend
+  namespace: production
+spec:
+  podSelector:
+    matchLabels:
+      app: database
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: backend
+    ports:
+    - protocol: TCP
+      port: 5432
+
+# Result: frontend → backend (8080) → database (5432)
+#         frontend → database: BLOCKED
+#         Any other pod → anything: BLOCKED</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="image-security">Image Security</h2>
+          
+          <div class="card-grid">
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-red);">Image Scanning</h4>
+              <p class="card-description">Scan images for CVEs before deployment. Block images with critical vulnerabilities. Trivy, Grype, Clair, Snyk.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-blue);">Image Signing</h4>
+              <p class="card-description">Cryptographically sign images. Verify signatures before pulling. Cosign, Notary, Sigstore.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-green);">Private Registry</h4>
+              <p class="card-description">Pull only from trusted registries. Block public Docker Hub pulls. Use admission control.</p>
+            </div>
+            <div class="card">
+              <h4 class="card-title" style="color: var(--accent-purple);">Base Image Hardening</h4>
+              <p class="card-description">Minimal base images (distroless, Alpine). No shells, package managers. Reduce attack surface.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="vendors">Kubernetes Security Tools</h2>
+          
+          <div class="vendor-grid">
+            <div class="vendor-item">Falco (Runtime)</div>
+            <div class="vendor-item">Trivy (Scanning)</div>
+            <div class="vendor-item">OPA/Gatekeeper</div>
+            <div class="vendor-item">Kyverno (Policy)</div>
+            <div class="vendor-item">Cilium (Network)</div>
+            <div class="vendor-item">Aqua Security</div>
+            <div class="vendor-item">Sysdig Secure</div>
+            <div class="vendor-item">Prisma Cloud</div>
+          </div>
+        </section>
+
+        <section>
+          <h2 id="best-practices">Kubernetes Security Best Practices</h2>
+          
+          <div class="info-box success">
+            <div class="info-box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Kubernetes Security Implementation Guidelines
+            </div>
+            <div class="info-box-content">
+              <p><strong>1. Enable Pod Security Standards:</strong> Enforce "restricted" profile. Start with "warn" mode, then move to "enforce".</p>
+              <p><strong>2. Default Deny Network Policies:</strong> No pod should communicate without explicit policy. Zero trust inside the cluster.</p>
+              <p><strong>3. Scan Images in CI/CD:</strong> Block deployments with critical CVEs. Integrate Trivy/Grype into pipeline.</p>
+              <p><strong>4. Use RBAC Properly:</strong> Least privilege. No cluster-admin for apps. Dedicated ServiceAccounts per workload.</p>
+              <p><strong>5. Enable Audit Logging:</strong> Log all API server requests. Ship to SIEM. Alert on suspicious activity.</p>
+              <p><strong>6. Secrets via External Store:</strong> Don't use Kubernetes Secrets alone. Integrate Vault, AWS Secrets Manager with CSI driver.</p>
+            </div>
+          </div>
+        </section>
+
+        <nav class="page-nav">
+          <a href="container-security.html" class="page-nav-link prev">
+            <div class="page-nav-label">Previous</div>
+            <div class="page-nav-title">← Container Security</div>
+          </a>
+          <a href="cspm.html" class="page-nav-link next">
+            <div class="page-nav-label">Next</div>
+            <div class="page-nav-title">CSPM →</div>
+          </a>
+        </nav>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>
