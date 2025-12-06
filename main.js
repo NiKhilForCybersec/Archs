@@ -35,6 +35,9 @@ function initNavigation() {
 
   // Highlight current page in navigation
   highlightCurrentPage();
+  
+  // Save sidebar scroll position before navigating
+  saveSidebarScrollOnNavigate();
 }
 
 function highlightCurrentPage() {
@@ -42,11 +45,18 @@ function highlightCurrentPage() {
   const currentFile = currentPath.split('/').pop() || 'index.html';
   
   const navLinks = document.querySelectorAll('.sidebar-nav-link, .sidebar-submenu-link');
+  const sidebar = document.querySelector('.sidebar');
+  
+  // Remove any existing active class
+  navLinks.forEach(link => link.classList.remove('active'));
+  
+  let activeLink = null;
   
   navLinks.forEach(link => {
     const href = link.getAttribute('href');
     if (href === currentFile || (currentFile === '' && href === 'index.html')) {
       link.classList.add('active');
+      activeLink = link;
       
       // Expand parent if in submenu
       const parentItem = link.closest('.sidebar-nav-item');
@@ -55,6 +65,57 @@ function highlightCurrentPage() {
       }
     }
   });
+  
+  // Scroll sidebar to show active link
+  if (sidebar && activeLink) {
+    // Check if there's a saved scroll position for this page
+    const savedScroll = sessionStorage.getItem('sidebarScroll');
+    
+    setTimeout(() => {
+      if (savedScroll !== null) {
+        // Restore saved scroll position
+        sidebar.scrollTop = parseInt(savedScroll, 10);
+        sessionStorage.removeItem('sidebarScroll');
+      } else {
+        // Scroll to active link
+        scrollSidebarToActive(sidebar, activeLink);
+      }
+    }, 50);
+  }
+}
+
+function scrollSidebarToActive(sidebar, activeLink) {
+  const linkRect = activeLink.getBoundingClientRect();
+  const sidebarRect = sidebar.getBoundingClientRect();
+  
+  // Check if active link is not visible in viewport
+  const isAboveViewport = linkRect.top < sidebarRect.top;
+  const isBelowViewport = linkRect.bottom > sidebarRect.bottom;
+  
+  if (isAboveViewport || isBelowViewport) {
+    // Calculate scroll position to put active link in upper third of sidebar
+    const linkOffsetTop = activeLink.offsetTop;
+    const scrollTarget = linkOffsetTop - (sidebar.clientHeight / 4);
+    
+    sidebar.scrollTo({
+      top: Math.max(0, scrollTarget),
+      behavior: 'smooth'
+    });
+  }
+}
+
+function saveSidebarScrollOnNavigate() {
+  const sidebar = document.querySelector('.sidebar');
+  const navLinks = document.querySelectorAll('.sidebar-nav-link');
+  
+  if (sidebar) {
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        // Save current scroll position before navigation
+        sessionStorage.setItem('sidebarScroll', sidebar.scrollTop.toString());
+      });
+    });
+  }
 }
 
 /* ---------- Search Functionality ---------- */
